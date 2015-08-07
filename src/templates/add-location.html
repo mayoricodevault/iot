@@ -1,0 +1,31 @@
+<ion-view title="Add New Location" ng-controller="addLocation">
+	<ion-content>
+		<form name="addLocationForm" ng-init="setFormScope(this)" data-ng-submit="locationSubmit()">
+			<div class="list">
+				<label class="item item-input">
+					<input type="text" placeholder="Name" ng-model="newlocation.name">
+				</label>
+				<label class="item item-input">
+					<input type="text" placeholder="Icon" ng-model="newlocation.icon">
+				</label>
+				<label class="item item-input">
+					<input type="text" placeholder="Note" ng-model="newlocation.note">
+				</label>
+				<li class="item item-toggle">
+					Featured
+					<label class="toggle toggle-balanced">
+						<input type="checkbox" checked ng-model="newlocation.featured">
+						<div class="track">
+							<div class="handle"></div>
+						</div>
+					</label>
+				</li>
+			</div>
+			<div class="padding">
+				<button class="button button-balanced">
+					Add Location
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>

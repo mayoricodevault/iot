@@ -1,0 +1,110 @@
+<ion-modal-view>
+	<ion-header-bar class="bar bar-header bar-balanced">
+		<h1 class="title">Edit Action</h1>
+		<button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+	</ion-header-bar>
+	<ion-content>
+		<form name="editActionForm">
+			<div class="list" style="background:#ffffff;">
+				<div class="item item-divider">
+				Action Info
+				</div>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Name</span>
+					<input type="text" placeholder="Name" ng-model="editaction.name">
+				</label>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Action Type
+					</div>
+					<select ng-model="editaction.type">
+						<option value="range">Range</option>
+						<option value="toggle">Toggle</option>
+					</select>
+				</label>
+				<div ng-if="editaction.type == 'range'">
+					<label class="item item-input item-stacked-label">
+						<span class="input-label">Default Value</span>
+						<input type="number" placeholder="50" ng-model="editaction.value">
+					</label>
+					<label class="item item-input item-stacked-label">
+						<span class="input-label">Min Value</span>
+						<input type="number" placeholder="0" ng-model="editaction.minValue">
+					</label>
+					<label class="item item-input item-stacked-label">
+						<span class="input-label">Max Value</span>
+						<input type="number" placeholder="100" ng-model="editaction.maxValue">
+					</label>
+					<label class="item item-input item-stacked-label">
+						<span class="input-label">Value Units (%, degrees, L, etc.)</span>
+						<input type="text" placeholder="%" ng-model="editaction.units">
+					</label>
+					<div class="item item-divider">
+					Icons
+					</div>
+					<label class="item item-input item-stacked-label">
+						<span class="input-label">Left Icon</span>
+						<input type="text" placeholder="ion-ios7-lightbulb-outline" ng-model="editaction.iconBefore">
+					</label>
+					<label class="item item-input item-stacked-label">
+						<span class="input-label">Right Icon</span>
+						<input type="text" placeholder="ion-ios7-lightbulb" ng-model="editaction.iconAfter">
+					</label>
+				</div>
+				<div ng-if="editaction.type == 'toggle'">
+					<label class="item item-input">
+						<div class="input-label">
+						Default State:
+						</div>
+					</label>
+					<label class="item item-radio">
+						<input type="radio" ng-model="editaction.state" value="on">
+						<div class="item-content">
+						On
+						</div>
+						<i class="radio-icon ion-checkmark"></i>
+					</label>
+					<label class="item item-radio">
+						<input type="radio" ng-model="editaction.state" value="off">
+						<div class="item-content">
+						Off
+						</div>
+						<i class="radio-icon ion-checkmark"></i>
+					</label>
+				</div>
+				<div class="item item-divider">
+				According Device
+				</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Select a Device
+					</div>
+					<select ng-model="editaction.deviceSelect" ng-options="device as device.name for device in devices"></select>
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Custom Action Script</span>
+					<textarea ng-model="editaction.script" rows="4" name="text" placeholder="$scope.custonFunction = function() {
+    console.log('Value Change', $scope.notification.checked);
+  };"></textarea>
+				</label>
+				<div class="item item-divider">
+				Featured
+				</div>
+				<li class="item item-toggle">
+					Featured
+					<label class="toggle toggle-balanced">
+						<input type="checkbox" checked ng-model="editaction.featured">
+						<div class="track">
+							<div class="handle"></div>
+						</div>
+					</label>
+				</li>
+			</div>
+			<div class="padding">
+				<button class="button button-balanced">
+					Save
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-modal-view>

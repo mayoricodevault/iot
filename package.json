@@ -1,0 +1,30 @@
+{
+  "name": "controler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "browser-sync": "^2.8.2",
+    "chai": "^3.2.0",
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-less": "^3.0.3",
+    "jshint-stylish": "^2.0.1",
+    "karma": "^0.13.3",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^0.2.0",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "mocha": "^2.2.5",
+    "phantomjs": "^1.9.17"
+  },
+  "devDependencies": {
+    "gulp": "~3.9.0",
+    "gulp-replace-path": "^0.4.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "init": "npm install",
+    "install": "bower install"
+  }
+}

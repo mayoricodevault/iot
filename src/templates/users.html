@@ -1,0 +1,29 @@
+<ion-view title="Users" ng-controller="Users">
+	<ion-content class="padding-vertical">
+		<div ng-repeat="user in users">
+			<div class="col-lg-33" on-hold="userHold(user)">
+				<div class="card">
+					<div class="item item-avatar">
+						<img ng-src="{{user.avatar}}">
+						<h2>{{ user.username }}</h2>
+						<p>{{user.lastLogin}} <span ng-show="user.lastLogin == 'Online'" class="balanced">&bull;</span></p>
+					</div>
+					<div ng-show="user.location == true" class="item item-image">
+						<div id="map_{{user.id}}" style="height: 150px;" data-tap-disabled="true"></div>
+					</div>
+					<ul class="list">
+						<li class="item item-toggle">
+						User Enabled
+						<label class="toggle toggle-balanced">
+							<input type="checkbox" ng-checked="user.enabled == 'true'">
+							<div class="track">
+								<div class="handle"></div>
+							</div>
+						</label>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

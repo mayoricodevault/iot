@@ -1,0 +1,29 @@
+<ion-view title="Actions" ng-controller="Actions">
+	<ion-content class="padding-vertical">
+		<div ng-repeat="action in actions">
+			<div class="col-lg-50" on-hold="actionHold(action)">
+				<li ng-if="action.type === 'range'" class="item">
+					{{ action.name }}
+					<span class="item-note">
+						{{ action.value }}{{ action.units }}
+					</span>
+				</li>
+				<div ng-if="action.type === 'range'" class="item range range-balanced">
+					<i class="icon" ng-class="action.iconBefore"></i>
+					<input type="range" ng-model="action.value" name="{{ action.id }}_action" min="{{ action.minValue }}" max="{{ action.maxValue }}">
+					<i class="icon" ng-class="action.iconAfter"></i>
+				</div>
+				<div ng-if="action.type === 'toggle'" class="item item-toggle">
+					{{ action.name }}
+					<label class="toggle toggle-balanced">
+					<input type="checkbox" ng-checked="action.state === 'on'">
+					<div class="track">
+						<div class="handle"></div>
+					</div>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</ion-content>
+</ion-view>

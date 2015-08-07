@@ -1,0 +1,74 @@
+<ion-view title="Intro" ng-controller="Intro">
+	<ion-content padding="false">
+		<ion-slide-box id="intro-slide-box" show-pager="false">
+			<ion-slide>
+				<div class="row">
+					<div class="text-center col col-center">
+						<img src="img/logo-inverted.png" class="img-responsive" alt="Logo">
+						<p class="stable">Xively  Coffee - IoT conception.<br>Tap next to set-up your application or just skip to start instantly</p>
+						<div class="padding-bottom">
+							<a href="#/route/dashboard/home" class="button button-balanced">
+								Skip Intro
+							</a>
+							<button ng-click="nextSlide()" class="button button-balanced icon-right ion-ios7-arrow-right">
+								<span class="font-family-default">Next</span>
+							</button>
+						</div>
+					</div>
+					<div style="height:100vh;"></div>
+				</div>
+			</ion-slide>
+			<ion-slide>
+				<div class="row">
+					<div class="text-center col col-center">
+						<h4 class="light">Service Login</h4>
+						<div class="list">
+							<label class="item item-input">
+								<span class="input-label">Username</span>
+								<input type="text">
+							</label>
+							<label class="item item-input">
+								<span class="input-label">Password</span>
+								<input type="password">
+							</label>
+						</div>
+						<div class="padding-bottom">
+							<button ng-click="prevSlide()" class="button button-balanced icon-left ion-ios7-arrow-left">
+								<span class="font-family-default">Prev</span>
+							</button>
+							<a href="#/route/dashboard/home" class="button button-balanced">
+								Skip Intro
+							</a>
+							<button ng-click="login()" class="button button-balanced icon-right ion-ios7-arrow-right">
+								<span class="font-family-default">Log In</span>
+							</button>
+						</div>
+						<div class="text-center">
+							<p><button ng-click="showRegister()" class="button button-clear button-light">Not a Member?</button></p>
+						</div>
+					</div>
+					<div style="height:100vh;"></div>
+				</div>
+			</ion-slide>
+			<ion-slide>
+				<div class="row">
+					<div class="col col-center">
+						<h3 class="text-center light">Lets Get Started</h3>
+						<div class="text-center light">
+							<img class="responsive-image" src="img/logo-inverted.png" alt="IoT">
+						</div>
+						<div class="text-center padding-vertical">
+							<button ng-click="prevSlide()" class="button button-balanced icon-left ion-ios7-arrow-left">
+								<span class="font-family-default">Prev</span>
+							</button>
+							<a href="#/route/dashboard/home" class="button button-balanced">
+								Start
+							</a>
+						</div>
+					</div>
+					<div style="height:100vh;"></div>
+				</div>
+			</ion-slide>
+		</ion-slide-box>
+	</ion-content>
+</ion-view>

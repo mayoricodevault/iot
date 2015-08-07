@@ -1,0 +1,78 @@
+cx<ion-side-menus>
+	<ion-side-menu-content>
+		<ion-nav-bar class="bar-light" animation="nav-title-slide-ios7">
+			<ion-nav-back-button class="button-icon ion-arrow-left-c">
+			</ion-nav-back-button>
+		</ion-nav-bar>
+		<ion-nav-buttons side="left">
+			<button class="button button-icon ion-navicon" ng-click="toggleLeft()" ng-hide="$exposeAside.active"></button>
+		</ion-nav-buttons>
+		<ion-nav-buttons side="right">
+			<a class="button button-icon icon ion-ios7-email-outline" ng-click="openAlerts($event)"><span class="badge badge-balanced">5</span></a>
+		</ion-nav-buttons>
+		<ion-nav-view name="menuContent"></ion-nav-view>
+	</ion-side-menu-content>
+	<ion-side-menu expose-aside-when="large">
+		<ion-header-bar class="bar-balanced">
+			<h1 class="title">Menu</h1>
+		</ion-header-bar>
+		<ion-content>
+			<div class="list">
+				<a menu-close class="item item-icon-left" href="#/route/dashboard/home">
+					<i class="icon ion-ios7-speedometer-outline"></i>
+					Dashboard
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/charts">
+					<i class="icon ion-ios7-pie"></i>
+					Charts
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/actions">
+					<i class="icon ion-flash"></i>
+					Actions
+					<span class="badge badge-balanced">{{actions.length}}</span>
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/devices">
+					<i class="icon ion-network"></i>
+					Devices
+					<span class="badge badge-balanced">{{devices.length}}</span>
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/locations">
+					<i class="icon ion-ios7-location"></i>
+					Locations
+					<span class="badge badge-balanced">{{locations.length}}</span>
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/users">
+					<i class="icon ion-ios7-people"></i>
+					Users
+					<span class="badge badge-balanced">{{users.length}}</span>
+				</a>
+				<div class="item item-divider">
+					Quick Actions
+				</div>
+				<a menu-close class="item item-icon-left" href="#/route/add-device">
+					<i class="icon ion-fork-repo"></i>
+					Add Device
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/add-action">
+					<i class="icon ion-ios7-plus-empty"></i>
+					Add Action
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/add-location">
+					<i class="icon ion-ios7-plus-empty"></i>
+					Add Location
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/add-user">
+					<i class="icon ion-ios7-personadd"></i>
+					Add User
+				</a>
+				<div class="item item-divider">
+					Account
+				</div>
+				<a menu-close class="item item-icon-left" href="#/intro">
+					<i class="icon ion-power"></i>
+					Intro
+				</a>
+			</div>
+		</ion-content>
+	</ion-side-menu>
+</ion-side-menus>

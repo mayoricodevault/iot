@@ -1,0 +1,63 @@
+<ion-view title="Add New Device" ng-controller="addDevice">
+	<ion-content>
+		<form name="addDeviceForm" ng-init="setFormScope(this)" data-ng-submit="deviceSubmit()">
+			<div class="list" style="background:#ffffff;">
+				<div class="item item-divider">
+				Device Info
+				</div>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Name</span>
+					<input type="text" placeholder="Name" ng-model="newdevice.name">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Icon</span>
+					<input type="text" placeholder="Icon" ng-model="newdevice.icon">
+				</label>
+				<div class="item item-divider">
+				Admin
+				</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Select a User
+					</div>
+					<select ng-model="newdevice.userSelect" ng-options="o.id as o.username for o in users"></select>
+				</label>
+				<div class="item item-divider">
+				Location
+				</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Select a Location
+					</div>
+					<select ng-model="newdevice.locationSelect" ng-options="o.id as o.name for o in locations"></select>
+				</label>
+				<div class="item item-divider">
+				Select Action
+				</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Action
+					</div>
+					<select ng-model="newdevice.actionSelect" ng-options="o.id as o.name for o in actions"></select>
+				</label>
+				<div class="item item-divider">
+				Featured
+				</div>
+				<li class="item item-toggle">
+					Featured
+					<label class="toggle toggle-balanced">
+						<input type="checkbox" checked ng-model="newdevice.featured">
+						<div class="track">
+							<div class="handle"></div>
+						</div>
+					</label>
+				</li>
+			</div>
+			<div class="padding">
+				<button class="button button-balanced">
+					Add Device
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>

@@ -1,0 +1,68 @@
+<ion-view title="Favorites">	
+	<ion-content>
+		<div class="padding">
+			<div class="item item-divider">
+			Featured Actions
+			</div>
+		</div>
+		<div ng-repeat="action in actions | filter: { featured: true}">
+			<div class="col-lg-50 padding-horizontal">
+				<li ng-if="action.type === 'range'" class="item">
+					{{ action.name }}
+					<span class="item-note">
+						{{ action.value }}{{ action.units }}
+					</span>
+				</li>
+				<div ng-if="action.type === 'range'" class="item range range-balanced">
+					<i class="icon" ng-class="action.iconBefore"></i>
+					<input type="range" ng-model="action.value" name="{{ action.id }}_action" min="{{ action.minValue }}" max="{{ action.maxValue }}">
+					<i class="icon" ng-class="action.iconAfter"></i>
+				</div>
+				<div ng-if="action.type === 'toggle'" class="item item-toggle">
+					{{ action.name }}
+					<label class="toggle toggle-balanced">
+					<input type="checkbox" ng-checked="action.state === 'on'">
+					<div class="track">
+						<div class="handle"></div>
+					</div>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="padding">
+			<div class="item item-divider">
+			Featured Places
+			</div>
+		</div>
+		<div ng-repeat="location in locations | filter: { featured: true}">
+			<div class="col-lg-50 padding-horizontal">
+				<div class="item item-icon-left">
+					<i class="icon" ng-class="location.icon"></i>
+					{{ location.name }}
+					<span class="item-note">
+					{{ location.note }}
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="padding">
+			<div class="item item-divider">
+			Featured Devices
+			</div>
+		</div>
+		<div ng-repeat="device in devices | filter: { featured: true}">
+			<div class="col-lg-50 padding-horizontal">
+				<div class="item item-icon-left" on-tap="deviceTap('router.device', device)">
+					<i class="icon" ng-class="device.icon"></i>
+					{{ device.name }}
+					<span class="item-note" ng-class="device.color">
+					{{ device.status }}
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</ion-content>
+</ion-view>

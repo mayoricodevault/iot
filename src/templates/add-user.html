@@ -1,0 +1,37 @@
+<ion-view title="Add New User" ng-controller="addUser">
+	<ion-content>
+		<form name="addUserForm" ng-init="setFormScope(this)" data-ng-submit="userSubmit()">
+			<div class="list">
+				<div class="item item-divider">
+				User Info
+				</div>
+				<label class="item item-input">
+					<input type="text" placeholder="Username" ng-model="newuser.username">
+				</label>
+				<label class="item item-input">
+					<input type="email" placeholder="Email" ng-model="newuser.email">
+				</label>
+				<label class="item item-input">
+					<input type="text" placeholder="Image" ng-model="newuser.avatar">
+				</label>
+				<div class="item item-divider">
+				Tracking
+				</div>
+				<li class="item item-toggle">
+					Show Location
+					<label class="toggle toggle-balanced">
+						<input type="checkbox" checked ng-model="newuser.location">
+						<div class="track">
+							<div class="handle"></div>
+						</div>
+					</label>
+				</li>
+			</div>
+			<div class="padding">
+				<button class="button button-balanced">
+					Add User
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>
