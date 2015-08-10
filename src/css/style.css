@@ -419,6 +419,25 @@
     transform: scale(1.5);
   }
 }
+/*@base-color:#ff4943;
+@word-color:#fff;*/
+.bar.bar-balanced {
+  border-color: #ff4943;
+  background-color: #ff4943;
+  /*background-image: linear-gradient(0deg,#498f24,#498f24 50%,transparent 50%);*/
+  color: #fff;
+}
+.button.button-balanced {
+  border-color: #ff4943;
+  background-color: #ff4943;
+  color: #fff;
+}
+.button.button-balanced.activated,
+.button.button-balanced.active {
+  border-color: #ff4943;
+  background-color: #ff4943;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+}
 #intro-slide-box {
   background: url(../img/index-bg.jpg) no-repeat center center fixed;
   background-size: cover;
