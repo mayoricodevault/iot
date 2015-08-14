@@ -7,20 +7,15 @@
 				</div>
 				<label class="item item-input item-stacked-label">
 					<span class="input-label">Name</span>
-					<input type="text" placeholder="Name" ng-model="newdevice.name">
+					<input type="text" placeholder="Name" ng-model="newdevice.devicename">
 				</label>
 				<label class="item item-input item-stacked-label">
 					<span class="input-label">Icon</span>
 					<input type="text" placeholder="Icon" ng-model="newdevice.icon">
 				</label>
-				<div class="item item-divider">
-				Admin
-				</div>
-				<label class="item item-input item-select">
-					<div class="input-label">
-					Select a User
-					</div>
-					<select ng-model="newdevice.userSelect" ng-options="o.id as o.username for o in users"></select>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Tag Id Assigned</span>
+					<input type="text" placeholder="Tag Id" ng-model="newdevice.tagid">
 				</label>
 				<div class="item item-divider">
 				Location
@@ -29,17 +24,30 @@
 					<div class="input-label">
 					Select a Location
 					</div>
-					<select ng-model="newdevice.locationSelect" ng-options="o.id as o.name for o in locations"></select>
+					<select ng-model="newdevice.devicelocation" ng-options="o.id as o.name for o in locations"></select>
 				</label>
 				<div class="item item-divider">
-				Select Action
+				Select Type
 				</div>
 				<label class="item item-input item-select">
 					<div class="input-label">
-					Action
+					Type
 					</div>
-					<select ng-model="newdevice.actionSelect" ng-options="o.id as o.name for o in actions"></select>
+					<select ng-model="newdevice.type" ng-options="o.name as o.name for o in device.type"></select>
 				</label>
+				
+				<div ng-show="newdevice.type=='Slave'" >
+					<div class="item item-divider">
+						Master Device
+					</div>
+					<label class="item item-input item-select">
+						<div class="input-label">
+							Device
+						</div>
+						<select ng-model="newdevice.masterDevice" ng-options="o.name as o.name for o in devices"></select>
+					</label>
+				</div>
+				
 				<div class="item item-divider">
 				Featured
 				</div>

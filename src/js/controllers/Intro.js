@@ -1,6 +1,37 @@
 'use strict';
 
 app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ionicLoading, $ionicPopup) {
+	
+	var firebaseObj;
+	
+	$scope.SignIn = function(event) {
+        event.preventDefault();  // To prevent form refresh
+
+        // Auth Logic will be here
+        firebaseObj = new Firebase("https://blistering-heat-2473.firebaseio.com");
+        var loginObj = $firebaseSimpleLogin(firebaseObj);
+
+        var username = $scope.user.email;
+        var password = $scope.user.password;
+
+        loginObj.$login('password', {
+            email: username,
+            password: password
+        })
+            .then(function(user) {
+                // Success callback
+                console.log('Authentication successful');
+            }, function(error) {
+                // Failure callback
+                console.log('Authentication failure');
+        });
+    }
+    
+    $scope.Logout = function(){
+    	firebaseObj.logout();
+    }
+    
+	
 	$scope.login = function() {
 		$ionicLoading.show({
 		  template: 'Logging in...'

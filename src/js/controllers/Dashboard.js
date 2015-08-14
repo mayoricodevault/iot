@@ -1,6 +1,10 @@
 'use strict';
-
-app.controller('Dashboard', function($scope, $interval) {
+app.controller('Dashboard', ['$scope','Socket','$interval', function($scope, Socket , $interval) {
+	Socket.connect( );
+  $scope.messages = [];
+  $scope.numberofusers=0;
+	$scope.messagesPoolCount=0;
+  $scope.individualBoard=0;
 	var maximum = 150;
 	$scope.data = [[]];
 	$scope.labels = [];
@@ -10,13 +14,13 @@ app.controller('Dashboard', function($scope, $interval) {
 	}
 	$scope.options =  {
 		responsive: true,
-		showTooltips: false,
-		animation: false,
+		showTooltips: true,
+		animation: true,
 		pointDot : false,
 		scaleShowLabels: true,
 		showScale: true,
 		maintainAspectRatio: false,
-		datasetStrokeWidth : 1,
+		datasetStrokeWidth : 2,
     }; 
 
     function getLiveChartData () {
@@ -24,19 +28,28 @@ app.controller('Dashboard', function($scope, $interval) {
         $scope.labels = $scope.labels.slice(1);
         $scope.data[0] = $scope.data[0].slice(1);
       }
-
-      while ($scope.data[0].length < maximum) {
-        $scope.labels.push('');
-        $scope.data[0].push(getRandomValue($scope.data[0]));
-      }
+      $scope.labels.push('');
+      $scope.data[0].push($scope.messagesPoolCount);
     }
-	function getRandomValue (data) {
-		var l = data.length, previous = l ? data[l - 1] : 50;
-		var y = previous + Math.random() * 10 - 5;
-		return y < 0 ? 0 : y > 100 ? 100 : y;
-	}
 	// Simulate async data update
 	$interval(function () {
 		getLiveChartData();
 	}, 500);
-});
+	Socket.on('xternal', function(data){
+      $scope.messagesPoolCount = data.msgs;
+    		
+      $scope.messages.push(data);
+       
+    });
+    Socket.on('connect', function () {
+    		console.log("sssss");
+    });
+    Socket.on('message', function(data){
+    		$scope.messagesPoolCount = data.msgs;
+        $scope.messages.push(data);
+    });
+	  // $scope.$on('$locationChangeStart', function(event){
+   //     Socket.disconnect(true);
+   // })
+	
+}]);

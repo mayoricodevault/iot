@@ -5,15 +5,25 @@ app.controller('MainCtrl', function($scope, $ionicSideMenuDelegate, $ionicPopove
 		{ username: 'Admin', email: 'admin@iot.domain', location: true, id: 'admin', avatar: 'img/noavatar.png', enabled: 'true', lastLogin: 'Online' },
 		{ username: 'xively', email: 'xively@iot.domain', location: true, id: 'xively', avatar: 'img/noavatar.png', enabled: 'true', lastLogin: 'Last login: 01/09/2014' }
 	];
-	$scope.device = { id: null, name: 'No Device', icon: 'ion-ios7-help-empty', status: 'Offline' },
+	
+	$scope.products = [
+		{id:'1', name:'Black'},
+		{id:'2', name:'Mocha'},
+		{id:'3', name:'Iced Coffe'},
+		{id:'4', name:'Latte'},
+		{id:'5', name:'Cappuccino'},
+		{id:'6', name:'Other'}
+	];
+	
+	$scope.device = { id: null, name: 'No Device', icon: 'ion-ios7-help-empty', status: 'Offline', type:[{id:'1', name:'Generic'},{id:'2', name:'Slave'}]},
 	$scope.devices = [
 		{ id: '1', name: 'Hall Way 1', icon: 'ion-thermometer', status: 'Off Line', featured: true, userSelect: "xively", actionSelect: "1" },
 		{ id: '2', name: 'Hall Way 2', icon: 'ion-coffee', status: 'Inactive', color: 'balanced', featured: true, userSelect: "xively", actionSelect: "1" },
 		{ id: '3', name: 'Hall Way 3', icon: 'ion-no-smoking', status: 'Idle', color: 'assertive', featured: true, userSelect: "xively", actionSelect: "1" },
 		{ id: '4', name: 'Welcome', icon: 'ion-model-s', status: 'Online', featured: true, userSelect: "xively", actionSelect: "1" },
-		{ id: '5', name: 'Barista - Guest', icon: 'ion-locked', status: 'Unarmed', color: 'assertive', featured: true, userSelect: "xively", actionSelect: "1"},
-		{ id: '6', name: 'Barista - Open', icon: 'ion-load-b', status: 'Working', color: 'balanced', userSelect: "xively", actionSelect: null },
-		{ id: '7', name: 'DashBoard', icon: 'ion-social-windows', status: 'Online', color: 'balanced', featured: true, userSelect: "admin", actionSelect: null },
+		{ id: '5', name: 'Barista - Guest', icon: 'ion-locked', status: 'Online', color: 'assertive', featured: true, userSelect: "xively", actionSelect: "1"},
+		{ id: '6', name: 'Barista - Open', icon: 'ion-load-b', status: 'Inactive', color: 'balanced', userSelect: "xively", actionSelect: null },
+		{ id: '7', name: 'DashBoard', icon: 'ion-social-windows', status: 'Active', color: 'balanced', featured: true, userSelect: "admin", actionSelect: null },
 		{ id: '8', name: 'Satellite Station', icon: 'ion-social-apple', status: 'Online', color: 'balanced', userSelect: "xively", actionSelect: null },
 		{ id: '9', name: 'Client Face', icon: 'ion-social-tux', status: 'Online', color: 'balanced', userSelect: "xively", actionSelect: null },
 	];

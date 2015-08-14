@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('iot', ['ionic','chart.js'])
+var app = angular.module('iot', ['ionic','ngCordova','chart.js', 'btford.socket-io','ngResource'])
 
 app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -47,7 +47,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: "/devices",
       views: {
         'menuContent' :{
-          templateUrl: "templates/devices.html"
+          templateUrl: "templates/devices.html",
+          controller: "deviceCtrl"
         }
       }
     })
@@ -76,7 +77,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
-	.state('router.charts', {
+	/*.state('router.charts', {
       url: "/charts",
       views: {
         'menuContent' :{
@@ -84,7 +85,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
           controller: "Charts"
         }
       }
-    })
+    })*/
 	.state('router.actions', {
       url: "/actions",
       views: {
@@ -121,15 +122,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
-	.state('router.addAction', {
-      url: "/add-action",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/add-action.html",
-          controller: "addAction"
-        }
+  .state('router.addProduct', {
+    url: "/add-product",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/add-product.html",
+        controller: "addProduct"
       }
-    })
+    }
+  })
 	.state('intro', {
       url: "/intro",
       templateUrl: "templates/intro.html",
