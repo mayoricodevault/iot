@@ -1,11 +1,11 @@
 app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast', function($scope, Api, $ionicPopup, Toast) {
     $scope.form = {};
     $scope.devices = [];
-
+    $scope.listCanSwipe = true;
     
     Api.Device.query({}, function(data){
         $scope.devices = data;
-    
+        console.log("devices --> ", $scope.devices);
     });
     console.log($scope.devices);
     $scope.deleteAll = function(){
@@ -14,15 +14,15 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast', function($
         })
     }
     
-    $scope.delete = function(index){
+    $scope.delete = function(device){
         var confirmPopup = $ionicPopup.confirm({
          title: 'Delete!',
-         template: 'Are you sure you want to delete this device?'
+         template: 'Are you sure you want to delete this device? ' +device.tagid
        });
        confirmPopup.then(function(res) {
          if(res) {
-            Api.Device.delete({id: $scope.devices[index]._id}, function(data){
-                $scope.devices.splice(index, 1);
+            Api.Device.delete({id: device._id}, function(data){
+                $scope.doRefresh();
             });
          } 
        });
@@ -50,7 +50,7 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast', function($
 	 
 	 $scope.doRefresh = function() {
         $scope.$broadcast('scroll.refreshComplete');
-        Toast.show('Loading Devices.....');
+        Toast.show('Loading...');
         Api.Device.query({}, function(data){
              $scope.devices = data;
         });

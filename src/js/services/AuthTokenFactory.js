@@ -1,0 +1,35 @@
+app.factory('AuthTokenFactory', function AuthTokenFactory($window) {
+    'use strict';
+    var store = $window.localStorage;
+    var key = 'auth-token';
+    var cachedToken;
+    var isAuthenticated = false;
+    
+    return {
+      getToken: getToken,
+      setToken: setToken,
+      isAuthenticated : isAuthenticated
+    };
+
+    function getToken() {
+        if (!cachedToken)
+                cachedToken = store.getItem(key);
+            return cachedToken;
+    }
+
+    function setToken(token) {
+      if (token) {
+        store.setItem(key, token);
+         isAuthenticated = true;
+      } else {
+        store.removeItem(key);
+        cachedToken = null;
+        isAuthenticated = false;
+      }
+    }
+    
+    function isAuthenticated() {
+      return !!AuthTokenFactory.getToken();
+    }
+
+  });

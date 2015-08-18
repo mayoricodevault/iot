@@ -1,0 +1,53 @@
+
+<ion-view title="{{product.productname}}">
+	<ion-content class="padding">
+		<form name="addProductForm" ng-init="setFormScope(this)" data-ng-submit="productSubmit()">
+			<div class="list" style="background:#ffffff;">
+			
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Name</span>
+					<input type="text" placeholder="Name" ng-model="newproduct.productname">
+				</label>
+				
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Icon</span>
+					<input type="text" placeholder="Icon" ng-model="newproduct.icon">
+				</label>
+				
+				
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Large</span>
+					<input type="text" placeholder="Large" ng-model="newproduct.large">
+				</label>
+				
+				
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Medium</span>
+					<input type="text" placeholder="Medium" ng-model="newproduct.medium">
+				</label>
+				
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Small</span>
+					<input type="text" placeholder="Small" ng-model="newproduct.small">
+				</label>	
+				
+				<div>
+					<li class="item item-toggle">
+						Featured
+						<label class="toggle toggle-balanced">
+							<input type="checkbox" checked ng-model="newproduct.featured">
+							<div class="track">
+								<div class="handle"></div>
+							</div>
+						</label>
+					</li>
+				</div>
+			</div>
+			<div class="padding">
+				<button class="button button-balanced">
+					Update Product
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>

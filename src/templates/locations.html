@@ -1,5 +1,7 @@
 <ion-view title="Locations">
+	<!--
 	<ion-content class="padding-vertical">
+		
 		<div ng-repeat="location in locations">
 			<div class="col-lg-50">
 				<div class="item item-icon-left" href="#">
@@ -12,4 +14,32 @@
 			</div>
 		</div>
 	</ion-content>
+	-->
+	<ion-content class="padding-vertical">
+			<ion-list can-swipe="listCanSwipe">
+			
+			<ion-item ng-repeat="location in locations">
+				<div on-tap="deviceTap('router.addLocation', location)">
+					
+					<i class="icon" ng-class="location.icon"></i>
+					{{ location.name }}
+					<span class="item-note" >
+					{{ location.note }}
+					</span>
+					
+					<ion-option-button class="button-positive" ng-click="delete(location)">
+				      Delete
+				    </ion-option-button>
+				    <ion-option-button class="button-info" ng-click="deviceTap('router.editlocations',location)">
+				      Edit
+				    </ion-option-button>
+				    
+				</div>
+			</ion-item>
+		</ion-list>
+	</ion-content>
+	
+	
+	
+	
 </ion-view>

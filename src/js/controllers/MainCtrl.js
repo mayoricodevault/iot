@@ -1,18 +1,13 @@
 'use strict';
 
-app.controller('MainCtrl', function($scope, $ionicSideMenuDelegate, $ionicPopover, $state, $timeout) {
+app.controller('MainCtrl', function($scope, $ionicSideMenuDelegate, $ionicPopover, $state, $timeout, shareComponentService, UserFactory) {
+	$scope.username="";
+	$scope.password="";
+	
+	
 	$scope.users = [
 		{ username: 'Admin', email: 'admin@iot.domain', location: true, id: 'admin', avatar: 'img/noavatar.png', enabled: 'true', lastLogin: 'Online' },
-		{ username: 'xively', email: 'xively@iot.domain', location: true, id: 'xively', avatar: 'img/noavatar.png', enabled: 'true', lastLogin: 'Last login: 01/09/2014' }
-	];
-	
-	$scope.products = [
-		{id:'1', name:'Black'},
-		{id:'2', name:'Mocha'},
-		{id:'3', name:'Iced Coffe'},
-		{id:'4', name:'Latte'},
-		{id:'5', name:'Cappuccino'},
-		{id:'6', name:'Other'}
+		{ username: 'xively', email: 'xively@iot.domain', location: true, id: 'stacy', avatar: 'img/noavatar.png', enabled: 'true', lastLogin: 'Last login: 01/09/2014' }
 	];
 	
 	$scope.device = { id: null, name: 'No Device', icon: 'ion-ios7-help-empty', status: 'Offline', type:[{id:'1', name:'Generic'},{id:'2', name:'Slave'}]},
@@ -27,22 +22,33 @@ app.controller('MainCtrl', function($scope, $ionicSideMenuDelegate, $ionicPopove
 		{ id: '8', name: 'Satellite Station', icon: 'ion-social-apple', status: 'Online', color: 'balanced', userSelect: "xively", actionSelect: null },
 		{ id: '9', name: 'Client Face', icon: 'ion-social-tux', status: 'Online', color: 'balanced', userSelect: "xively", actionSelect: null },
 	];
-	$scope.locations = [
-		{ id: '1', name: 'Hallway', icon: 'ion-fork', note: 'Hall Way', featured: true },
-		{ id: '2', name: 'Contitution', icon: 'ion-waterdrop', note: 'Coffe Shop Setup', featured: true },
+	
+	$scope.type = [
+		{id:'1',name:'Generic'},
+		{id:'2',name:'Slave'}
 	];
+
+	
 	$scope.actions = [
 		{ id: '1', name: 'In Zone', type: "range", value: '68', minValue : "0", maxValue : "100", units: "%", iconBefore: 'ion-ios7-lightbulb-outline', iconAfter: 'ion-ios7-lightbulb', deviceSelect : "", script: "", featured: true },
 		{ id: '2', name: 'Out Zone', type: "range", value: '24', minValue : "0", maxValue : "100", units: "%", iconBefore: 'ion-ios7-bolt-outline', iconAfter: 'ion-ios7-bolt', deviceSelect : "", script: "", featured: false },
 		{ id: '4', name: 'Replication', type: "toggle", featured: true },
 	];
+	
+	UserFactory.getUser().then(function success(response){
+		$scope.user = response.data;	
+	});
+	
 	$scope.toggleLeft = function() {
 		$ionicSideMenuDelegate.toggleLeft();
 	};
+	
 	$scope.deviceTap = function(route, device) {
 		$scope.device = device;
+		shareComponentService.addDevice(device);
 		$state.go(route);
 	};
+	
 	$ionicPopover.fromTemplateUrl('templates/alerts.html', {
 		scope: $scope,
 	}).then(function(popover) {
@@ -60,4 +66,10 @@ app.controller('MainCtrl', function($scope, $ionicSideMenuDelegate, $ionicPopove
 	$timeout(function () {
 		ionic.EventController.trigger("resize", "", true, false);
 	}, 1500);
+	
+	$scope.logout = function() {
+		UserFactory.logout();
+		$scope.user = null;
+		$state.go("intro");
+	}
 })

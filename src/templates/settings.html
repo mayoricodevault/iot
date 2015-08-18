@@ -1,5 +1,8 @@
 <ion-view title="Settings">	
 	<ion-content>
+		<form name="addSetttingForm" ng-init="setFormScope(this)" data-ng-submit="settingSubmit()">
+			
+		
 		<ul class="list">
 			<div class="item item-divider">
 				General Settings
@@ -7,7 +10,9 @@
 			<li class="item item-toggle">
 				Notifications
 				<label class="toggle toggle-balanced">
-					<input type="checkbox" checked>
+					<input type="checkbox" 
+						   checked
+						   ng-model="newsetting.notification" >
 					<div class="track">
 					<div class="handle"></div>
 					</div>
@@ -25,7 +30,8 @@
 			<li class="item item-toggle">
 				Use Google Maps
 				<label class="toggle toggle-balanced">
-					<input type="checkbox" checked>
+					<input type="checkbox" checked
+							ng-model="newsetting.usegooglemaps">
 					<div class="track">
 					<div class="handle"></div>
 					</div>
@@ -33,14 +39,16 @@
 			</li>
 			<label class="item item-input">
 				<span class="input-label">Google Maps API Key</span>
-				<input type="text" value="AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es">
+				<input type="text" value="AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es"
+					   ng-model="newsetting.googlemapapikey">
 			</label>
 			<!-- <div class="item item-divider">
 				Xively
 			</div>
 			<label class="item item-input">
 				<span class="input-label">Master Key</span>
-				<input type="text" value="a2PSG80FlQTbjENbanuMCAZyVhsHy2Z0AWuDHxTKtwtuP5k8">
+				<input type="text" value="a2PSG80FlQTbjENbanuMCAZyVhsHy2Z0AWuDHxTKtwtuP5k8"
+					   ng-model="newsetting.masterkey">
 			</label> -->
 			<!-- <div class="item item-divider">
 				API Settings
@@ -74,12 +82,12 @@
 			</div>
 			<li class="item item-checkbox">
 				<label class="item item-input">
-					<input type="text" placeholder="Email" >
+					<input type="text" placeholder="Email" ng-model="newsetting.email">
 				</label>
 			</li>
 			<li class="item item-checkbox">
 				<label class="item item-input">
-					<input type="text" placeholder="Sms" >
+					<input type="text" placeholder="Sms" ng-model="newsetting.sms">
 				</label>
 			</li>
 			
@@ -88,34 +96,42 @@
 			</div>
 			<li class="item item-checkbox">
 				<label class="checkbox">
-				<input type="checkbox" checked>
+				<input type="checkbox" checked ng-model="newsetting.urgentalerts">
 				</label>
 				Urgent Alerts
 			</li>
 			<li class="item item-checkbox">
 				<label class="checkbox">
-				<input type="checkbox" checked>
+				<input type="checkbox" checked ng-model="newsetting.devicesnotifications">
 				</label>
 				Devices Notifications
 			</li>
 			<!-- <li class="item item-checkbox">
 				<label class="checkbox">
-				<input type="checkbox" checked>
+				<input type="checkbox" checked ng-model="newsetting.usernotresponding">
 				</label>
 				Users Notifications
 			</li> -->
 			<li class="item item-checkbox">
 				<label class="checkbox">
-				<input type="checkbox">
+				<input type="checkbox" ng-model="newsetting.devicenotrespondig">
 				</label>
 				Device Not Responding
 			</li>
 			<li class="item item-checkbox">
 				<label class="checkbox">
-				<input type="checkbox">
+				<input type="checkbox" ng-model="newsetting.connectionlost">
 				</label>
 				Connection Lost
 			</li>
 		</ul>
+		
+		<div class="padding">
+			<button class="button button-balanced" >
+				{{ title }} Setting
+			</button>
+		</div>
+		
+		</form>
 	</ion-content>
 </ion-view>

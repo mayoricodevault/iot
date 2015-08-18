@@ -28,24 +28,28 @@
 				<img src="img/layout.png"/>
 			</div>
 		</wrap-owlcarousel>
-		<div ng-repeat="device in devices">
-			<div class="col-lg-50">
-				<div class="item item-icon-left" on-tap="deviceTap('router.device', device)">
+		
+		<ion-list can-swipe="listCanSwipe">
+			
+			<ion-item ng-repeat="device in devices">
+				<div on-tap="deviceTap('router.device', device)">
+					
 					<i class="icon" ng-class="device.icon"></i>
 					{{ device.devicename }}
 					<span class="item-note" ng-class="device.color">
 					{{ device.status }}
 					</span>
-					<ion-option-button class="button-positive"ng-click="">
-				      Share
+					
+					<ion-option-button class="button-positive" ng-click="delete(device)">
+				      Delete
 				    </ion-option-button>
-				    <ion-option-button class="button-info"ng-click="">
+				    <ion-option-button class="button-info" ng-click="deviceTap('router.editdevice',device)">
 				      Edit
 				    </ion-option-button>
+				    
 				</div>
-			    
-			</div>
-		</div>
+			</ion-item>
+		</ion-list>
 		<div class="clearfix"></div>
 	</ion-content>
 </ion-view>

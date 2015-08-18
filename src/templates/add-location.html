@@ -5,8 +5,11 @@
 				<label class="item item-input">
 					<input type="text" placeholder="Name" ng-model="newlocation.name">
 				</label>
-				<label class="item item-input">
-					<input type="text" placeholder="Icon" ng-model="newlocation.icon">
+				<label class="item item-input item-select">
+						<div class="input-label">
+							Select a icon
+						</div>
+					<select ng-model="newlocation.icon" ng-options="o.name as o.name for o in locationsList"></select>
 				</label>
 				<label class="item item-input">
 					<input type="text" placeholder="Note" ng-model="newlocation.note">

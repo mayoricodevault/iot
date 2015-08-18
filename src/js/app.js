@@ -2,7 +2,8 @@
 
 var app = angular.module('iot', ['ionic','ngCordova','chart.js', 'btford.socket-io','ngResource'])
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
+  
   $stateProvider
     .state('router', {
       url: "/route",
@@ -39,7 +40,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
       url: "/settings",
       views: {
         'settings-tab' :{
-          templateUrl: "templates/settings.html"
+          templateUrl: "templates/settings.html",
+          controller: 'settings'
         }
       }
     })
@@ -60,38 +62,57 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
     })
+  .state('router.editdevice', {
+      url: "/editdevice",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/edit-device.html",
+          controller: "editDevice"
+        }
+      }
+    })
 	.state('router.locations', {
       url: "/locations",
       views: {
         'menuContent' :{
-          templateUrl: "templates/locations.html"
+          templateUrl: "templates/locations.html",
+          controller:"locations"
         }
       }
     })
+	.state('router.editlocations', {
+      url: "/editLocation",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/editLocation.html",
+          controller:"editLocation"
+        }
+      }
+    })    
+  .state('router.products', {
+    url: "/products",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/products.html",
+        controller: "productCtrl"
+      }
+    }
+  })
+  .state('router.editproduct', {
+    url: "/editproduct",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/edit-product.html",
+        controller: "editProduct"
+      }
+    }
+  })
 	.state('router.users', {
       url: "/users",
       views: {
         'menuContent' :{
           templateUrl: "templates/users.html",
           controller: "Users"
-        }
-      }
-    })
-	/*.state('router.charts', {
-      url: "/charts",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/charts.html",
-          controller: "Charts"
-        }
-      }
-    })*/
-	.state('router.actions', {
-      url: "/actions",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/actions.html",
-          controller: "Actions"
         }
       }
     })
@@ -137,7 +158,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controller: "Intro"
     })
   $urlRouterProvider.otherwise("/intro");
-});
+  
+  $httpProvider.interceptors.push('AuthInterceptor');
+}).
+constant("API_URL", 'http://iottemplate-mmayorivera.c9.io');
 
 app.directive('wrapOwlcarousel', function () {
     return {

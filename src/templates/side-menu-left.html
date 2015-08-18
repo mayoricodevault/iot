@@ -15,6 +15,9 @@ cx<ion-side-menus>
 	<ion-side-menu expose-aside-when="large">
 		<ion-header-bar class="bar-balanced">
 			<h1 class="title">Menu</h1>
+			<button ng-click="logout()" class="button button-balanced icon-right ion-log-out">
+							<span class="font-family-default">Log Out</span>
+			</button>
 		</ion-header-bar>
 		<ion-content>
 			<div class="list">
@@ -22,15 +25,7 @@ cx<ion-side-menus>
 					<i class="icon ion-ios7-speedometer-outline"></i>
 					Dashboard
 				</a>
-				<!-- <a menu-close class="item item-icon-left" href="#/route/charts">
-					<i class="icon ion-ios7-pie"></i>
-					Charts
-				</a> -->
-				<!-- <a menu-close class="item item-icon-left" href="#/route/actions">
-					<i class="icon ion-flash"></i>
-					Actions
-					<span class="badge badge-balanced">{{actions.length}}</span>
-				</a> -->
+	
 				<a menu-close class="item item-icon-left" href="#/route/devices">
 					<i class="icon ion-network"></i>
 					Devices
@@ -40,6 +35,11 @@ cx<ion-side-menus>
 					<i class="icon ion-ios7-location"></i>
 					Locations
 					<span class="badge badge-balanced">{{locations.length}}</span>
+				</a>
+				<a menu-close class="item item-icon-left" href="#/route/products">
+					<i class="icon ion-ios7-location"></i>
+					Products
+					<span class="badge badge-balanced">{{products.length}}</span>
 				</a>
 				<a menu-close class="item item-icon-left" href="#/route/users">
 					<i class="icon ion-ios7-people"></i>
@@ -69,14 +69,8 @@ cx<ion-side-menus>
 					<i class="icon ion-ios7-personadd"></i>
 					Add User
 				</a>
-				<div class="item item-divider">
-					Account
-				</div>
-				<a menu-close class="item item-icon-left" href="#/intro">
-					<i class="icon ion-power"></i>
-					Intro
-				</a>
+
 			</div>
 		</ion-content>
 	</ion-side-menu>
-</ion-side-menus>
+</ion-side-menus>>

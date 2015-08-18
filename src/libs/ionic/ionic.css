@@ -5038,7 +5038,9 @@ a.item-content {
 .item-thumbnail-left, .item-thumbnail-left .item-content {
   padding-top: 8px;
   padding-left: 106px;
-  min-height: 100px; }
+  min-height: 100px;
+  /*min-height: 60px;*/
+  }
   .item-thumbnail-left > img:first-child, .item-thumbnail-left .item-image, .item-thumbnail-left .item-content > img:first-child, .item-thumbnail-left .item-content .item-image {
     position: absolute;
     top: 10px;

@@ -1,27 +1,34 @@
 'use strict';
-app.controller('Dashboard', ['$scope','Socket','$interval', function($scope, Socket , $interval) {
+app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', function($scope, Socket , $interval, Api,Toast) {
 	Socket.connect( );
   $scope.messages = [];
+  $scope.devices = [];
   $scope.numberofusers=0;
 	$scope.messagesPoolCount=0;
   $scope.individualBoard=0;
-	var maximum = 150;
-	$scope.data = [[]];
-	$scope.labels = [];
-	for (var i = 0; i < maximum; i++) {
-		$scope.data[0].push(0);
-		$scope.labels.push("");
-	}
+  
+  Api.Device.query({}, function(data){
+        $scope.devices = data;
+  });
+//	var maximum = 150;
+//	$scope.data = [[]];
+$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+  $scope.series = ['Series A', 'Series B'];
+  $scope.data = [
+    [65, 59, 80, 81, 56, 55, 40],
+    [28, 48, 40, 19, 86, 27, 90]
+  ];
+
 	$scope.options =  {
 		responsive: true,
-		showTooltips: true,
+		showTooltips: false,
 		animation: true,
 		pointDot : false,
-		scaleShowLabels: true,
+		scaleShowLabels: false,
 		showScale: true,
 		maintainAspectRatio: false,
 		datasetStrokeWidth : 2,
-    }; 
+  }; 
 
     function getLiveChartData () {
       if ($scope.data[0].length) {
@@ -31,18 +38,20 @@ app.controller('Dashboard', ['$scope','Socket','$interval', function($scope, Soc
       $scope.labels.push('');
       $scope.data[0].push($scope.messagesPoolCount);
     }
-	// Simulate async data update
-	$interval(function () {
-		getLiveChartData();
-	}, 500);
-	Socket.on('xternal', function(data){
+
+  	$interval(function () {
+  		getLiveChartData();
+  	}, 500);
+
+	//	getLiveChartData();
+	
+	 Socket.on('xternal', function(data){
       $scope.messagesPoolCount = data.msgs;
-    		
       $scope.messages.push(data);
-       
+      Toast.show('Incoming.....');
     });
     Socket.on('connect', function () {
-    		console.log("sssss");
+    		Toast.show('Coonecting.....');
     });
     Socket.on('message', function(data){
     		$scope.messagesPoolCount = data.msgs;
@@ -51,5 +60,13 @@ app.controller('Dashboard', ['$scope','Socket','$interval', function($scope, Soc
 	  // $scope.$on('$locationChangeStart', function(event){
    //     Socket.disconnect(true);
    // })
+	
+  $scope.doRefresh = function() {
+        $scope.$broadcast('scroll.refreshComplete');
+        Toast.show('Loading Devices.....');
+        Api.Device.query({}, function(data){
+             $scope.devices = data;
+        });
+    }
 	
 }]);

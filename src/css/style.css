@@ -593,3 +593,15 @@
   width: 60%;
   height: 30%;
 }
+
+
+/*.badge.badge-balanced{
+  border-color: #ff4943;
+  background-color: #ff4943;
+  color: #fff;
+}
+
+.toggle.toggle-balanced input:checked + .track{
+  border-color: #ff4943;
+  background-color: #ff4943;
+}*/

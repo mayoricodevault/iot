@@ -1,0 +1,34 @@
+<ion-view title="Products">
+	<ion-content class="padding-vertical">
+		
+		<ion-refresher
+	         refreshing-text="Loading..."
+	         refreshing-icon="ion-loading-c"
+	         pulling-icon="ion-ios7-arrow-thin-down"
+	         on-refresh="doRefresh()">
+        </ion-refresher>
+        
+		<ion-list can-swipe="listCanSwipe">
+			
+			<ion-item ng-repeat="product in products">
+				
+				<div on-tap="deviceTap('router.product', product)">
+					
+					<!-- <div class="item item-icon-left" href="#"> -->
+						<i class="icon" ng-class="location.icon"></i>
+						{{ product.productname }}
+						
+						<ion-option-button class="button-positive" ng-click="delete(product)">
+					      Delete
+					    </ion-option-button>
+					    <ion-option-button class="button-info" ng-click="productTap('router.editproduct',product)">
+					      Edit
+					    </ion-option-button>
+					<!-- </div> -->
+				</div>
+				
+			</ion-item>
+			
+		</ion-list>
+	</ion-content>
+</ion-view>

@@ -1,4 +1,4 @@
-app.factory('Toast', function($rootScope, $timeout, $ionicPopup, $cordovaToast) {
+app.factory('Toast', function($rootScope, $cordovaToast, $ionicLoading) {
 	    return {
 	        show: function (message, duration, position) {
 	        	message = message || "There was a problem...";
@@ -17,15 +17,10 @@ app.factory('Toast', function($rootScope, $timeout, $ionicPopup, $cordovaToast) 
                         duration = 5000;
                     }
 
-  					var myPopup = $ionicPopup.show({
-  						template: "<div class='loading-container'>" + message + "</div>",
-  						scope: $rootScope,
-  						buttons: []
-  					});
-  
-  					$timeout(function() {
-  						myPopup.close(); 
-  					}, duration);
+	  				var myPopup = $ionicLoading.show({
+					  template: message,
+					  duration: duration
+					});
 	        	}
 			}
 		};

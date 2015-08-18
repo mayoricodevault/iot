@@ -1,9 +1,16 @@
 'use strict';
 
-app.controller('Users', function($scope, $ionicActionSheet) {
+app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', function($scope, $ionicActionSheet,Api,Toast) {
+	
+	$scope.users = [];
+	
+	Api.User.query({},function(data){
+		$scope.users = data;
+		console.log("users --> ",$scope.users);
+	});
+	
 	ionic.DomUtil.ready(addMaps);
-	var adminLat = new google.maps.LatLng(43.07493,-89.381388);
-	var userLat = new google.maps.LatLng(45.07493,-88.381388);
+	var adminLat = new google.maps.LatLng(-16.5411128,-68.088327);
 	var mapOptions = {
 		center: adminLat,
 		zoom: 16,
@@ -11,13 +18,7 @@ app.controller('Users', function($scope, $ionicActionSheet) {
 		scrollwheel: false,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	var mapOptions2 = {
-		center: userLat,
-		zoom: 11,
-		draggable: false,
-		scrollwheel: false,
-		mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
+
 	function addMaps () {
 		var map = new google.maps.Map(document.getElementById("map_admin"),
 		mapOptions);
@@ -45,4 +46,16 @@ app.controller('Users', function($scope, $ionicActionSheet) {
 			}
 		});
 	}
-});
+	
+	
+	
+	
+	$scope.doRefresh = function() {
+        $scope.$broadcast('scroll.refreshComplete');
+        Toast.show('Loading...');
+        Api.User.query({}, function(data){
+             $scope.users = data;
+        });
+    }
+	
+}]);

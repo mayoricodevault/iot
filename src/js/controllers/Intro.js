@@ -1,50 +1,25 @@
 'use strict';
 
-app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ionicLoading, $ionicPopup) {
-	
-	var firebaseObj;
-	
-	$scope.SignIn = function(event) {
-        event.preventDefault();  // To prevent form refresh
+app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ionicLoading, $ionicPopup, UserFactory, Toast) {
 
-        // Auth Logic will be here
-        firebaseObj = new Firebase("https://blistering-heat-2473.firebaseio.com");
-        var loginObj = $firebaseSimpleLogin(firebaseObj);
-
-        var username = $scope.user.email;
-        var password = $scope.user.password;
-
-        loginObj.$login('password', {
-            email: username,
-            password: password
-        })
-            .then(function(user) {
-                // Success callback
-                console.log('Authentication successful');
-            }, function(error) {
-                // Failure callback
-                console.log('Authentication failure');
-        });
-    }
-    
-    $scope.Logout = function(){
-    	firebaseObj.logout();
-    }
-    
 	
-	$scope.login = function() {
-		$ionicLoading.show({
-		  template: 'Logging in...'
-		});
-		$timeout( function() {
-			$ionicLoading.show({
-			  template: 'Success'
-			});
-		}, 1600);
-		$timeout( function() {
-			$ionicLoading.hide();
-			$ionicSlideBoxDelegate.next();
-		}, 2000);
+	$scope.login = function(username, password) {
+		Toast.show("Connecting....");
+		UserFactory.login(username, password).
+		then(function success(response){
+			$scope.user = response.data;
+			$timeout( function() {
+				$ionicLoading.show({
+				  template: 'Success'
+				});
+			}, 800);
+			$timeout( function() {
+				$ionicLoading.hide();
+				$ionicSlideBoxDelegate.next();
+			}, 800);
+			
+		}, loginError);
+		
 	}
 	$scope.nextSlide = function() {
 		$ionicSlideBoxDelegate.next();
@@ -75,4 +50,8 @@ app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ioni
 			]
 		});
 	};
+	function loginError(response) {
+		$ionicSlideBoxDelegate.previous();
+		Toast.show(response.data,1200);
+	}
 });

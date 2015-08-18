@@ -12,7 +12,7 @@
 					<input type="email" placeholder="Email" ng-model="newuser.email">
 				</label>
 				<label class="item item-input">
-					<input type="text" placeholder="Image" ng-model="newuser.avatar">
+					<input type="text" placeholder="Image" ng-model="newuser.image">
 				</label>
 				<div class="item item-divider">
 				Tracking
@@ -20,7 +20,7 @@
 				<li class="item item-toggle">
 					Show Location
 					<label class="toggle toggle-balanced">
-						<input type="checkbox" checked ng-model="newuser.location">
+						<input type="checkbox" checked ng-model="newuser.showlocation" ng-click="getLocation()">
 						<div class="track">
 							<div class="handle"></div>
 						</div>

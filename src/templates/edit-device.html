@@ -1,0 +1,71 @@
+<ion-view title="{{device.devicename}}">
+	<ion-content class="padding">
+		<form name="addDeviceForm" ng-init="setFormScope(this)" data-ng-submit="deviceSubmit()">
+			<div class="list" style="background:#ffffff;">
+				<div class="item item-divider">
+				Device Info
+				</div>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Name</span>
+					<input type="text" placeholder="Name" ng-model="newdevice.devicename">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Icon</span>
+					<input type="text" placeholder="Icon" ng-model="newdevice.icon">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Tag Id Assigned</span>
+					<input type="text" placeholder="Tag Id" ng-model="newdevice.tagid">
+				</label>
+				<div class="item item-divider">
+				Location
+				</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Select a Location
+					</div>
+					<select ng-model="newdevice.devicelocation" ng-options="o.id as o.name for o in locations"></select>
+				</label>
+				<div class="item item-divider">
+				Select Type
+				</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Type
+					</div>
+					<select ng-model="newdevice.type" ng-options="o.id as o.name for o in type"></select>
+				</label>
+				
+				<div ng-show="newdevice.type=='Slave'" >
+					<div class="item item-divider">
+						Master Device
+					</div>
+					<label class="item item-input item-select">
+						<div class="input-label">
+							Device
+						</div>
+						<select ng-model="newdevice.masterDevice" ng-options="o.name as o.name for o in devices"></select>
+					</label>
+				</div>
+				
+				<div class="item item-divider">
+				Featured
+				</div>
+				<li class="item item-toggle">
+					Featured
+					<label class="toggle toggle-balanced">
+						<input type="checkbox" checked ng-model="newdevice.featured">
+						<div class="track">
+							<div class="handle"></div>
+						</div>
+					</label>
+				</li>
+			</div>
+			<div class="padding">
+				<button class="button button-balanced">
+					Update Device
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>

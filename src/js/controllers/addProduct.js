@@ -1,30 +1,49 @@
 'use strict';
 
-app.controller('addProduct', function($scope) {
+app.controller('addProduct',['$scope','Api','$ionicPopup' ,function($scope,Api,$ionicPopup) {
+	
 	$scope.setFormScope = function(scope){
 		this.formScope = scope;
 	}
 	$scope.newproduct = {};
+	
 	$scope.productSubmit = function() {
-		if(!$scope.newproduct.name) {
-			alert('Name required');
+		if(!$scope.newproduct.productname) {
+			$scope.showAlert("Incorrect Value !!","Invalid Product Name!");
 			return;
 		}
 		if(!$scope.newproduct.icon) {
 			$scope.newproduct.icon = 'ion-alert';
 		}
-		$scope.products.push($scope.newproduct);
-		this.formScope.addProductForm.$setPristine();
-		var defaultForm = {
-			name : "",
-			icon : "",
-			large : "",
-			medium : "",
-			small : "",
-			reatred: "",
-		};
 		
-		console.log("data --> ",$scope.newproduct);
-		$scope.newproduct = defaultForm;
+		console.log("Product --> ",$scope.newproduct);
+		
+		Api.Product.save({}, $scope.newproduct,
+			function(data){
+				//this.formScope.addProductForm.$setPristine();
+				var defaultForm = {
+					productname : "",
+					icon : "",
+					large : "",
+					medium : "",
+					small : "",
+					featured: "",
+				};
+				
+				$scope.newproduct = defaultForm;
+			},
+			function(err){
+				$scope.showAlert("System Error!!!",err.statusText);
+				return false;
+			}
+		);
 	};
-});
+	
+	$scope.showAlert = function(errTitle, errMsg) {
+	   var alertPopup = $ionicPopup.alert({
+	     title: errTitle,
+	     template: errMsg
+	   });
+	   alertPopup.then(function(res) {});
+	 };
+}]);

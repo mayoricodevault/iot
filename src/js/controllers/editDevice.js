@@ -1,8 +1,9 @@
 'use strict';
 
-app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast', function($scope, Api, $ionicPopup, $cordovaToast) {
+app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','shareComponentService' , function($scope, Api, $ionicPopup, $cordovaToast, shareComponentService) {
 	
-	$scope.newdevice = {};
+	$scope.newdevice = shareComponentService.getDevice();
+	console.log("new device --> ",$scope.newdevice);
 	$scope.formScope=null;
 	$scope.setFormScope = function(frmDevice){
 		$scope.formScope = frmDevice;
@@ -21,7 +22,7 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast', fu
 			return;
 		}
 		
-		Api.Device.save({}, $scope.newdevice, 
+		Api.Device.save({id:$scope.newdevice._id}, $scope.newdevice, 
         function(data){
 			$scope.devices.push($scope.newdevice);
 			$scope.formScope.addDeviceForm.$setPristine();
