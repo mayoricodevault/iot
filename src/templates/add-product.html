@@ -1,23 +1,28 @@
-<ion-view title="Update Location">
+<ion-view title="Add New Product">
 	<ion-content>
-		<form name="addLocationForm" ng-init="setFormScope(this)" data-ng-submit="locationSubmit()">
+		<form name="addProductForm" ng-init="setFormScope(this)" data-ng-submit="productSubmit()">
 			<div class="list">
 				<label class="item item-input">
-					<input type="text" placeholder="Name" ng-model="newlocation.name">
+					<input type="text" placeholder="Name" ng-model="newproduct.productname">
 				</label>
-				<label class="item item-input item-select">
-						<div class="input-label">
-							Select a icon
-						</div>
-					<select ng-model="newlocation.icon" ng-options="o.name as o.name for o in locationsList"></select>
+				
+				<label class="item item-input">
+					<input type="text" placeholder="Icon" ng-model="newproduct.icon">					
+				</label>
+				
+				<label class="item item-input">
+					<input type="text" placeholder="Large" ng-model="newproduct.large">
 				</label>
 				<label class="item item-input">
-					<input type="text" placeholder="Note" ng-model="newlocation.note">
+					<input type="text" placeholder="Medium" ng-model="newproduct.medium">
+				</label>
+				<label class="item item-input">
+					<input type="text" placeholder="Small" ng-model="newproduct.small">
 				</label>
 				<li class="item item-toggle">
 					Featured
 					<label class="toggle toggle-balanced">
-						<input type="checkbox" checked ng-model="newlocation.featured">
+						<input type="checkbox" checked ng-model="newproduct.featured">
 						<div class="track">
 							<div class="handle"></div>
 						</div>
@@ -26,7 +31,7 @@
 			</div>
 			<div class="padding">
 				<button class="button button-balanced">
-					Update Location
+					Add Product
 				</button>
 			</div>
 		</form>

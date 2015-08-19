@@ -24,7 +24,9 @@
 					<div class="input-label">
 					Select a Location
 					</div>
-					<select ng-model="newdevice.devicelocation" ng-options="o.id as o.name for o in locations"></select>
+					<select ng-model="newdevice.devicelocation" ng-options="o._id as o.name for o in locations">
+						<option value="" >Select</option>
+					</select>
 				</label>
 				<div class="item item-divider">
 				Select Type
@@ -33,7 +35,9 @@
 					<div class="input-label">
 					Type
 					</div>
-					<select ng-model="newdevice.type" ng-options="o.name as o.name for o in device.type"></select>
+					<select ng-model="newdevice.type" ng-options="o.name as o.name for o in typeList">
+						<option value="" >Select</option>
+					</select>
 				</label>
 				
 				<div ng-show="newdevice.type=='Slave'" >
@@ -44,7 +48,9 @@
 						<div class="input-label">
 							Device
 						</div>
-						<select ng-model="newdevice.masterDevice" ng-options="o.name as o.name for o in devices"></select>
+						<select ng-model="newdevice.masterdevice" ng-options="o._id as o.devicename for o in deviceList">
+							<option value="">Select</option>
+						</select>
 					</label>
 				</div>
 				
@@ -63,7 +69,7 @@
 			</div>
 			<div class="padding">
 				<button class="button button-balanced">
-					Add Device
+					Add
 				</button>
 			</div>
 		</form>

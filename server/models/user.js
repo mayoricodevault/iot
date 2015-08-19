@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var deviceSchema = mongoose.Schema({
-    username: String,
+    username : {type:String,required:true,index:{unique:true}},
     email : String,
     image : String,
     lat : String,

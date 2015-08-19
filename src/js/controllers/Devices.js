@@ -3,11 +3,12 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast', function($
     $scope.devices = [];
     $scope.listCanSwipe = true;
     
+    $scope.doRefresh;
+   
     Api.Device.query({}, function(data){
-        $scope.devices = data;
-        console.log("devices --> ", $scope.devices);
-    });
-    console.log($scope.devices);
+    	$scope.devices=data;
+    }); // end query
+   
     $scope.deleteAll = function(){
         Api.Device.delete({}, function(data){
             $scope.devices = [];

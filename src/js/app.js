@@ -16,7 +16,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/dashboard.html",
-          controller: 'Dashboard'
+          controller: 'Dashboard',
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -24,7 +25,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       url: "/home",
       views: {
         'home-tab' :{
-          templateUrl: "templates/home.html"
+          templateUrl: "templates/home.html",
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -32,7 +34,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       url: "/favorites",
       views: {
         'favorites-tab' :{
-          templateUrl: "templates/favorites.html"
+          templateUrl: "templates/favorites.html",
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -41,7 +44,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'settings-tab' :{
           templateUrl: "templates/settings.html",
-          controller: 'settings'
+          controller: 'settings',
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -50,7 +54,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/devices.html",
-          controller: "deviceCtrl"
+          controller: "deviceCtrl",
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -58,7 +63,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       url: "/device",
       views: {
         'menuContent' :{
-          templateUrl: "templates/device-single.html"
+          templateUrl: "templates/device-single.html",
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -67,7 +73,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/edit-device.html",
-          controller: "editDevice"
+          controller: "editDevice",
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -76,25 +83,18 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/locations.html",
-          controller:"locations"
+          controller:"locations",
+          resolve: { authenticate: authenticate }
         }
       }
     })
-	.state('router.editlocations', {
-      url: "/editLocation",
-      views: {
-        'menuContent' :{
-          templateUrl: "templates/editLocation.html",
-          controller:"editLocation"
-        }
-      }
-    })    
   .state('router.products', {
     url: "/products",
     views: {
       'menuContent' :{
         templateUrl: "templates/products.html",
-        controller: "productCtrl"
+        controller: "productCtrl",
+        resolve: { authenticate: authenticate }
       }
     }
   })
@@ -103,7 +103,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
     views: {
       'menuContent' :{
         templateUrl: "templates/edit-product.html",
-        controller: "editProduct"
+        controller: "editProduct",
+        resolve: { authenticate: authenticate }
       }
     }
   })
@@ -112,7 +113,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/users.html",
-          controller: "Users"
+          controller: "Users",
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -121,7 +123,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/add-user.html",
-          controller: "addUser"
+          controller: "addUser",
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -130,7 +133,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/add-device.html",
-          controller: "addDevice"
+          controller: "addDevice",
+          resolve: { authenticate: authenticate }
         }
       }
     })
@@ -139,29 +143,75 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/add-location.html",
-          controller: "addLocation"
+          controller: "locations",
+          resolve: { authenticate: authenticate }
         }
       }
     })
+	.state('router.editLocation', {
+      url: "/edit-location",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/edit-location.html",
+          controller:"editLocation",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })       
   .state('router.addProduct', {
     url: "/add-product",
     views: {
       'menuContent' :{
         templateUrl: "templates/add-product.html",
-        controller: "addProduct"
+        controller: "addProduct",
+        resolve: { authenticate: authenticate }
       }
     }
   })
 	.state('intro', {
       url: "/intro",
       templateUrl: "templates/intro.html",
-      controller: "Intro"
+      controller: "Intro",
+      resolve: { reroute: reroute }
     })
+    
   $urlRouterProvider.otherwise("/intro");
   
   $httpProvider.interceptors.push('AuthInterceptor');
-}).
-constant("API_URL", 'http://iottemplate-mmayorivera.c9.io');
+  
+  function reroute($q, LSFactory , $state, $timeout) {
+      if (LSFactory.getUser()) {
+        $timeout(function() {
+          // This code runs after the authentication promise has been rejected.
+          // Go to the log-in page
+          $state.go('router.dashboard.home')
+        })
+        // Resolve the promise successfully
+      } else {
+        // The next bit of code is asynchronously tricky.
+        return $q.when()
+      }
+  }
+  
+  function authenticate($q, LSFactory , $state, $timeout) {
+      if (LSFactory.getUser()) {
+        // Resolve the promise successfully
+        return $q.when()
+      } else {
+        // The next bit of code is asynchronously tricky.
+
+        $timeout(function() {
+          // This code runs after the authentication promise has been rejected.
+          // Go to the log-in page
+          $state.go('intro')
+        })
+
+        // Reject the authentication promise to prevent the state from loading
+        return $q.reject()
+      }
+    }
+})
+.constant("API_URL", 'http://iottemplate-mmayorivera.c9.io');
 
 app.directive('wrapOwlcarousel', function () {
     return {

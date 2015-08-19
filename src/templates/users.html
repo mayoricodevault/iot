@@ -17,7 +17,9 @@
 					</div>
 					<div ng-show="user.showlocation == true" class="item item-image">
 						<!-- <div id="map_{{user.id}}" style="height: 150px;" data-tap-disabled="true"></div> -->
-						<div id="map_admin" style="height: 150px;" data-tap-disabled="true"></div>
+						<!-- <div id="map_admin" style="height: 150px;" data-tap-disabled="true"></div> -->
+						
+						<div id='map' zoom="14" lat="{{user.lat}}" lng="{{user.lng}}" style="height: 150px;" map-xively></div>
 					</div>
 					<ul class="list">
 						<li class="item item-toggle">

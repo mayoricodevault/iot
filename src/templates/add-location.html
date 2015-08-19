@@ -9,7 +9,9 @@
 						<div class="input-label">
 							Select a icon
 						</div>
-					<select ng-model="newlocation.icon" ng-options="o.name as o.name for o in locationsList"></select>
+					<select ng-model="newlocation.icon" ng-options="o.name as o.name for o in locationsList">
+						<option value="" >Select</option>
+					</select>
 				</label>
 				<label class="item item-input">
 					<input type="text" placeholder="Note" ng-model="newlocation.note">
@@ -26,7 +28,7 @@
 			</div>
 			<div class="padding">
 				<button class="button button-balanced">
-					Add Location
+					Add
 				</button>
 			</div>
 		</form>

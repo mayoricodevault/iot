@@ -1,9 +1,22 @@
 'use strict';
 
-app.controller('editLocation', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','shareComponentService' , function($scope, Api, $ionicPopup, $cordovaToast, shareComponentService) {
+app.controller('editLocation', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','shareComponentService','storeService','Toast' , function($scope, Api, $ionicPopup, $cordovaToast, shareComponentService, storeService,Toast) {
+
+	$scope.newlocation = [];
 	$scope.Locations = [];
-	$scope.newlocation = shareComponentService.getDevice();
-	console.log("new Location --> ",$scope.newlocation);
+	$scope.locationsList=[
+						{
+							name:"ion-fork"
+						},
+						{
+						   name:"ion-waterdrop"
+						},{
+							name:"ion-alert"
+						}
+		];	
+	//$scope.newlocation = shareComponentService.getDevice();
+	$scope.newlocation = storeService.jsonRead("shareData");
+	
 	$scope.formScope=null;
 	$scope.setFormScope = function(frmLocation){
 		$scope.formScope = frmLocation;
@@ -11,25 +24,18 @@ app.controller('editLocation', ['$scope', 'Api', '$ionicPopup', '$cordovaToast',
 	
 	$scope.locationSubmit = function() {
 		if(!$scope.newlocation.name) {
-			$scope.showAlert("Incorrect Value !!","Invalid Name!");
+			Toast.show("The field Name is required.");
 			return;
 		}
+		
 		if(!$scope.newlocation.icon) {
 			$scope.newlocation.icon = 'ion-alert';
 		}
 		
-		
 		Api.Location.save({id:$scope.newlocation._id}, $scope.newlocation, 
         function(data){
-			$scope.locations.push($scope.newlocation);
-			$scope.formScope.addLocationForm.$setPristine();
-			var defaultForm = {
-				name : "",
-				icon : "",
-				note: "",
-				featured: true,
-			};
-			$scope.newlocation = defaultForm;
+			Toast.show("Update Successful.","");
+			storeService.jsonWrite("shareData",$scope.newlocation);
         },
         function(err){
         	$scope.showAlert("System Error!!!", err.statusText);
@@ -47,4 +53,5 @@ app.controller('editLocation', ['$scope', 'Api', '$ionicPopup', '$cordovaToast',
 	     
 	   });
 	 };
+	 
 }]);

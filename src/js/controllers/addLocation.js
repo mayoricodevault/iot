@@ -13,12 +13,18 @@ app.controller('addLocation',['$scope','Api','$ionicPopup','$cordovaToast', func
 						}
 		];
 		
-	
-	$scope.newlocation = {};
+	$scope.locations = [];
+	$scope.newlocation = {
+		name : "",
+		icon : "",
+		note : "",
+		featured : true
+	};   //end json  
 	$scope.formScope=null;
 	$scope.setFormScope = function(frmLocation){
 		this.formScope = frmLocation;
 	}
+	
 	$scope.locationSubmit = function() {
 		if(!$scope.newlocation.name) {
 			$scope.showAlert("Name required.","Name is empty.");
@@ -29,6 +35,7 @@ app.controller('addLocation',['$scope','Api','$ionicPopup','$cordovaToast', func
 			$scope.newlocation.icon = 'ion-alert';
 		}
 		
+		
 		Api.Location.save({},$scope.newlocation,
 			function(data){
 			$scope.locations.push($scope.newlocation);
@@ -37,7 +44,8 @@ app.controller('addLocation',['$scope','Api','$ionicPopup','$cordovaToast', func
 			var defaultForm = {
 				name : "",
 				icon : "",
-				note : ""
+				note : "",
+				featured : true
 			};
 			$scope.newlocation = defaultForm;			
 		},
@@ -45,9 +53,9 @@ app.controller('addLocation',['$scope','Api','$ionicPopup','$cordovaToast', func
 			$scope.showAlert("System Error!!!",err.statusText);
 			return false;
 		});
-	};
+	}; // end submit
 	
-		 $scope.showAlert = function(errTitle, errMsg) {
+	 $scope.showAlert = function(errTitle, errMsg) {
 	   var alertPopup = $ionicPopup.alert({
 	     title: errTitle,
 	     template: errMsg
@@ -55,6 +63,6 @@ app.controller('addLocation',['$scope','Api','$ionicPopup','$cordovaToast', func
 	   alertPopup.then(function(res) {
 	     
 	   });
-	 };
+	 };// end showAlert
 	
 }]);

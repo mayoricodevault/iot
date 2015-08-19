@@ -4,6 +4,14 @@ var app = express();
 var http = require('http').Server(app);
 var _ = require("underscore");
 var io = require('socket.io')(http);
+var jwtSecret = 'asesam0/3uk';
+var session = require("express-session")({
+    secret: jwtSecret,
+    resave: true,
+    saveUninitialized: true
+  });
+var sharedsession = require("express-socket.io-session");
+
 //native NodeJS module for resolving paths
 var path = require('path');
 //get our port # from c9's enviromental variable: PORT
@@ -11,16 +19,20 @@ var port = process.env.PORT || 3000;
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var cors= require('cors');
+var moment = require('moment');
 // Async Parallel
 var async = require('async');
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 
-var jwtSecret = 'asesam0/3uk';
+
 //setup, configure, and connect to MongoDB
 var mongoose = require('mongoose');
 var configDB = require('./server/config/database.js');
+var sessionsStore = require('./server/models/session');
+var sessionMgm = require("./server/services/sessionManagement");
 mongoose.connect(configDB.url);
+app.use(session);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(methodOverride());
@@ -28,11 +40,7 @@ app.use(methodOverride());
 //Set our view engine to EJS, and set the directory our views will be stored in
 app.set('view engine', 'ejs');
 app.set('views', path.resolve(__dirname, 'src', 'views'));
-
-//serve static files from client folder.
-//ex: libs/bootstrap/bootstrap.css in our html actually points to client/libs/bootstrap/bootstrap.css
 app.use(express.static(path.resolve(__dirname, 'src')));
-
 //io Specific Settings
 // io.set('heartbeat timeout',10000);
 // io.set('heartbeat interval',9000);
@@ -46,16 +54,30 @@ var user = {
   password : "123"
 };
 
-
+io.use(sharedsession(session));
 io.on('connection', function(socket) {
+  
+  // var cookie = socket.handshake.headers.cookie;
+  // var match = cookie.match(/\buser_id=([a-zA-Z0-9]{32})/);  //parse cookie header
+  // var userId = match ? match[1] : null;
+        
   var devicename = '';
+  var CurrentDate = moment().format();
+  console.log(CurrentDate);
   numberofusers = io.sockets.server.eio.clientsCount;
   console.log("Number of Users : " + numberofusers);
   console.log("A Device has Connected!" + socket.id);
+  sessionMgm.add({
+    sessionid : socket.handshake.sessionID,
+    socketid : socket.id,
+    dt : moment().format(),
+    role : 'anonymous'
+  });
   
   socket.on('request-devices', function(){
     socket.emit('devices', {devices: devices});
   });
+  
   
   socket.on('message', function(data){
       io.emit('message', {devicename: devicename, message: "room : " + data.message });
@@ -66,6 +88,17 @@ io.on('connection', function(socket) {
   })
   
   socket.on('add-device', function(data){
+
+    if(data != null) {
+        var user = sessionMgm.getSessionBySocketId(data.socketid);
+        if(user != null) {
+            io.sockets.socket(user.sessionId).emit('newMessage', data.message);
+        } else {
+            var sysMsg = {type: "error", message: "User not found!"};
+            socket.emit('systemMessage', sysMsg);
+        }
+    }
+
 
     if(devices.indexOf(data.devicename) == -1){
       io.emit('add-device', {
@@ -85,6 +118,7 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function(){
     console.log(devicename + ' has Disconnected!');
     devices.splice(devices.indexOf(devicename), 1);
+    sessionMgm.remove(socket.id);
     io.emit('remove-device', {devicename: devicename});
   })
 });

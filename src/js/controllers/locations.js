@@ -5,13 +5,62 @@ app.controller('locations', ['$scope', 'Api', '$ionicPopup','Toast' , function($
     $scope.form = {};
     $scope.locations = [];
   	$scope.listCanSwipe = true;
+	$scope.newlocation = {
+		name : "",
+		icon : "",
+		note : "",
+		featured : true
+	};   //end json 
+	
+	$scope.locationsList=[
+						{
+							name:"ion-fork"
+						},
+						{
+						   name:"ion-waterdrop"
+						},{
+							name:"ion-alert"
+						}
+		];	
+	
+	
+	$scope.formScope=null;
+	$scope.setFormScope = function(frmLocation){
+		this.formScope = frmLocation;
+	}
+	
 
     Api.Location.query({}, function(data){
     	$scope.locations=data;
-    	console.info("** locations "+$scope.locations);
     }); // end query
 
-
+	$scope.locationSubmit = function() {
+		if(!$scope.newlocation.name) {
+		    Toast.show("The field Name is required.");
+			return;
+		}
+		
+		if(!$scope.newlocation.icon) {
+			$scope.newlocation.icon = 'ion-alert';
+		}
+		
+    		Api.Location.save({},$scope.newlocation,
+    			function(data){
+    			$scope.locations.push($scope.newlocation);
+    			var defaultForm = {
+    				name : "",
+    				icon : "",
+    				note : "",
+    				featured : true
+    			};
+    			$scope.newlocation = defaultForm;
+    			Toast.show("Add Successful.");
+    		},
+    		function(err){
+    		    Toast.show(err.data);
+    			return false;
+    		});
+	}; // end submit
 
     $scope.delete = function(location){
         var confirmPopup = $ionicPopup.confirm({
@@ -25,7 +74,7 @@ app.controller('locations', ['$scope', 'Api', '$ionicPopup','Toast' , function($
             });
          } 
        });
-    }
+    }// end delete
     
     $scope.addToDatabase = function(){
         Api.Location.save({}, $scope.form, 
@@ -50,7 +99,7 @@ app.controller('locations', ['$scope', 'Api', '$ionicPopup','Toast' , function($
 	 $scope.doRefresh = function() {
         $scope.$broadcast('scroll.refreshComplete');
         Toast.show('Loading...');
-        Api.Device.query({}, function(data){
+        Api.Location.query({}, function(data){
              $scope.locations = data;
         });
     }; //end doRefresh

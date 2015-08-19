@@ -1,9 +1,32 @@
 'use strict';
 
-app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','shareComponentService' , function($scope, Api, $ionicPopup, $cordovaToast, shareComponentService) {
+app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','shareComponentService','storeService', 'Toast' , function($scope, Api, $ionicPopup, $cordovaToast, shareComponentService, storeService, Toast) {
 	
-	$scope.newdevice = shareComponentService.getDevice();
-	console.log("new device --> ",$scope.newdevice);
+	
+	$scope.newdevice = storeService.jsonRead("shareData");
+	$scope.newdevice=[];
+	$scope.locationsList=[];
+	$scope.typeList=[];
+	$scope.deviceList=[];
+	Api.Location.query({}, function(data){
+    	$scope.locationsList=data;
+    }); // end query locations
+    
+    
+	$scope.typeList=[{
+						name:"Generic"
+					},{
+					    name:"Slave"
+					}];    
+					
+	Api.Device.query({}, function(data){
+    	$scope.deviceList=data;
+    	console.info("DEVICES LUST "+$scope.deviceList);
+    }); // end query device					
+					
+    
+   // $scope.newdevice=[]; 
+	$scope.newdevice = storeService.jsonRead("shareData");
 	$scope.formScope=null;
 	$scope.setFormScope = function(frmDevice){
 		$scope.formScope = frmDevice;
@@ -11,32 +34,46 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 	
 	$scope.deviceSubmit = function() {
 		if(!$scope.newdevice.devicename) {
-			$scope.showAlert("Incorrect Value !!","Invalid Device Name!");
+			Toast.show("The field Name is required.");
 			return;
 		}
 		if(!$scope.newdevice.icon) {
 			$scope.newdevice.icon = 'ion-alert';
 		}
 		if(!$scope.newdevice.tagid) {
-			$scope.showAlert("Incorrect Value !!","Invalid Tag ID!");
+				Toast.show("The field Tag ID is required.");
 			return;
 		}
 		
+		if(!$scope.newdevice.devicelocation) {
+			Toast.show("The field Location is required.");
+			return;
+		}		
+		
+		if(!$scope.newdevice.type){
+		  Toast.show("The field Type is required.");
+			return;
+		}		
+		
+		if(angular.lowercase($scope.newdevice.type)==="slave"){
+			if(!$scope.newdevice.masterdevice){
+		  		Toast.show("The field Master device is required.");
+				return;
+			}
+		}		
+		
+		
+		if(angular.lowercase($scope.newdevice.type)==="generic"){
+			$scope.newdevice.masterdevice="";
+		}			
+		
 		Api.Device.save({id:$scope.newdevice._id}, $scope.newdevice, 
         function(data){
-			$scope.devices.push($scope.newdevice);
-			$scope.formScope.addDeviceForm.$setPristine();
-			var defaultForm = {
-				devicename : "",
-				tagid:"",
-				icon : "",
-				status: "",
-				type : "",
-				devicelocation : "",
-				masterDevice : "",
-				featured : 0
-			};
-			$scope.newdevice = defaultForm;
+			//$scope.devices.push($scope.newdevice);
+			//$scope.formScope.addDeviceForm.$setPristine();
+			storeService.jsonWrite("shareData",$scope.newdevice);
+			Toast.show("Update Successful.");
+			//$scope.doRefresh();
         },
         function(err){
         	$scope.showAlert("System Error!!!", err.statusText);
@@ -54,4 +91,8 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 	     
 	   });
 	 };
+	 
+	 /*$scope.doRefresh = function() {
+        Toast.show('Loading...');
+     }*/
 }]);

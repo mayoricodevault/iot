@@ -8,19 +8,19 @@ app.factory('AuthTokenFactory', function AuthTokenFactory($window) {
     return {
       getToken: getToken,
       setToken: setToken,
-      isAuthenticated : isAuthenticated
+      isAuth : isAuth
     };
 
     function getToken() {
         if (!cachedToken)
                 cachedToken = store.getItem(key);
-            return cachedToken;
+        return cachedToken;
     }
-
     function setToken(token) {
       if (token) {
         store.setItem(key, token);
-         isAuthenticated = true;
+        cachedToken = token;
+        isAuthenticated = true;
       } else {
         store.removeItem(key);
         cachedToken = null;
@@ -28,8 +28,8 @@ app.factory('AuthTokenFactory', function AuthTokenFactory($window) {
       }
     }
     
-    function isAuthenticated() {
-      return !!AuthTokenFactory.getToken();
+    function isAuth() {
+      return !!getToken();
     }
 
   });

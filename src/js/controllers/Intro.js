@@ -1,13 +1,15 @@
 'use strict';
 
-app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ionicLoading, $ionicPopup, UserFactory, Toast) {
-
-	
+app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ionicLoading, $ionicPopup, UserFactory, Toast , Socket, $rootScope, $state, LSFactory) {
+	$scope.ioConn = null;
+	$scope.toggleLeft = function() {
+    	$ionicSideMenuDelegate.toggleLeft();
+	 };
+        
 	$scope.login = function(username, password) {
-		Toast.show("Connecting....");
+		Toast.show("Connecting....", 30);
 		UserFactory.login(username, password).
 		then(function success(response){
-			$scope.user = response.data;
 			$timeout( function() {
 				$ionicLoading.show({
 				  template: 'Success'
@@ -15,9 +17,11 @@ app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ioni
 			}, 800);
 			$timeout( function() {
 				$ionicLoading.hide();
-				$ionicSlideBoxDelegate.next();
 			}, 800);
-			
+			$scope.ioConn = Socket.connect();
+			LSFactory.setData("sio", $scope.ioConn.id);
+			LSFactory.setData("userId", username);
+			$state.go("router.dashboard.home");
 		}, loginError);
 		
 	}

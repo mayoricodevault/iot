@@ -1,18 +1,9 @@
-app.factory('UserFactory', ['$http', 'API_URL', 'AuthTokenFactory', '$q', function($http, API_URL, AuthTokenFactory, $q){
+app.factory('UserFactory', ['$http', 'API_URL', 'AuthTokenFactory', '$q', "$rootScope", function($http, API_URL, AuthTokenFactory, $q, LSFactory){
     return {
         login : login,
         logout: logout,
-        getUser : getUser,
-        isAuth : isAuth
+        getUser : getUser
     };
-    
-    function isAuth() {
-        if (AuthTokenFactory.getToken()) {
-            return $q.resolve("ok");
-        } else {
-            return $q.reject({data : 'Client does not a valid auhtorization'});
-        }
-	}
     
     function login(username,password) {
       return $http.post( API_URL + '/login', {
@@ -22,14 +13,14 @@ app.factory('UserFactory', ['$http', 'API_URL', 'AuthTokenFactory', '$q', functi
          AuthTokenFactory.setToken(response.data.token);
          return response;
       });
-    };
+    }
     function logout() {
         AuthTokenFactory.setToken();
     }
     function getUser() {
-        if (AuthTokenFactory.getToken()) {
+        if (AuthTokenFactory.isAuth) {
+    
             return $http.post( API_URL + '/me');
-            
         } else {
             return $q.reject({data : 'Client does not a valid auhtorization'});
         }

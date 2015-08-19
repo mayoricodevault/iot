@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('addUser', ['$scope','Api', '$ionicPopup',function($scope,Api,$ionicPopup) {
+app.controller('addUser', ['$scope','Api', '$ionicPopup','Toast',function($scope,Api,$ionicPopup,Toast) {
 	
 	$scope.setFormScope = function(scope){
 		this.formScope = scope;
@@ -11,7 +11,7 @@ app.controller('addUser', ['$scope','Api', '$ionicPopup',function($scope,Api,$io
 		console.log("newuser --> ",$scope.newuser);
 		
 		if(!$scope.newuser.username) {
-			alert('Username required');
+			Toast.show('The field Username is required');
 			return;
 		}
 		
@@ -39,10 +39,11 @@ app.controller('addUser', ['$scope','Api', '$ionicPopup',function($scope,Api,$io
 					showlocation: false,
 				};
 				$scope.newuser = defaultForm;
+				Toast.show("Add Successful.");
 				
 			},
 			function(err){
-				$scope.showAlert("System Error!!!",err.statusText);
+				Toast.show(err.data);
 				return false;
 			}
 		)

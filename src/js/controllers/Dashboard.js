@@ -1,15 +1,14 @@
 'use strict';
-app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', function($scope, Socket , $interval, Api,Toast) {
-	Socket.connect( );
+app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$rootScope', function($scope, Socket , $interval, Api,Toast) {
+	
+
   $scope.messages = [];
   $scope.devices = [];
   $scope.numberofusers=0;
 	$scope.messagesPoolCount=0;
   $scope.individualBoard=0;
   
-  Api.Device.query({}, function(data){
-        $scope.devices = data;
-  });
+  $scope.doRefresh;
 //	var maximum = 150;
 //	$scope.data = [[]];
 $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
@@ -50,8 +49,8 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July"]
       $scope.messages.push(data);
       Toast.show('Incoming.....');
     });
-    Socket.on('connect', function () {
-    		Toast.show('Coonecting.....');
+    $scope.$on('socket:connect', function (ev, data) {
+			Toast.show('Connecting..sss...'+ data);
     });
     Socket.on('message', function(data){
     		$scope.messagesPoolCount = data.msgs;

@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('addProduct',['$scope','Api','$ionicPopup' ,function($scope,Api,$ionicPopup) {
+app.controller('addProduct',['$scope','Api','$ionicPopup','Toast' ,function($scope,Api,$ionicPopup,Toast) {
 	
 	$scope.setFormScope = function(scope){
 		this.formScope = scope;
@@ -9,7 +9,7 @@ app.controller('addProduct',['$scope','Api','$ionicPopup' ,function($scope,Api,$
 	
 	$scope.productSubmit = function() {
 		if(!$scope.newproduct.productname) {
-			$scope.showAlert("Incorrect Value !!","Invalid Product Name!");
+			Toast.show("The field Name is required.");
 			return;
 		}
 		if(!$scope.newproduct.icon) {
@@ -31,9 +31,10 @@ app.controller('addProduct',['$scope','Api','$ionicPopup' ,function($scope,Api,$
 				};
 				
 				$scope.newproduct = defaultForm;
+				Toast.show("Add Successful.");
 			},
 			function(err){
-				$scope.showAlert("System Error!!!",err.statusText);
+				Toast.show(err.data);
 				return false;
 			}
 		);

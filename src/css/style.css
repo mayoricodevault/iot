@@ -438,6 +438,23 @@
   background-color: #ff4943;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
 }
+.bar-header-menu {
+  background-color: #ff4943!important;
+}
+.bar.bar-stable .title {
+  background-color: #ff4943;
+  color: #fff;
+}
+/*.badge.badge-balanced{
+  border-color: #ff4943;
+  background-color: #ff4943;
+  color: #fff;
+}
+
+.toggle.toggle-balanced input:checked + .track{
+  border-color: #ff4943;
+  background-color: #ff4943;
+}*/
 #intro-slide-box {
   background: url(../img/index-bg.jpg) no-repeat center center fixed;
   background-size: cover;
@@ -593,15 +610,3 @@
   width: 60%;
   height: 30%;
 }
-
-
-/*.badge.badge-balanced{
-  border-color: #ff4943;
-  background-color: #ff4943;
-  color: #fff;
-}
-
-.toggle.toggle-balanced input:checked + .track{
-  border-color: #ff4943;
-  background-color: #ff4943;
-}*/

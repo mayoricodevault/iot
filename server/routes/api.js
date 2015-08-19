@@ -14,13 +14,16 @@ module.exports = function(router, socket){
         device.icon = req.body.icon;
         device.type = req.body.type;
         device.featured = req.body.featured;
+        device.masterdevice = req.body.masterdevice;
         
         device.save(function(err, data){
             if(err)
-                throw err;
+                return res.status(400).end("The name field must be unique.");
+                //throw err;
             res.json(data);
         });
     });
+    
     
     router.get('/devices', function(req, res){
         Device.find({}, function(err, data){
@@ -57,7 +60,7 @@ module.exports = function(router, socket){
             device.tagid = req.body.tagid;
             device.type = req.body.type;
             device.featured = req.body.featured;
-            
+            device.masterdevice = req.body.masterdevice;
             device.save(function(err, data){
                 if(err)
                     throw err;
@@ -66,6 +69,16 @@ module.exports = function(router, socket){
             
         });
     });
+    
+    
+    router.get('/devices/:type', function(req, res){
+        console.log("**** DEVICE QUERY ***");
+        console.log("**** DEVICE QUERY ***"+req.params.type);
+        console.log("**** DEVICE QUERY ***"+req.params.type);
+        Device.findOne({type: req.params.type}, function(err, data){
+                res.json(data);
+        });
+    });    
     
     // Produts
     router.post('/products', function(req, res){
@@ -80,7 +93,7 @@ module.exports = function(router, socket){
         
         product.save(function(err, data){
             if(err)
-                throw err;
+                return res.status(400).end("The name field must be unique.");
             res.json(data);
         });
     });
@@ -188,8 +201,11 @@ module.exports = function(router, socket){
         location.note = req.body.note;
         location.featured=req.body.featured;
         location.save(function(err, data){
-            if(err)
-                throw err;
+            if(err){
+                return res.status(400).end("The name field must be unique.");
+                //throw err;
+            }
+                
             res.json(data);
         });
     });
@@ -225,11 +241,14 @@ module.exports = function(router, socket){
         });
     });
         
+      router.delete('/locations/:id', function(req, res){
+        Location.remove({_id: req.params.id}, function(err){
+            res.json({result: err ? 'error' : 'ok'});
+        })
+    })
     
     // User
-    
     router.post('/users', function(req, res){
-     
         var user = new User();
         user.username = req.body.username;
         user.email = req.body.email;
@@ -240,7 +259,7 @@ module.exports = function(router, socket){
         
         user.save(function(err, data){
             if(err)
-                throw err;
+                return res.status(400).end("The Username field must be unique.");
             res.json(data);
         });
     });
