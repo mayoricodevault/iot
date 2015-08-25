@@ -1,4 +1,4 @@
-<ion-view title="Locations">
+<ion-view title="Servers">
 	<!--
 	<ion-content class="padding-vertical">
 		
@@ -24,19 +24,19 @@
      </ion-refresher>		
 			<ion-list can-swipe="listCanSwipe">
 			
-			<ion-item ng-repeat="location in locations">
-				<div on-tap="deviceTap('router.addLocation', location)">
+			<ion-item ng-repeat="server in servers">
+				<div on-tap="deviceTap('router.addServer', server)">
 					
-					<i class="icon" ng-class="location.icon"></i>
-					{{ location.name }}
+					<i class="icon" ng-class="location.name"></i>
+					{{ server.name }}
 					<span class="item-note" >
-					{{ location.note }}
+					{{ server.url }}
 					</span>
 					
-					<ion-option-button class="button-positive" ng-click="delete(location)">
+					<ion-option-button class="button-positive" ng-click="delete(server)">
 				      Delete
 				    </ion-option-button>
-				    <ion-option-button class="button-info" ng-click="deviceTap('router.editLocation',location)">
+				    <ion-option-button class="button-info" ng-click="deviceTap('router.editserver',server)">
 				      Edit
 				    </ion-option-button>
 				    
@@ -44,8 +44,5 @@
 			</ion-item>
 		</ion-list>
 	</ion-content>
-	
-	
-	
 	
 </ion-view>

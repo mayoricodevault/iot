@@ -73,22 +73,23 @@
 		</ion-side-menu-content>
 			
 		<ion-side-menu side="left">
-			<header class="bar bar-header bar-stable">
+			<ion-header-bar class="bar-balanced">
 				<h1 class="title">Devices</h1>
-			</header>
-		    <ion-content class="has-header">
-				<ion-list>
-					<ion-item menu-close ng-click="login()">
-					  Device 1
-					</ion-item>
-					<ion-item menu-close href="#/app/search">
-					  Device 2
-					</ion-item>
-					<ion-item menu-close href="#/app/browse">
-					  Device 3
-					</ion-item>
-					<ion-item menu-close href="#/app/playlists">
-					  Device 4
+			</ion-header-bar>
+		    <ion-content>
+		    	
+				<div class="list">
+					<a menu-close class="item item-icon-left" href="#/route/dashboard/home">
+						<i class="icon ion-ios-monitor"></i>
+						Dashboard
+					</a>
+					<a menu-close class="item item-icon-left" href="#/route/dashboard/home">
+						<i class="icon ion-coffee"></i>
+						Barista
+					</a>
+					<menu-close class="item item-icon-left" href="#/route/dashboard/home">
+						<i class="icon ion-icecream"></i>
+						Kiosk
 					</ion-item>
 				</ion-list>
 			</ion-content>

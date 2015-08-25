@@ -14,7 +14,11 @@
 						<img ng-src="{{user.image}}">
 						<h2>{{ user.username }}</h2>
 						<p>{{user.lastLogin}} <span ng-show="user.lastLogin == 'Online'" class="balanced">&bull;</span></p>
+						
+						<p><span class="ion-edit" ng-click="editUser('router.edituser',user)" ></span>
+						<span class="ion-ios-close" ng-click="deleteUser(user)"></span></p>
 					</div>
+					
 					<div ng-show="user.showlocation == true" class="item item-image">
 						<!-- <div id="map_{{user.id}}" style="height: 150px;" data-tap-disabled="true"></div> -->
 						<!-- <div id="map_admin" style="height: 150px;" data-tap-disabled="true"></div> -->

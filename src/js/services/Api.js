@@ -6,5 +6,6 @@ app.factory('Api', ['$resource', function($resource){
         Location: $resource('/api/locations/:id', {id: '@id'}),
         //User: $resource('/api/deviceusers/:id', {id: '@id'}),
         User: $resource('/api/users/:id', {id: '@id'}),
+        Server: $resource('/api/servers/:id', {id: '@id'}),
     }
 }]);

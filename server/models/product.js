@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
-var deviceSchema = mongoose.Schema({
-    
+var productSchema = mongoose.Schema({
     productname: {type:String,required:true,index:{unique:true}},
     icon : String,
     large : String,
@@ -11,4 +10,4 @@ var deviceSchema = mongoose.Schema({
     
 });
 
-module.exports = mongoose.model('products', deviceSchema);
+module.exports = mongoose.model('products', productSchema);

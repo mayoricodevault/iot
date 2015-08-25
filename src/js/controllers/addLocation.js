@@ -3,23 +3,16 @@
 app.controller('addLocation',['$scope','Api','$ionicPopup','$cordovaToast', function($scope,Api,$ionicPopup,$cordovaToast) {
 
 	$scope.locationsList=[
-						{
-							name:"ion-fork"
-						},
-						{
-						   name:"ion-waterdrop"
-						},{
-							name:"ion-alert"
-						}
-		];
+						{ name:"ion-fork"},
+						{ name:"ion-waterdrop"},
+						{name:"ion-alert"}];
 		
-	$scope.locations = [];
 	$scope.newlocation = {
 		name : "",
 		icon : "",
 		note : "",
 		featured : true
-	};   //end json  
+	};
 	$scope.formScope=null;
 	$scope.setFormScope = function(frmLocation){
 		this.formScope = frmLocation;
@@ -38,17 +31,16 @@ app.controller('addLocation',['$scope','Api','$ionicPopup','$cordovaToast', func
 		
 		Api.Location.save({},$scope.newlocation,
 			function(data){
-			$scope.locations.push($scope.newlocation);
-		//	$scope.formScope.addLocationForm.$setPristine();
-		//	$scope.addLocationForm.$setPristine();
-			var defaultForm = {
-				name : "",
-				icon : "",
-				note : "",
-				featured : true
-			};
-			$scope.newlocation = defaultForm;			
-		},
+				$scope.locations.push($scope.newlocation);
+				console.log("LOCATIONS --> ",$scope.locations.length);
+				var defaultForm = {
+					name : "",
+					icon : "",
+					note : "",
+					featured : true
+				};
+				$scope.newlocation = defaultForm;			
+			},
 		function(err){
 			$scope.showAlert("System Error!!!",err.statusText);
 			return false;

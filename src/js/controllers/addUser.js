@@ -29,7 +29,7 @@ app.controller('addUser', ['$scope','Api', '$ionicPopup','Toast',function($scope
 		console.log("newuser --> ",$scope.newuser);
 		Api.User.save({},$scope.newuser,
 			function(data){
-				//$scope.users.push($scope.newuser);
+				$scope.users.push($scope.newuser);
 				//this.formScope.addUserForm.$setPristine();
 				var defaultForm = {
 					username : "",

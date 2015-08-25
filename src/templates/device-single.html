@@ -28,12 +28,29 @@
 					</label>
 				</li>
 			</div>
+			<ion-list can-swipe="listCanSwipe">
+				<ion-item ng-repeat="session in sessionArray">
+					<div on-tap="deviceTap('router.device', device)">
+						<i class="icon" ng-class="device.icon"></i>
+						{{ session.deviceName }}
+						<span class="item-note" ng-class="device.color">
+						{{ session.sessionid }}
+						</span>
+						<ion-option-button class="button-positive" ng-click="resetSession(session)">
+					      Reset
+					    </ion-option-button>
+					    <ion-option-button class="button-info" ng-click="testSession('router.editdevice',device)">
+					      Test
+					    </ion-option-button>
+					    
+					</div>
+				</ion-item>
+			</ion-list>
+			
+			
 			<div class="padding">
 				<button class="button button-balanced">
-					Close
-				</button>
-				<button class="button button-balanced">
-					Restart
+					Reset All
 				</button>
 			</div>
 			

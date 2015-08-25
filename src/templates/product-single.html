@@ -1,0 +1,61 @@
+<ion-view title="{{singleProduct.productname}}">
+	<ion-content class="padding">
+		<div ng-if="device.tagid === null">
+			<h5 class="text-center">No Product to Show</h5>
+		</div>
+		<!--<div ng-if="device.tagid != null">-->
+		<div>
+			
+			<div class="list">
+				
+				<div class="item item-divider">
+				Product Info
+				</div>
+				
+				<li class="item item-icon-left">
+					Name
+					<span class="item-note">{{singleProduct.productname}}</span>
+				</li>
+				
+				<li class="item item-icon-left">
+					Icon
+					<span class="item-note">{{singleProduct.icon}}</span>
+				</li>
+				
+				<li class="item item-icon-left">
+					Large
+					<span class="item-note">{{singleProduct.large}}</span>
+				</li>
+				
+				<li class="item item-icon-left">
+					Medium
+					<span class="item-note">{{singleProduct.medium}}</span>
+				</li>
+				
+				<li class="item item-icon-left">
+					Small
+					<span class="item-note">{{singleProduct.small}}</span>
+				</li>
+				
+				<li class="item item-toggle item-icon-left">
+					Featured
+					<label class="toggle toggle-balanced">
+						<input type="checkbox" checked ng-model="singleProduct.featured">
+						<div class="track">
+							<div class="handle"></div>
+						</div>
+					</label>
+				</li>
+			</div>
+			<div class="padding">
+				<button class="button button-balanced">
+					Close
+				</button>
+				<button class="button button-balanced">
+					Restart
+				</button>
+			</div>
+			
+		</div>
+	</ion-content>
+</ion-view>

@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('iot', ['ionic','ngCordova','chart.js', 'btford.socket-io','ngResource'])
+var app = angular.module('iot', ['ionic','ngCordova','chart.js', 'btford.socket-io','ngResource', 'firebase'])
 
 app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
   
@@ -59,11 +59,22 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
         }
       }
     })
+	.state('router.people', {
+      url: "/people",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/people.html",
+          controller: "people",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })    
 	.state('router.device', {
       url: "/device",
       views: {
         'menuContent' :{
           templateUrl: "templates/device-single.html",
+          controller: "deviceCtrl",
           resolve: { authenticate: authenticate }
         }
       }
@@ -78,6 +89,16 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
         }
       }
     })
+  .state('router.editserver', {
+      url: "/editserver",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/edit-server.html",
+          controller: "editServer",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })    
 	.state('router.locations', {
       url: "/locations",
       views: {
@@ -88,6 +109,16 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
         }
       }
     })
+  .state('router.servers', {
+      url: "/servers",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/servers.html",
+          controller:"servers",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })    
   .state('router.products', {
     url: "/products",
     views: {
@@ -108,6 +139,16 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       }
     }
   })
+  .state('router.product', {
+    url: "/product",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/product-single.html",
+        controller: "productCtrl",
+        resolve: { authenticate: authenticate }
+      }
+    }
+  })
 	.state('router.users', {
       url: "/users",
       views: {
@@ -124,6 +165,16 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
         'menuContent' :{
           templateUrl: "templates/add-user.html",
           controller: "addUser",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })
+    .state('router.edituser', {
+      url: "/edit-user",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/edit-user.html",
+          controller: "editUser",
           resolve: { authenticate: authenticate }
         }
       }
@@ -168,6 +219,16 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       }
     }
   })
+	.state('router.addServer', {
+      url: "/add-server",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/add-server.html",
+          controller: "addServer",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })  
 	.state('intro', {
       url: "/intro",
       templateUrl: "templates/intro.html",
@@ -211,7 +272,8 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       }
     }
 })
-.constant("API_URL", 'http://iottemplate-mmayorivera.c9.io');
+.constant("API_URL", 'http://iottemplate-mmayorivera.c9.io')
+.constant('FIREBASE_URI_SESSIONS', 'https://kxively.firebaseio.com/sessions');
 
 app.directive('wrapOwlcarousel', function () {
     return {

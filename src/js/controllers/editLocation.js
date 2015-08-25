@@ -34,11 +34,11 @@ app.controller('editLocation', ['$scope', 'Api', '$ionicPopup', '$cordovaToast',
 		
 		Api.Location.save({id:$scope.newlocation._id}, $scope.newlocation, 
         function(data){
-			Toast.show("Update Successful.","");
+			Toast.show("Update Successful.");
 			storeService.jsonWrite("shareData",$scope.newlocation);
         },
         function(err){
-        	$scope.showAlert("System Error!!!", err.statusText);
+        	Toast.show("System Error." + err.statusText);
 			return false;
         });
 	

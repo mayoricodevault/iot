@@ -29,5 +29,5 @@ app.controller('Actions', function($scope, $ionicActionSheet, $ionicModal) {
 				return true;
 			}
 		});
-	}
+	}// comnent
 });

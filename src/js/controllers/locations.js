@@ -3,7 +3,6 @@
 app.controller('locations', ['$scope', 'Api', '$ionicPopup','Toast' , function($scope, Api, $ionicPopup, Toast) {
 
     $scope.form = {};
-    $scope.locations = [];
   	$scope.listCanSwipe = true;
 	$scope.newlocation = {
 		name : "",
@@ -29,10 +28,10 @@ app.controller('locations', ['$scope', 'Api', '$ionicPopup','Toast' , function($
 		this.formScope = frmLocation;
 	}
 	
-
-    Api.Location.query({}, function(data){
+	$scope.doRefresh;
+    /*Api.Location.query({}, function(data){
     	$scope.locations=data;
-    }); // end query
+    });*/
 
 	$scope.locationSubmit = function() {
 		if(!$scope.newlocation.name) {
@@ -47,6 +46,7 @@ app.controller('locations', ['$scope', 'Api', '$ionicPopup','Toast' , function($
     		Api.Location.save({},$scope.newlocation,
     			function(data){
     			$scope.locations.push($scope.newlocation);
+    			console.log("LOCATIONS --> ",$scope.locations);
     			var defaultForm = {
     				name : "",
     				icon : "",
@@ -101,6 +101,7 @@ app.controller('locations', ['$scope', 'Api', '$ionicPopup','Toast' , function($
         Toast.show('Loading...');
         Api.Location.query({}, function(data){
              $scope.locations = data;
+             $scope.refreshDataAmount();
         });
     }; //end doRefresh
 	 

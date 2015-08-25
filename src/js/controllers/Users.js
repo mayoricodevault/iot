@@ -1,12 +1,11 @@
 'use strict';
 
-app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', function($scope, $ionicActionSheet,Api,Toast) {
+app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', '$ionicPopup','shareComponentService','$state', function($scope, $ionicActionSheet,Api,Toast,$ionicPopup,shareComponentService,$state) {
 	
 	$scope.users = [];
 	
 	Api.User.query({},function(data){
 		$scope.users = data;
-		console.log("users --> ",$scope.users);
 	});
 	
 	ionic.DomUtil.ready(addMaps);
@@ -27,6 +26,8 @@ app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', function($
 		mapOptions2);
 		$scope.map2 = map2;
 	};
+	
+	
 	$scope.userHold = function(user) {
 		var hideSheet = $ionicActionSheet.show({
 			buttons: [
@@ -47,7 +48,27 @@ app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', function($
 		});
 	}
 	
-	
+	$scope.deleteUser = function(user){
+		console.log("deleteUser");
+        var confirmPopup = $ionicPopup.confirm({
+        	title: 'Delete!',
+        	template: 'Are you sure you want to delete this user? ' +user.username
+        	
+        });
+       confirmPopup.then(function(res) {
+         if(res) {
+            Api.User.delete({id: user._id}, function(data){
+                $scope.doRefresh();
+            });
+         } 
+       });
+    }
+    
+    $scope.editUser = function(route, user) {
+		$scope.user = user;
+		shareComponentService.addDevice(user);
+		$state.go(route);
+	};
 	
 	
 	$scope.doRefresh = function() {
@@ -55,6 +76,7 @@ app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', function($
         Toast.show('Loading...');
         Api.User.query({}, function(data){
              $scope.users = data;
+             $scope.refreshDataAmount();
         });
     }
 	

@@ -1,8 +1,24 @@
 'use strict';
 
-app.controller('MainCtrl', function($scope, $ionicSideMenuDelegate, $ionicPopover, $state, $timeout, shareComponentService, UserFactory, storeService, $rootScope, Socket, $ionicHistory, $ionicSlideBoxDelegate, $window, API_URL, Toast, LSFactory) {
+app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicPopover, $state, $timeout, shareComponentService, UserFactory, storeService, $rootScope, Socket, $ionicHistory, $ionicSlideBoxDelegate, $window, API_URL, Toast, LSFactory) {
 	$scope.username="";
 	$scope.password="";
+	$scope.devices = [];
+	$scope.locations = [];
+	$scope.products = [];
+	$scope.users = [];
+	$scope.servers = [];
+	$scope.people= [];
+	
+	$scope.refreshDataAmount = function(){
+		Api.Device.query({}, function(data){$scope.devices=data;});
+	    Api.Location.query({}, function(data){$scope.locations=data;});
+	    Api.Product.query({}, function(data){$scope.products = data;});
+	    Api.User.query({},function(data){$scope.users = data;});
+	    Api.Server.query({},function(data){$scope.servers = data;});
+	}
+	$scope.refreshDataAmount();
+	
 
 	$scope.type = [
 		{id:'1',name:'Generic'},
@@ -18,11 +34,12 @@ app.controller('MainCtrl', function($scope, $ionicSideMenuDelegate, $ionicPopove
 		$ionicSideMenuDelegate.toggleLeft();
 	};
 	
-	$scope.deviceTap = function(route, device) {
-		$scope.device = device;
-		shareComponentService.addDevice(device);
+	$scope.deviceTap = function(route, data) {
+		$scope.device = data;
+		$scope.singleProduct = data;
+		shareComponentService.addDevice(data);
 		
-		storeService.jsonWrite("shareData",device);
+		storeService.jsonWrite("shareData",data);
 		
 		$state.go(route);
 	};

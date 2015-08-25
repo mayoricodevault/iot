@@ -50,23 +50,6 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 			return;
 		}		
 		
-		if(!$scope.newdevice.type){
-		  Toast.show("The field Type is required.");
-			return;
-		}		
-		
-		if(angular.lowercase($scope.newdevice.type)==="slave"){
-			if(!$scope.newdevice.masterdevice){
-		  		Toast.show("The field Master device is required.");
-				return;
-			}
-		}		
-		
-		
-		if(angular.lowercase($scope.newdevice.type)==="generic"){
-			$scope.newdevice.masterdevice="";
-		}			
-		
 		Api.Device.save({id:$scope.newdevice._id}, $scope.newdevice, 
         function(data){
 			//$scope.devices.push($scope.newdevice);

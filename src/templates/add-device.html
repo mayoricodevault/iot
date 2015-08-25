@@ -28,31 +28,18 @@
 						<option value="" >Select</option>
 					</select>
 				</label>
+				
 				<div class="item item-divider">
-				Select Type
+				Type
 				</div>
 				<label class="item item-input item-select">
 					<div class="input-label">
-					Type
+					Select a Type
 					</div>
-					<select ng-model="newdevice.type" ng-options="o.name as o.name for o in typeList">
+					<select ng-model="newdevice.devicetype" ng-options="o.name as o.name for o in devicetypes">
 						<option value="" >Select</option>
 					</select>
-				</label>
-				
-				<div ng-show="newdevice.type=='Slave'" >
-					<div class="item item-divider">
-						Master Device
-					</div>
-					<label class="item item-input item-select">
-						<div class="input-label">
-							Device
-						</div>
-						<select ng-model="newdevice.masterdevice" ng-options="o._id as o.devicename for o in deviceList">
-							<option value="">Select</option>
-						</select>
-					</label>
-				</div>
+				</label>				
 				
 				<div class="item item-divider">
 				Featured

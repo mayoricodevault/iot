@@ -5,6 +5,7 @@
     <title>Xively</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <link href="libs/ionic/ionic.css" rel="stylesheet">
+    <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     
     <script src="libs/chartjs/Chart.js"></script>
@@ -23,7 +24,8 @@
     <script type="text/javascript" src="libs/angular-chart.js/angular-chart.js"></script>
     <script type="text/javascript" src="libs/ngCordova/dist/ng-cordova.js"></script>
     <script type="text/javascript" src="libs/angular-socket-io/socket.js"></script>
-
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script type="text/javascript" src="libs/angularfire/angularfire.js"></script>
 
     <!--end -->
     <!--<script src="libs/angular-chart.js"></script>-->
@@ -31,10 +33,11 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript" src="js/SocketFactory.js"></script>
-
+    <script type="text/javascript" src="js/services/SessionService.js"></script>
+     <script type="text/javascript" src="js/services/VisitorsService.js"></script>
     <script type="text/javascript" src="js/services/Api.js"></script>
     <script type="text/javascript" src="js/services/Toaster.js"></script>
-<script type="text/javascript" src="js/services/LSFactory.js"></script>
+    <script type="text/javascript" src="js/services/LSFactory.js"></script>
     <script type="text/javascript" src="js/services/UserFactory.js"></script>
     <script type="text/javascript" src="js/services/AuthInterceptor.js"></script>
     <script type="text/javascript" src="js/services/AuthTokenFactory.js"></script>
@@ -68,6 +71,11 @@
     <script src="js/controllers/editDevice.js"></script>
     <script src="js/controllers/Products.js"></script>
     <script src="js/controllers/editProduct.js"></script>
+    <script src="js/controllers/servers.js"></script>
+    <script src="js/controllers/addServer.js"></script>
+    <script src="js/controllers/editServer.js"></script>
+    <script src="js/controllers/editUser.js"></script>
+    <script src="js/controllers/people.js"></script>
     
     <!-- Services -->
     <script src="js/services/shareComponentService.js"></script>

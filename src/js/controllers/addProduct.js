@@ -16,11 +16,10 @@ app.controller('addProduct',['$scope','Api','$ionicPopup','Toast' ,function($sco
 			$scope.newproduct.icon = 'ion-alert';
 		}
 		
-		console.log("Product --> ",$scope.newproduct);
-		
 		Api.Product.save({}, $scope.newproduct,
 			function(data){
 				//this.formScope.addProductForm.$setPristine();
+				$scope.products.push($scope.newproduct);
 				var defaultForm = {
 					productname : "",
 					icon : "",

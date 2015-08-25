@@ -3,6 +3,7 @@ var Product = require('../models/product');
 var Setting = require('../models/setting');
 var Location = require('../models/location');
 var User = require('../models/user');
+var Server = require('../models/server');
 
 module.exports = function(router, socket){
     // Device
@@ -12,13 +13,12 @@ module.exports = function(router, socket){
         device.devicelocation = req.body.devicelocation;
         device.tagid = req.body.tagid;
         device.icon = req.body.icon;
-        device.type = req.body.type;
         device.featured = req.body.featured;
-        device.masterdevice = req.body.masterdevice;
+        device.type = req.body.type;
         
         device.save(function(err, data){
             if(err)
-                return res.status(400).end("The name field must be unique.");
+                return res.status(400).end("The field must be unique.");
                 //throw err;
             res.json(data);
         });
@@ -58,9 +58,8 @@ module.exports = function(router, socket){
             device.devicelocation = req.body.devicelocation;
             device.icon = req.body.icon;
             device.tagid = req.body.tagid;
-            device.type = req.body.type;
             device.featured = req.body.featured;
-            device.masterdevice = req.body.masterdevice;
+            device.type = req.body.type;
             device.save(function(err, data){
                 if(err)
                     throw err;
@@ -70,15 +69,6 @@ module.exports = function(router, socket){
         });
     });
     
-    
-    router.get('/devices/:type', function(req, res){
-        console.log("**** DEVICE QUERY ***");
-        console.log("**** DEVICE QUERY ***"+req.params.type);
-        console.log("**** DEVICE QUERY ***"+req.params.type);
-        Device.findOne({type: req.params.type}, function(err, data){
-                res.json(data);
-        });
-    });    
     
     // Produts
     router.post('/products', function(req, res){
@@ -308,5 +298,57 @@ module.exports = function(router, socket){
         });
     });
     
+    
+    
+     // Server
+    router.post('/servers', function(req, res){
+        var server = new Server();
+        server.name = req.body.name;
+        server.ipaddress = req.body.ipaddress;
+        server.url = req.body.url;
+        server.save(function(err, data){
+            if(err){
+                return res.status(400).end("The name field must be unique.");
+                //throw err;
+            }
+            res.json(data);
+        });
+    });
+    
+    router.get('/servers/', function(req, res){
+        Server.find({}, function(err, data){
+            console.log(data);
+            res.json(data);
+        });
+    });
+    
+     router.post('/servers/:id', function(req, res){
+        
+        Server.findOne({_id: req.params.id}, function(err, data){
+            var server = data;
+            server.name = req.body.name;
+            server.ipaddress = req.body.ipaddress;
+            server.url = req.body.url;
+            server.save(function(err, data){
+                if(err)
+                    throw err;
+                res.json(data);
+            });
+            
+        });
+    });
+    
+    
+    router.delete('/servers', function(req, res){
+        Server.remove({}, function(err){
+            res.json({result: err ? 'error' : 'ok'});
+        });
+    });
+        
+      router.delete('/servers/:id', function(req, res){
+        Server.remove({_id: req.params.id}, function(err){
+            res.json({result: err ? 'error' : 'ok'});
+        })
+    });
     
 }

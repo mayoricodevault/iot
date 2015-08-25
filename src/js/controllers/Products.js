@@ -6,7 +6,6 @@ app.controller('productCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','shareComp
     
     Api.Product.query({}, function(data){
         $scope.products = data;
-        console.log("products --> ", $scope.products);
     });
     
     $scope.productTap = function(route, product) {
@@ -14,8 +13,6 @@ app.controller('productCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','shareComp
 		shareComponentService.addDevice(product);
 		$state.go(route);
 	};
-    
-    console.log($scope.products);
     $scope.deleteAll = function(){
         Api.Product.delete({}, function(data){
             $scope.products = [];
@@ -61,6 +58,7 @@ app.controller('productCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','shareComp
         Toast.show('Loading...');
         Api.Product.query({}, function(data){
              $scope.products = data;
+             $scope.refreshDataAmount();
         });
     }
 }]);

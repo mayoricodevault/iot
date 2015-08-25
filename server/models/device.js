@@ -3,9 +3,8 @@ var deviceSchema = mongoose.Schema({
     devicename: {type:String,required:true,index:{unique:true}},
     devicelocation: String,
     icon : String,
-    tagid : String,
+    tagid :{type:String,required:true,index:{unique:true}},
     type : String,
-    masterdevice: String,
     featured : Boolean,
     status : String
 });

@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var deviceSchema = mongoose.Schema({
+var userSchema = mongoose.Schema({
     username : {type:String,required:true,index:{unique:true}},
     email : String,
     image : String,
@@ -9,4 +9,4 @@ var deviceSchema = mongoose.Schema({
     lastlogin: String
 });
 
-module.exports = mongoose.model('users', deviceSchema);
+module.exports = mongoose.model('users', userSchema);

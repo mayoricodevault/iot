@@ -1,0 +1,55 @@
+<ion-view title="People">
+	<ion-content class="padding-vertical">
+		<ion-refresher pulling-text="Pull to refresh"
+	         refreshing-text="Loading..."
+	         refreshing-icon="ion-loading-c"
+	         pulling-icon="ion-ios7-arrow-thin-down"
+	         on-refresh="doRefresh()">
+        </ion-refresher>
+		<div class="padding-horizontal">	
+			<h4>Snapshots</h4>
+		</div>
+		<wrap-owlcarousel
+			class="owl-carousel padding"
+			data-options="{
+				autoPlay: false,
+				slideSpeed : 300,
+				paginationSpeed : 400,
+				items: 2,
+				itemsDesktop: [1199,3],
+				itemsTablet: [768,2]                                                                                  ,
+				itemsMobile: [479,1],
+				navigation: false,
+			}">
+			<div class="owl-item">
+				<img src="img/constitution-dg.png" />
+			</div>
+			<div class="owl-item">
+				<img src="img/layout.png"/>
+			</div>
+		</wrap-owlcarousel>
+		
+		<ion-list can-swipe="listCanSwipe">
+			
+			<ion-item ng-repeat="person in people">
+				<div on-tap="deviceTap('router.person', person)">
+					
+					<i class="icon" ng-class="device.icon"></i>
+					{{ person.name }}
+					<span class="item-note" ng-class="device.color">
+					{{ person.status }}
+					</span>
+					
+					<ion-option-button class="button-positive" ng-click="delete(person)">
+				      Test
+				    </ion-option-button>
+				    <ion-option-button class="button-info" ng-click="deviceTap('router.editdevice',device)">
+				      Edit
+				    </ion-option-button>
+				    
+				</div>
+			</ion-item>
+		</ion-list>
+		<div class="clearfix"></div>
+	</ion-content>
+</ion-view>

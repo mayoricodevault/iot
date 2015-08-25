@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-//socket IO stuff
+var favicon = require('express-favicon');
 var http = require('http').Server(app);
 var _ = require("underscore");
 var io = require('socket.io')(http);
@@ -11,7 +11,7 @@ var session = require("express-session")({
     saveUninitialized: true
   });
 var sharedsession = require("express-socket.io-session");
-
+app.use(favicon(__dirname + '/src/img/favicon.ico'));
 //native NodeJS module for resolving paths
 var path = require('path');
 //get our port # from c9's enviromental variable: PORT
@@ -24,14 +24,18 @@ var moment = require('moment');
 var async = require('async');
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
-
+var requestify = require('requestify');
+var stringify = require('json-stringify');
 
 //setup, configure, and connect to MongoDB
 var mongoose = require('mongoose');
 var configDB = require('./server/config/database.js');
 var sessionsStore = require('./server/models/session');
 var sessionMgm = require("./server/services/sessionManagement");
+
 mongoose.connect(configDB.url);
+var DeviceList = require('./server/models/device');
+var ServerList = require('./server/models/server');
 app.use(session);
 app.use(cors());
 app.use(bodyParser.json());
@@ -170,6 +174,16 @@ app.post("/xively", function(request, response) {
 //   'libs/chartjs/Chart.js',
 //   '/js/*',
 //   '/' ,'/#/intro/*', '/#/route/*' ]}));
+app.get('/deviceslist', function (req, res) {
+   DeviceList.find({}, function(err, data){
+         res.json(200, {devices : data});
+  });
+});
+app.get('/serverlist', function (req, res) {
+    ServerList.find({}, function(err, data){
+        res.json(200, {servers : data});
+    });
+});
 app.post("/test", function(request, response) {
       parallel({
         timeoutMS: 1000  // 1 second timeout
@@ -200,11 +214,9 @@ app.get('/', function(req, res) {
 });
 
 app.post('/login', authenticate, function(req, res) {
-  
   var token = jwt.sign({
     username: user.username
   }, jwtSecret);
-  
   res.send({
     token: token,
     user: user
@@ -215,13 +227,63 @@ app.post('/me', function(req, res) {
     res.send(req.user);
 });
 
+app.post('/remote', function (req, res) {
+  requestify.request('https://rtc-mmayorivera.c9.io/xively', {
+    method: 'POST',
+    body: req.body,
+    headers : {
+            'Content-Type': 'application/json'
+    },
+    dataType: 'json'        
+    }).then(function(response) {
+        // Get the response body
+        console.log(response);
+    });
+    res.json(200, {results: "Message received and proceed to Forward"});
+});
+
+app.post('/devices', function (req, res) {
+  
+});
+
+app.post("/sync", function(request, response) {
+  var sync = request.body;
+  if(_.isUndefined(sync) || _.isEmpty(sync) ){
+    return response.json(400, {error: "Message is invalid"});
+  }
+  if(_.isUndefined(sync.socketid)) {
+    return response.json(400, {error: "Socket id  Must be defined"});
+  }
+  if(_.isUndefined(sync.sessionid)) {
+    return response.json(400, {error: "Session id  Must be defined"});
+  }
+  if(_.isUndefined(sync.action)) {
+    return response.json(400, {error: "Action Must be defined"});
+  }
+  if(_.isUndefined(sync.tagId)) {
+    return response.json(400, {error: "Tag Id Must be defined"});
+  }
+    if(_.isUndefined(sync.url)) {
+    return response.json(400, {error: "Url Must be defined"});
+  }
+  
+  requestify.request("http://kiosk-mmayorivera.c9.io/sync", {
+    method: 'POST',
+    body: sync,
+    headers : {
+            'Content-Type': 'application/json'
+    },
+    dataType: 'json'        
+    }).then(function(response) {
+        response.json(200, response.getBody());
+    });
+    response.json(200, {results: "Action Syncronized!!"});
+
+});
 
 var api = express.Router();
 require('./server/routes/api')(api);
 app.use('/api', api);
-
-
-
 app.get('/*', function(req, res) {
   res.render('index.ejs');
 });
@@ -258,7 +320,7 @@ function parallel(options, tasks, cb) {
 
 //make our app listen for incoming requests on the port assigned above
 http.listen(port, function() {
-  console.log('SERVER RUNNING... PORT: ' + port);
+  console.log('SERVER RUNNING... PORT: ' + port + " : " + process.env.IP);
 })
 
 function authenticate(req,res, next) {

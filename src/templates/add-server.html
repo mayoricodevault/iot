@@ -1,0 +1,25 @@
+<ion-view title="Add New Server">
+	<ion-content>
+		<form name="addUserForm" ng-init="setFormScope(this)" data-ng-submit="serverSubmit()">
+			<div class="list">
+				<div class="item item-divider">
+				Server Info
+				</div>
+				<label class="item item-input">
+					<input type="text" placeholder="Name" ng-model="newserver.name">
+				</label>				
+				<label class="item item-input">
+					<input type="text" placeholder="Url" ng-model="newserver.url">
+				</label>				
+				<label class="item item-input">
+					<input type="text" placeholder="Ip Address" ng-model="newserver.ipaddress">
+				</label>
+			</div>
+			<div class="padding">
+				<button class="button button-balanced">
+					Add
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>
