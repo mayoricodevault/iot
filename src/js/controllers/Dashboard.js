@@ -1,7 +1,6 @@
 'use strict';
 app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$rootScope', function($scope, Socket , $interval, Api,Toast) {
-	
-
+        
   $scope.messages = [];
   $scope.devices = [];
   $scope.numberofusers=0;
@@ -28,6 +27,10 @@ app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$ro
 		maintainAspectRatio: false,
 		datasetStrokeWidth : 2,
   }; 
+  
+    Api.Device.query({}, function(data){
+         $scope.devices = data;
+    });
 
     function getLiveChartData () {
       if ($scope.data[0].length) {

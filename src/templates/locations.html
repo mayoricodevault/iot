@@ -24,7 +24,7 @@
      </ion-refresher>		
 			<ion-list can-swipe="listCanSwipe">
 			
-			<ion-item ng-repeat="location in locations">
+			<ion-item ng-repeat="location in locations | orderBy:'name':reverse">
 				<div on-tap="deviceTap('router.addLocation', location)">
 					
 					<i class="icon" ng-class="location.icon"></i>

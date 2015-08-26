@@ -445,6 +445,9 @@
   background-color: #ff4943;
   color: #fff;
 }
+.popup {
+  width: 350px!important;
+}
 /*.badge.badge-balanced{
   border-color: #ff4943;
   background-color: #ff4943;

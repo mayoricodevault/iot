@@ -8,7 +8,7 @@ app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicP
 	$scope.products = [];
 	$scope.users = [];
 	$scope.servers = [];
-	$scope.people= [];
+	$scope.visitors= [];
 	
 	$scope.refreshDataAmount = function(){
 		Api.Device.query({}, function(data){$scope.devices=data;});

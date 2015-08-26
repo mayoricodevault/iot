@@ -1,0 +1,51 @@
+<ion-view title="Add New Person">
+	<ion-content>
+		<div class="list">
+			<div class="padding">
+				<button  ng-click="newPerson()" class="button button-balanced">
+					Generate New Person
+				</button>
+			</div>
+			<div class="row">
+			  <div class="col"  ng-model="new_person"></div>
+			</div>
+		</div>	
+		
+			<div class="list">
+				<label class="item item-input">
+					<input type="text" placeholder="Name" ng-model="new_person.name">
+				</label>
+				
+				<label class="item item-input">
+					<input type="text" placeholder="Email" ng-model="new_person.email">					
+				</label>
+				
+				<label class="item item-input">
+					<input type="text" placeholder="Company" ng-model="new_person.company.name">
+				</label>
+				
+				<label class="item item-input">
+					<input type="text" placeholder="Zip code" ng-model="new_person.address.zipcode">
+				</label>				
+				
+				<div class="item item-divider">
+				Zone
+				</div>
+				
+				<label class="item item-input">
+					<input type="text" placeholder="Zone from" ng-model="new_person.zonefrom">
+				</label>
+				<label class="item item-input">
+					<input type="text" placeholder="Zone to" ng-model="new_person.zoneto">
+				</label>				
+				<div class="item item-divider">
+				Drink
+				</div>				
+				<label class="item item-input">
+					<input type="text" placeholder="Drink" ng-model="new_person.favcoffe">
+				</label>				
+			</div>		
+		
+		
+	</ion-content>
+</ion-view>

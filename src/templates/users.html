@@ -7,7 +7,7 @@
 	         on-refresh="doRefresh()">
         </ion-refresher>
 		
-		<div ng-repeat="user in users">
+		<div ng-repeat="user in users | orderBy:'username':reverse">
 			<div class="col-lg-33" on-hold="userHold(user)">
 				<div class="card">
 					<div class="item item-avatar">

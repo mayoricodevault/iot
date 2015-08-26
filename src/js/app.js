@@ -228,7 +228,17 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
           resolve: { authenticate: authenticate }
         }
       }
-    })  
+    }) 
+	.state('router.addPerson', {
+      url: "/add-person",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/add-person.html",
+          controller: "addPerson",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })     
 	.state('intro', {
       url: "/intro",
       templateUrl: "templates/intro.html",
@@ -273,6 +283,7 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
     }
 })
 .constant("API_URL", 'http://iottemplate-mmayorivera.c9.io')
+.constant('FIREBASE_URI', 'https://kxively.firebaseio.com/people')
 .constant('FIREBASE_URI_SESSIONS', 'https://kxively.firebaseio.com/sessions');
 
 app.directive('wrapOwlcarousel', function () {

@@ -1,46 +1,39 @@
 'use strict';
 
-app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsService', function($scope, Api, $ionicPopup, Toast,VisitorsService) {
+app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsService','$rootScope', function($scope, Api, $ionicPopup, Toast,VisitorsService,$rootScope) {
 
-	var aux=VisitorsService.getVisitors();
-	console.info("persona de  miguel "+aux);
-	
-	
-	
-
-    $scope.form = {};
-  	$scope.listCanSwipe = true;
-	
-    Api.Server.query({}, function(data){
-    	$scope.servers=data;
-    });	
-	
-	$scope.people={};
-	$scope.doRefresh;
-
-    $scope.delete = function(server){
-        var confirmPopup = $ionicPopup.confirm({
-         title: 'Delete!',
-         template: 'Are you sure you want to delete this server: ' +server.name +"?"
-       });
-       confirmPopup.then(function(res) {
-         if(res) {
-            Api.Server.delete({id: server._id}, function(data){
-                $scope.doRefresh();
-                $scope.refreshDataAmount();
-            });
-         } 
-       });
-    }
+	$scope.cleanVisitors = VisitorsService.getVisitors();
+    $scope.visitors = [];
+    //$scope.totalCount=0;
+ 
     
+    $scope.$watch('cleanVisitors', function () {
+        visitorsToArray($scope.cleanVisitors);
+	//	console.info("Nro de visitantes "+$scope.totalCount);
+	}, true);
+    
+    
+    function visitorsToArray(oVisitors) {
+        var total = 0;
+		$scope.visitors = [];
+		oVisitors.forEach(function (visitor) {
+			// Skip invalid entries so they don't break the entire app.
+			if (!visitor || !visitor.name) {
+				return;
+			}
+            $scope.visitors.push(visitor);    
+			total++;
+		});
+		$rootScope.totalPeople = total;
+    }    
+    
+	$scope.people=$scope.visitors;
+	$scope.doRefresh;
     
 	 $scope.doRefresh = function() {
         $scope.$broadcast('scroll.refreshComplete');
         Toast.show('Loading...');
-        Api.Server.query({}, function(data){
-             $scope.servers = data;
-             $scope.refreshDataAmount();
-        });
+		$scope.cleanVisitors = VisitorsService.getVisitors();
     }; //end doRefresh    
 	 
 }]);

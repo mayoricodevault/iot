@@ -241,6 +241,7 @@ module.exports = function(router, socket){
     router.post('/users', function(req, res){
         var user = new User();
         user.username = req.body.username;
+        user.password = req.body.password;
         user.email = req.body.email;
         user.image = req.body.image;
         user.lat = req.body.lat;
@@ -283,6 +284,7 @@ module.exports = function(router, socket){
         User.findOne({_id: req.params.id}, function(err, data){
             var user = data;
             user.username = req.body.username;
+            user.password = req.body.password;
             user.email = req.body.email;
             user.image = req.body.image;
             user.lat = req.body.lat;

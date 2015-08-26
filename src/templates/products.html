@@ -10,7 +10,7 @@
         
 		<ion-list can-swipe="listCanSwipe">
 			
-			<ion-item ng-repeat="product in products">
+			<ion-item ng-repeat="product in products | orderBy:'productname':reverse">
 				
 				<div on-tap="deviceTap('router.product', product)">
 					

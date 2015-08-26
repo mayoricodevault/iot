@@ -34,13 +34,17 @@
 						<i class="icon" ng-class="device.icon"></i>
 						{{ session.deviceName }}
 						<span class="item-note" ng-class="device.color">
-						{{ session.sessionid }}
+						{{ session.socketid }}
 						</span>
 						<ion-option-button class="button-positive" ng-click="resetSession(session)">
 					      Reset
 					    </ion-option-button>
-					    <ion-option-button class="button-info" ng-click="testSession('router.editdevice',device)">
+					    <ion-option-button class="button-info" ng-click="testSession(session)">
 					      Test
+					    </ion-option-button>
+					    <ion-option-button class="button-dark" ng-click="snapshot()">
+					    	<i class="icon ion-ios-camera-outline"></i>
+					    	<!-- Snapshot -->
 					    </ion-option-button>
 					    
 					</div>

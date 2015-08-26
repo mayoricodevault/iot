@@ -15,6 +15,11 @@ app.controller('addUser', ['$scope','Api', '$ionicPopup','Toast',function($scope
 			return;
 		}
 		
+		if(!$scope.newuser.password) {
+			Toast.show('The field Password is required');
+			return;
+		}
+		
 		if(typeof $scope.newuser.image == 'undefined') {
 			$scope.newuser.image = 'img/noavatar.png';
 		}
@@ -33,6 +38,7 @@ app.controller('addUser', ['$scope','Api', '$ionicPopup','Toast',function($scope
 				//this.formScope.addUserForm.$setPristine();
 				var defaultForm = {
 					username : "",
+					password : "",
 					image : "",
 					lat: "",
 					lng: "",

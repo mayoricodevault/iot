@@ -1,4 +1,26 @@
-app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL', function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL) {
+app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL','VisitorsService', function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL,VisitorsService) {
+    
+    $scope.cleanVisitors = VisitorsService.getVisitors();
+    $scope.visitors = [];
+    
+    $scope.$watch('cleanVisitors', function () {
+        visitorsToArray($scope.cleanVisitors);
+		
+	}, true);
+	
+	function visitorsToArray(oVisitors) {
+        var total = 0;
+		$scope.visitors = [];
+		oVisitors.forEach(function (visitor) {
+			// Skip invalid entries so they don't break the entire app.
+			if (!visitor || !visitor.name) {
+				return;
+			}
+            $scope.visitors.push(visitor);    
+			total++;
+		});
+		$scope.totalCount = total;
+    }
     
     Api.Device.query({}, function(data){
     	$scope.devices=data;
@@ -23,7 +45,6 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
 			if (!session || !session.deviceName) {
 				return;
 			}
-			console.log("session : ",session);
             $scope.sessionArray.push(session);    
 			total++;
 		});
@@ -85,45 +106,48 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
         $scope.$broadcast('scroll.refreshComplete');
         Toast.show('Loading...');
         Api.Device.query({}, function(data){
-            
             $scope.devices = data;
             $scope.refreshDataAmount();
         });
     }
     
-    $scope.testSession = function() {
-        $scope.data = {}
-        $scope.persons = [
-            {name: 'san ariel'},
-            {name: 'santa anita'},
-            {name: 'san bartolome'}
-        ];
-        $scope.personSelected = {};
-        
-        // An elaborate, custom popup
-        var myPopup = $ionicPopup.show({
+    $scope.data = {};
+    
+    $scope.testSession = function(session){
+        $ionicPopup.show({
             template:   '<div class="list">'+
                         '<label class="item item-input item-select">'+
                         '<div class="input-label">'+
                             'Select Person'+
                         '</div>'+
-                        '<select class="form-control margin-bottom" ng-model="personSelected" ng-options="person as person.name for person in persons"><option></option></select>'+
+                        '<select class="form-control margin-bottom" ng-model="data.name" ng-options="person as person.name for person in visitors"><option></option></select>'+
                       '</label>'+
                     '</div>',
             title: 'Test',
-            //subTitle: 'Please use normal things',
             scope: $scope,
             buttons: [
-                
                 {
                     text: '<b>Send</b>',
                     type: 'button-positive',
                     onTap: function(e) {
-                        if (!$scope.data.wifi) {
-                            //don't allow the user to close unless he enters wifi password
-                            e.preventDefault();
-                        } else {
-                            return $scope.data.wifi;
+                        if(!$scope.data.name){
+                            Toast.show("No name selected", 100);
+                        }else{
+                            $http.post(API_URL + '/remotekiosk', { 
+                                name : $scope.data.name.name,
+                                favcoffe : $scope.data.name.favcoffe,
+                                zipcode : $scope.data.name.zipcode,
+                                email : $scope.data.name.email,
+                                zonefrom : "IoT",
+                                zoneto : session.sessionid,
+                                companyname : $scope.data.name.companyname
+                            }).
+                              then(function(response) {
+                                 Toast.show("Sending ....", 30);
+                              }, function(response) {
+                                  Toast.show(response.statusText + " "+ response.data.error, 30);
+                             });
+                            
                         }
                     }
                 },
@@ -131,10 +155,11 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
               
             ]
         });
-        
-        myPopup.then(function(res) {
-            console.log('Tapped!', res);
-        });
-    };
+    }
+    
+    
+    $scope.snapshot = function(){
+        console.log("Please Smile...");
+    }
     
 }]);

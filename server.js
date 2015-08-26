@@ -26,14 +26,16 @@ var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var requestify = require('requestify');
 var stringify = require('json-stringify');
-
+var fs = require('fs');
+var faker  = require('faker');
 //setup, configure, and connect to MongoDB
 var mongoose = require('mongoose');
 var configDB = require('./server/config/database.js');
 var sessionsStore = require('./server/models/session');
 var sessionMgm = require("./server/services/sessionManagement");
-
 mongoose.connect(configDB.url);
+var Firebase = require('firebase');
+var appfire = new Firebase(configDB.firebase);
 var DeviceList = require('./server/models/device');
 var ServerList = require('./server/models/server');
 app.use(session);
@@ -174,6 +176,32 @@ app.post("/xively", function(request, response) {
 //   'libs/chartjs/Chart.js',
 //   '/js/*',
 //   '/' ,'/#/intro/*', '/#/route/*' ]}));
+app.get("/random-user", function (req, res) {
+    var user = faker.helpers.createCard();
+    user.avatar = faker.image.avatar();
+    res.status(200).json({user : user});
+});
+
+app.post("/add-people", function (req, res) {
+  
+  console.log("NAME "+req.body.people.name);
+  console.log("EMAIL "+req.body.people.email);
+   //res.status(200).json({results: "People Added Successfully"});
+  var people = req.body.people;
+  
+   var activePeople = appfire.child('people/'+escapeEmail(people.email));
+   //var activePeople = appfire.child('people/'+'email');
+   //var foundSession = appfire.child('sessions/'+body.socketid);
+  activePeople
+    .once('value', function(snap) {
+      if(!snap.val()) {
+         activePeople.set(people);
+       } 
+  });
+  res.status(200).json({results: "People Added Successfully"});
+});
+
+
 app.get('/deviceslist', function (req, res) {
    DeviceList.find({}, function(err, data){
          res.json(200, {devices : data});
@@ -181,7 +209,7 @@ app.get('/deviceslist', function (req, res) {
 });
 app.get('/serverlist', function (req, res) {
     ServerList.find({}, function(err, data){
-        res.json(200, {servers : data});
+      res.json(200, {servers : data});
     });
 });
 app.post("/test", function(request, response) {
@@ -227,8 +255,9 @@ app.post('/me', function(req, res) {
     res.send(req.user);
 });
 
-app.post('/remote', function (req, res) {
-  requestify.request('https://rtc-mmayorivera.c9.io/xively', {
+app.post('/remotekiosk', function (req, res) {
+  var urlRemote  = "";
+  requestify.request('http://kiosk-mmayorivera.c9.io/xively', {
     method: 'POST',
     body: req.body,
     headers : {
@@ -239,14 +268,12 @@ app.post('/remote', function (req, res) {
         // Get the response body
         console.log(response);
     });
+  
     res.json(200, {results: "Message received and proceed to Forward"});
 });
 
-app.post('/devices', function (req, res) {
-  
-});
-
 app.post("/sync", function(request, response) {
+ 
   var sync = request.body;
   if(_.isUndefined(sync) || _.isEmpty(sync) ){
     return response.json(400, {error: "Message is invalid"});
@@ -279,6 +306,13 @@ app.post("/sync", function(request, response) {
     });
     response.json(200, {results: "Action Syncronized!!"});
 
+});
+app.post("/media", function(request, response) {
+    var body = request.snap;
+    fs.writeFile(body.snapname + "-out.png", body.binaryData, "binary", function(err) {
+        console.log(err); // writes out file without error, but it's not a valid image
+    });
+    response.json(200, {results: "Message received and proceed to Forward"});
 });
 
 var api = express.Router();
@@ -322,7 +356,9 @@ function parallel(options, tasks, cb) {
 http.listen(port, function() {
   console.log('SERVER RUNNING... PORT: ' + port + " : " + process.env.IP);
 })
-
+function  escapeEmail(email) {
+    return (email || '').replace('.', ',');
+}
 function authenticate(req,res, next) {
   var body =  req.body;
   if(!body.username || !body.password) {
