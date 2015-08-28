@@ -25,7 +25,7 @@
 			<ion-list can-swipe="listCanSwipe">
 			
 			<ion-item ng-repeat="server in servers | orderBy:'name':reverse">
-				<div on-tap="deviceTap('router.addServer', server)">
+				<div on-tap="deviceTap('router.viewserver', server)">
 					
 					<i class="icon" ng-class="location.name"></i>
 					{{ server.name }}

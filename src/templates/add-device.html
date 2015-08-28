@@ -1,5 +1,14 @@
 <ion-view title="Add New Device">
 	<ion-content>
+		
+		<ion-refresher pulling-text="Pull to refresh"
+	         refreshing-text="Loading..."
+	         refreshing-icon="ion-loading-c"
+	         pulling-icon="ion-ios7-arrow-thin-down"
+	         on-refresh="doRefresh()">
+        </ion-refresher>
+		
+		
 		<form name="addDeviceForm" ng-init="setFormScope(this)" data-ng-submit="deviceSubmit()">
 			<div class="list" style="background:#ffffff;">
 				<div class="item item-divider">
@@ -36,10 +45,36 @@
 					<div class="input-label">
 					Select a Type
 					</div>
-					<select ng-model="newdevice.devicetype" ng-options="o.name as o.name for o in devicetypes">
+					<select ng-model="newdevice.type" ng-options="o.name as o.name for o in devicetypes">
 						<option value="" >Select</option>
 					</select>
-				</label>				
+				</label>
+				
+				<div ng-show="newdevice.type == 'Kiosk' ">
+					<div class="item item-divider">
+						Barista
+					</div>
+					<label class="item item-input item-select">
+						<div class="input-label">
+						Select Barista
+						</div>
+						<select ng-model="newdevice.master" ng-options="d.devicename as d.devicename for d in baristas">
+							<option value="" >Select</option>
+						</select>
+					</label>
+				</div>
+				
+				<div class="item item-divider">
+					Server
+				</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Select Server
+					</div>
+					<select ng-model="newdevice.server" ng-options="d.name as d.name for d in servers">
+						<option value="" >Select</option>
+					</select>
+				</label>
 				
 				<div class="item item-divider">
 				Featured

@@ -1,0 +1,29 @@
+<ion-view title="View Location">
+	<ion-content>
+		
+			<div class="list">
+				<label class="item item-input">
+					<input type="text" placeholder="Name" ng-model="newlocation.name" readonly>
+				</label>
+				<label class="item item-input item-select">
+						<div class="input-label">
+							Select a icon
+						</div>
+					<select ng-model="newlocation.icon" ng-options="o.name as o.name for o in locationsList" onmouseover="this.disabled=true;" onmouseout="this.disabled=false;"></select>
+				</label>
+				<label class="item item-input">
+					<input type="text" placeholder="Note" ng-model="newlocation.note" readonly>
+				</label>
+				<li class="item item-toggle">
+					Featured
+					<label class="toggle toggle-balanced">
+						<input type="checkbox" checked ng-model="newlocation.featured" onclick="return false" >
+						<div class="track">
+							<div class="handle"></div>
+						</div>
+					</label>
+				</li>
+			</div>
+
+	</ion-content>
+</ion-view>

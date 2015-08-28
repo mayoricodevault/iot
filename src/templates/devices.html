@@ -32,7 +32,7 @@
 		<ion-list can-swipe="listCanSwipe">
 			
 			<ion-item ng-repeat="device in devices | orderBy:'devicename':reverse">
-				<div on-tap="deviceTap('router.device', device)">
+				<div on-tap="deviceSelect('router.device', device)">
 					
 					<i class="icon" ng-class="device.icon"></i>
 					{{ device.devicename }}

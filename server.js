@@ -26,7 +26,6 @@ var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var requestify = require('requestify');
 var stringify = require('json-stringify');
-var fs = require('fs');
 var faker  = require('faker');
 //setup, configure, and connect to MongoDB
 var mongoose = require('mongoose');
@@ -104,8 +103,6 @@ io.on('connection', function(socket) {
             socket.emit('systemMessage', sysMsg);
         }
     }
-
-
     if(devices.indexOf(data.devicename) == -1){
       io.emit('add-device', {
         devicename: data.devicename
@@ -121,11 +118,27 @@ io.on('connection', function(socket) {
     }
   })
   
+  socket.on('ping', function(data){
+    if (data) {
+        requestify.request(data.urlServer + "/ping", {
+        method: 'GET',
+        body: data,
+        headers : {
+                'Content-Type': 'application/json'
+        },
+        dataType: 'json'        
+         }).then(function(response) {
+            // Get the response body
+            console.log(response);
+        });
+    }
+  });
+  
+  
   socket.on('disconnect', function(){
-    console.log(devicename + ' has Disconnected!');
+    console.log(socket.id + ' has Disconnected!');
     devices.splice(devices.indexOf(devicename), 1);
     sessionMgm.remove(socket.id);
-    io.emit('remove-device', {devicename: devicename});
   })
 });
 //POST method to create a chat message
@@ -168,6 +181,7 @@ app.post("/xively", function(request, response) {
 
 });
 
+
 // app.use(expressJwt({secret : jwtSecret}).unless({path : ['/login', 
 //   '/js/controllers/Actions.js',
 //   '/libs/angular/angular.js',
@@ -176,6 +190,18 @@ app.post("/xively", function(request, response) {
 //   'libs/chartjs/Chart.js',
 //   '/js/*',
 //   '/' ,'/#/intro/*', '/#/route/*' ]}));
+app.post('/pong', function(req, res) {
+    if(_.isUndefined(req.params.sessionid) || _.isEmpty(req.params.sessionid)) {
+        res.status(400).json({results: "Invalid Request!!!"});
+    }
+    var sessionid = req.params.sessionid; //req.param('sessionid');
+    if(!sessionid) {
+        res.status(400).json({results: "Must Have Socket Session Id"});
+    }
+    io.sockets.emit('pong', {sessionid : sessionid, status : data.status});
+    res.status(200).json({results: "Message received and proceed to Forward"});
+});
+
 app.get("/random-user", function (req, res) {
     var user = faker.helpers.createCard();
     user.avatar = faker.image.avatar();
@@ -184,14 +210,8 @@ app.get("/random-user", function (req, res) {
 
 app.post("/add-people", function (req, res) {
   
-  console.log("NAME "+req.body.people.name);
-  console.log("EMAIL "+req.body.people.email);
-   //res.status(200).json({results: "People Added Successfully"});
   var people = req.body.people;
-  
-   var activePeople = appfire.child('people/'+escapeEmail(people.email));
-   //var activePeople = appfire.child('people/'+'email');
-   //var foundSession = appfire.child('sessions/'+body.socketid);
+  var activePeople = appfire.child('people/'+escapeEmail(people.email));
   activePeople
     .once('value', function(snap) {
       if(!snap.val()) {
@@ -257,7 +277,7 @@ app.post('/me', function(req, res) {
 
 app.post('/remotekiosk', function (req, res) {
   var urlRemote  = "";
-  requestify.request('http://kiosk-mmayorivera.c9.io/xively', {
+  requestify.request('https://kiosk-mmayorivera.c9.io/xively', {
     method: 'POST',
     body: req.body,
     headers : {
@@ -273,7 +293,6 @@ app.post('/remotekiosk', function (req, res) {
 });
 
 app.post("/sync", function(request, response) {
- 
   var sync = request.body;
   if(_.isUndefined(sync) || _.isEmpty(sync) ){
     return response.json(400, {error: "Message is invalid"});
@@ -294,27 +313,18 @@ app.post("/sync", function(request, response) {
     return response.json(400, {error: "Url Must be defined"});
   }
   
-  requestify.request("http://kiosk-mmayorivera.c9.io/sync", {
+  requestify.request("https://kiosk-mmayorivera.c9.io/sync", {
     method: 'POST',
     body: sync,
     headers : {
             'Content-Type': 'application/json'
     },
     dataType: 'json'        
-    }).then(function(response) {
-        response.json(200, response.getBody());
+    }).then(function(res) {
+       response.status(200).json(res.getBody());
     });
-    response.json(200, {results: "Action Syncronized!!"});
 
 });
-app.post("/media", function(request, response) {
-    var body = request.snap;
-    fs.writeFile(body.snapname + "-out.png", body.binaryData, "binary", function(err) {
-        console.log(err); // writes out file without error, but it's not a valid image
-    });
-    response.json(200, {results: "Message received and proceed to Forward"});
-});
-
 var api = express.Router();
 require('./server/routes/api')(api);
 app.use('/api', api);

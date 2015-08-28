@@ -37,7 +37,7 @@ app.controller('addServer',['$scope','Api','$ionicPopup','$cordovaToast','Toast'
 		Api.Server.save({},$scope.newserver,
 			function(data){
 				$scope.servers.push($scope.newserver);
-				console.log("SERVERS --> ",$scope.servers.length);
+				
 				var defaultForm = {
 					name : "",
 					ipaddress : "",

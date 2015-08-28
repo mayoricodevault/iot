@@ -1,12 +1,24 @@
-app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL','VisitorsService', function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL,VisitorsService) {
+app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL','VisitorsService','storeService','$state','shareComponentService', 'Socket', function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL,VisitorsService,storeService,$state,shareComponentService, Socket) {
     
+    
+    $scope.newSnapShot = "";
     $scope.cleanVisitors = VisitorsService.getVisitors();
     $scope.visitors = [];
+    $scope.imgSelected = false;
+    $scope.singleProduct= shareComponentService.getDevice();
+    $scope.showImage = false;
     
     $scope.$watch('cleanVisitors', function () {
         visitorsToArray($scope.cleanVisitors);
-		
 	}, true);
+	
+	$scope.deviceSelect = function(route, data) {
+		$scope.device = data;
+		$scope.singleProduct = data;
+		shareComponentService.addDevice(data);
+		$state.go(route);
+	};
+	
 	
 	function visitorsToArray(oVisitors) {
         var total = 0;
@@ -32,9 +44,13 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
     
     $scope.cleanSessions = SessionService.getSessions();
     $scope.sessionArray = [];
+    $scope.arraySessions = [];
     
     $scope.$watch('cleanSessions', function () {
+        //console.log("all sessions --> ",$scope.cleanSessions);
         sessionsToArray($scope.cleanSessions);
+        changeImage();
+        //console.log("clean sessions......");
 	}, true);
 	
 	function sessionsToArray(sessions) {
@@ -47,7 +63,18 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
 			}
             $scope.sessionArray.push(session);    
 			total++;
+			
 		});
+		
+		$scope.arraySessions = [];
+		// filter session by tagid
+		for(var idx in $scope.sessionArray){
+	        //console.log($scope.singleProduct.tagid +"==" + $scope.sessionArray[idx].tagId);
+	        if($scope.singleProduct.tagid == $scope.sessionArray[idx].tagId){
+	            $scope.arraySessions.push($scope.sessionArray[idx]);
+	        }
+	    }
+		
 		$scope.totalCount = total;
     }
     
@@ -96,7 +123,7 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
 	 $scope.resetSession = function (session) {
          $http.post(API_URL + '/sync', {sessionid : session.sessionid, socketid: session.socketid, action : 'reset', tagId : session.tagId, url : session.serverUrl}).
           then(function(response) {
-             Toast.show("Reseting....", 30);
+              Toast.show("Reseting....", 30);
           }, function(response) {
               Toast.show(response.statusText + " "+ response.data.error, 30);
          });
@@ -133,9 +160,17 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                         if(!$scope.data.name){
                             Toast.show("No name selected", 100);
                         }else{
+                            var favcoffee = "";
+                            if ( $scope.data.name.favcoffee) {
+                                favcoffee = $scope.data.name.favcoffee;
+                            }
+                             if ( $scope.data.name.favcoffe) {
+                                favcoffee = $scope.data.name.favcoffe;
+                            }
                             $http.post(API_URL + '/remotekiosk', { 
+                                
                                 name : $scope.data.name.name,
-                                favcoffe : $scope.data.name.favcoffe,
+                                favcoffe : favcoffee,
                                 zipcode : $scope.data.name.zipcode,
                                 email : $scope.data.name.email,
                                 zonefrom : "IoT",
@@ -157,9 +192,91 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
         });
     }
     
-    
-    $scope.snapshot = function(){
-        console.log("Please Smile...");
+    function changeImage(){
+        var sessionId = $scope.newSnapShot;
+        console.log("sessionID: ",sessionId);
+        for(var id in $scope.sessionArray){
+            if($scope.sessionArray[id].socketid==sessionId){
+                $scope.imgSelected = $scope.sessionArray[id].snapshot;
+                console.log("imgSelected: ",$scope.imgSelected);
+                return;
+            }
+        }
     }
     
+    
+    $scope.snapshot = function(session){
+        $ionicPopup.show({
+            template:   '<div class="list">'+
+                        '<div >'+
+                        '</div>'+
+                    '</div>',
+            title: 'Snapshot',
+            scope: $scope,
+            buttons: [
+                {
+                    text: '<b>Capture</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        $http.post(API_URL + '/sync', { 
+                            socketid :session.socketid,
+                            sessionid : session.sessionid,
+                            action : "snap",
+                            tagId : session.tagId,
+                            url : session.serverUrl
+                        }).
+                          then(function(response) {
+                             Toast.show("Taking a Snap Shot....", 30);
+                             $scope.showImage = true;
+                             $scope.newSnapShot = session.socketid;
+                          }, function(response) {
+                              Toast.show(response.statusText + " "+ response.data.error, 30);
+                         });
+                    }
+                },
+                { text: 'Cancel' }
+              
+            ]
+        });
+    };
+    
+    $scope.ping = function(session){
+        $ionicPopup.show({
+            template:   '<div class="list">'+
+                        '<div >'+
+                        '</div>'+
+                    '</div>',
+            title: 'Ping',
+            scope: $scope,
+            buttons: [
+                {
+                    text: '<b>Ping</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                         var timeStamp  = new Date().getTime();
+                         $http.post(session.serverUrl + '/ping', { 
+                             sessionid : session.sessionid , 
+                             ts :timeStamp 
+                         }).
+                          then(function(response) {
+                             //todo : time out para comparar con el registro actual
+                             // no tiene el ts mandado entonces eliminar session
+                             Toast.show("Making sure if it is alive....", 30);
+                          }, function(response) {
+                              Toast.show(response.statusText + " "+response.data.results, 30);
+                        });
+                    }
+                },
+                { text: 'Cancel' }
+              
+            ]
+        });
+    }
+    
+    $scope.resetAll = function(){
+        for(var idxSession in $scope.sessionArray){
+            $scope.resetSession($scope.sessionArray[idxSession]);
+        }
+    }
+        
 }]);

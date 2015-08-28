@@ -13,6 +13,8 @@ module.exports = function(router, socket){
         device.devicelocation = req.body.devicelocation;
         device.tagid = req.body.tagid;
         device.icon = req.body.icon;
+        device.master = req.body.master;
+        device.server = req.body.server;
         device.featured = req.body.featured;
         device.type = req.body.type;
         
@@ -58,6 +60,8 @@ module.exports = function(router, socket){
             device.devicelocation = req.body.devicelocation;
             device.icon = req.body.icon;
             device.tagid = req.body.tagid;
+            device.master = req.body.master;
+            device.server = req.body.server;
             device.featured = req.body.featured;
             device.type = req.body.type;
             device.save(function(err, data){

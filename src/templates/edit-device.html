@@ -25,6 +25,7 @@
 					Select a Location 
 					</div>
 					<select ng-model="newdevice.devicelocation" ng-options="o._id as o.name for o in locationsList">
+					<!-- <input type="text" placeholder="Location" ng-model="newdevice.devicelocation"> -->
 					</select>
 				</label>
 				<div class="item item-divider">
@@ -35,19 +36,21 @@
 					Type 
 					</div>
 					<select ng-model="newdevice.type" ng-options="o.name as o.name for o in typeList">
-														         
+					<!-- <input type="text" placeholder="Type" ng-model="newdevice.type">									          -->
 					</select>
 				</label>
 				
-				<div ng-show="newdevice.type=='Slave'" >
+				<div ng-show="newdevice.type=='Kiosk'" >
 					<div class="item item-divider">
-						Master Device
+						Barista
 					</div>
 					<label class="item item-input item-select">
 						<div class="input-label">
-							Device 
+							Select Barista 
 						</div>
-						<select ng-model="newdevice.masterdevice" ng-options="o._id as o.devicename for o in deviceList">
+						
+						<!-- <input type="text" placeholder="Barista" ng-model="newdevice.master"> -->
+						<select ng-model="newdevice.master" ng-options="o._id as o.devicename for o in deviceList">
 							<option value="">Select</option>
 						</select>
 					</label>

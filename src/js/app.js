@@ -98,7 +98,17 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
           resolve: { authenticate: authenticate }
         }
       }
-    })    
+    }) 
+  .state('router.viewserver', {
+      url: "/viewserver",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/view-server.html",
+          controller: "viewServer",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })     
 	.state('router.locations', {
       url: "/locations",
       views: {
@@ -179,6 +189,16 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
         }
       }
     })
+    .state('router.viewPerson', {
+      url: "/view-person",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/view-person.html",
+          controller: "viewPerson",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })    
 	.state('router.addDevice', {
       url: "/add-device",
       views: {
@@ -208,7 +228,17 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
           resolve: { authenticate: authenticate }
         }
       }
-    })       
+    })  
+	.state('router.viewLocation', {
+      url: "/view-location",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/view-location.html",
+          controller:"viewLocation",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    })      
   .state('router.addProduct', {
     url: "/add-product",
     views: {
@@ -224,7 +254,7 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/add-server.html",
-          controller: "addServer",
+          controller: "servers",
           resolve: { authenticate: authenticate }
         }
       }

@@ -8,21 +8,35 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 	$scope.locationsList=[];
 	$scope.typeList=[];
 	$scope.deviceList=[];
+	
+	
+	Api.Device.query({}, function(data){
+		$scope.deviceList=data;
+		console.info("DEVICES LIST "+$scope.deviceList);
+    }); // end query device	
+	
 	Api.Location.query({}, function(data){
+		for(var key in data){
+			console.log("sadfasdfasdf");
+			if($scope.deviceList.devicelocation == data[key]._id){
+				$scope.newdevice.devicelocation = $scope.locations.name;
+				console.log("DEVICE LOCATION: ",$scope.newdevice.devicelocation);
+				break;
+			}
+		}
     	$scope.locationsList=data;
     }); // end query locations
     
     
 	$scope.typeList=[{
-						name:"Generic"
-					},{
-					    name:"Slave"
-					}];    
+							name:"Kiosk"
+						},
+						{
+						   name:"Barista"
+						},{
+							name:"Dashboard"
+						}];    
 					
-	Api.Device.query({}, function(data){
-    	$scope.deviceList=data;
-    	console.info("DEVICES LUST "+$scope.deviceList);
-    }); // end query device					
 					
     
    // $scope.newdevice=[]; 

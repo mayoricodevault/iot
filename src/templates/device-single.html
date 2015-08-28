@@ -1,11 +1,19 @@
 <ion-view title="{{device.devicename}}">
 	<ion-content class="padding">
+			<ion-refresher pulling-text="Pull to refresh"
+	         refreshing-text="Loading..."
+	         refreshing-icon="ion-loading-c"
+	         pulling-icon="ion-ios7-arrow-thin-down"
+	         on-refresh="doRefresh()">
+        </ion-refresher>
 		<div ng-if="device.tagid === null">
 			<h5 class="text-center">No Devices to Show</h5>
 		</div>
 		<!--<div ng-if="device.tagid != null">-->
 		<div>
-			<img ng-src="img/constitution-dg.png" style="margin-left:auto;display:block;margin-right:auto;width:40%;"/>
+			<span ng-show="showImage">
+				<img data-ng-src="data:image/png;base64,{{imgSelected}}" style="margin-left:auto;display:block;margin-right:auto;width:40%;"/>
+			</span>
 			
 			<div class="list">
 				<div class="item item-icon-left">
@@ -29,33 +37,37 @@
 				</li>
 			</div>
 			<ion-list can-swipe="listCanSwipe">
-				<ion-item ng-repeat="session in sessionArray">
+				<ion-item ng-repeat="session in arraySessions">
 					<div on-tap="deviceTap('router.device', device)">
 						<i class="icon" ng-class="device.icon"></i>
 						{{ session.deviceName }}
 						<span class="item-note" ng-class="device.color">
 						{{ session.socketid }}
 						</span>
-						<ion-option-button class="button-positive" ng-click="resetSession(session)">
+						<ion-option-button side="right" class="button-positive" ng-click="resetSession(session)">
 					      Reset
 					    </ion-option-button>
 					    <ion-option-button class="button-info" ng-click="testSession(session)">
 					      Test
 					    </ion-option-button>
-					    <ion-option-button class="button-dark" ng-click="snapshot()">
+					    <ion-option-button class="button-dark" ng-click="snapshot(session)">
 					    	<i class="icon ion-ios-camera-outline"></i>
 					    	<!-- Snapshot -->
 					    </ion-option-button>
-					    
+					    <ion-option-button class="button-info" ng-click="ping(session)">
+					      Ping
+					    </ion-option-button>
 					</div>
 				</ion-item>
 			</ion-list>
 			
 			
 			<div class="padding">
-				<button class="button button-balanced">
-					Reset All
-				</button>
+				<div ng-show="sessionArray.length>0">
+					<button class="button button-balanced" ng-click="resetAll()">
+						Reset All
+					</button>
+				</div>
 			</div>
 			
 		</div>

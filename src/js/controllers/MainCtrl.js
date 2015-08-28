@@ -40,6 +40,7 @@ app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicP
 		shareComponentService.addDevice(data);
 		
 		storeService.jsonWrite("shareData",data);
+		shareComponentService.addDevice(data);
 		
 		$state.go(route);
 	};

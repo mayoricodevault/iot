@@ -1,8 +1,8 @@
 'use strict';
 
-app.controller('editProduct', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','shareComponentService' , function($scope, Api, $ionicPopup, $cordovaToast, shareComponentService) {
+app.controller('editProduct', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','storeService', function($scope, Api, $ionicPopup, $cordovaToast, storeService) {
 	$scope.products = [];
-	$scope.newproduct = shareComponentService.getDevice();
+	$scope.newproduct = storeService.jsonRead("shareData");
 	console.log("new Product --> ",$scope.newproduct);
 	$scope.formScope=null;
 	$scope.setFormScope = function(frmProduct){
@@ -24,20 +24,11 @@ app.controller('editProduct', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','
 		
 		Api.Product.save({id:$scope.newproduct._id}, $scope.newproduct, 
         function(data){
+        	Toast.show("Update Successful.");
 			$scope.products.push($scope.newproduct);
-			$scope.formScope.addProductForm.$setPristine();
-			var defaultForm = {
-				productname : "",
-				icon : "",
-				large: "",
-				medium : "",
-				small : "",
-				featured : 0
-			};
-			$scope.newproduct = defaultForm;
         },
         function(err){
-        	$scope.showAlert("System Error!!!", err.statusText);
+        	Toast.show("System Error." + err.statusText);
 			return false;
         });
 	

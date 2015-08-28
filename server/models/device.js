@@ -5,6 +5,8 @@ var deviceSchema = mongoose.Schema({
     icon : String,
     tagid :{type:String,required:true,index:{unique:true}},
     type : String,
+    master: String,
+    server: String,
     featured : Boolean,
     status : String
 });

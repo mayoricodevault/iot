@@ -32,7 +32,7 @@ app.controller('addLocation',['$scope','Api','$ionicPopup','$cordovaToast', func
 		Api.Location.save({},$scope.newlocation,
 			function(data){
 				$scope.locations.push($scope.newlocation);
-				console.log("LOCATIONS --> ",$scope.locations.length);
+				
 				var defaultForm = {
 					name : "",
 					icon : "",

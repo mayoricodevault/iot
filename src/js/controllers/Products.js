@@ -1,5 +1,5 @@
 
-app.controller('productCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','shareComponentService','$state', function($scope, Api, $ionicPopup, Toast, shareComponentService,$state) {
+app.controller('productCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','$state','storeService', function($scope, Api, $ionicPopup, Toast,$state,storeService) {
     $scope.form = {};
     $scope.products = [];
     $scope.listCanSwipe = true;
@@ -10,7 +10,7 @@ app.controller('productCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','shareComp
     
     $scope.productTap = function(route, product) {
 		$scope.product = product;
-		shareComponentService.addDevice(product);
+		storeService.jsonWrite('shareData',product);
 		$state.go(route);
 	};
     $scope.deleteAll = function(){
