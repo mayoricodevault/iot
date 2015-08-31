@@ -12,8 +12,13 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 	
 	Api.Device.query({}, function(data){
 		$scope.deviceList=data;
-		console.info("DEVICES LIST "+$scope.deviceList);
+		console.info("DEVICES LIST ",$scope.deviceList);
     }); // end query device	
+    
+    /*Api.Location.query({},function(data)){
+    	$scope.locationList = data;
+    	console.log("Locations --> ",$scope.locationList);
+    }*/
 	
 	Api.Location.query({}, function(data){
 		for(var key in data){

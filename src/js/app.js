@@ -54,7 +54,7 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       views: {
         'menuContent' :{
           templateUrl: "templates/devices.html",
-          controller: "deviceCtrl",
+          controller: "devicesCtrl",
           resolve: { authenticate: authenticate }
         }
       }
@@ -70,7 +70,7 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       }
     })    
 	.state('router.device', {
-      url: "/device",
+      url: "/device/:tagid",
       views: {
         'menuContent' :{
           templateUrl: "templates/device-single.html",
@@ -314,6 +314,7 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
 })
 .constant("API_URL", 'http://iottemplate-mmayorivera.c9.io')
 .constant('FIREBASE_URI', 'https://kxively.firebaseio.com/people')
+.constant('FIREBASE_URI_ROOT', 'https://kxively.firebaseio.com')
 .constant('FIREBASE_URI_SESSIONS', 'https://kxively.firebaseio.com/sessions');
 
 app.directive('wrapOwlcarousel', function () {

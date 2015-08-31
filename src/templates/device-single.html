@@ -37,7 +37,7 @@
 				</li>
 			</div>
 			<ion-list can-swipe="listCanSwipe">
-				<ion-item ng-repeat="session in arraySessions">
+				<ion-item ng-repeat="session in sessionArray">
 					<div on-tap="deviceTap('router.device', device)">
 						<i class="icon" ng-class="device.icon"></i>
 						{{ session.deviceName }}

@@ -18,7 +18,7 @@ app.controller('addPerson',['$scope','Api','$ionicPopup','$cordovaToast','Toast'
 		$http.get(API_URL + '/random-user')
 		.success(function(data){
 			
-		var arrayDrink=['Latte','Capuccino','Black','Mocha','Iced coffee','Other'];	
+		var arrayDrink=['amer','cap','dec','esp','reg','tea'];	
 		var pos=Math.floor((Math.random() * 6) + 0);
 			 $scope.coffee=arrayDrink[pos];
 			$scope.new_person = data.user;

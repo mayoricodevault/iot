@@ -3,13 +3,24 @@
 app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','Toast', function($scope, Api, $ionicPopup, $cordovaToast,Toast) {
     
     $scope.baristas=[];
-    Api.Device.query({}, function(data){
+    
+    $scope.$on('$ionicView.beforeEnter', function () {
+            // update campaigns everytime the view becomes active
+        doRefresh();
+    });   
+    
+    function baristaFilter(data){
+    	$scope.baristas=[];
     	for(var idx in data){
-    		if(data[idx].type == 'Kiosk'){
+    		if(data[idx].type == 'Barista'){
     			$scope.baristas.push(data[idx]);
     		}
     	}
-    	
+    }
+    
+    Api.Device.query({}, function(data){
+    	$scope.devices = data;
+    	baristaFilter(data);
     }); // devices query
     
     Api.Server.query({}, function(data){
@@ -17,22 +28,23 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
     }); // servers query
     
 	$scope.newdevice = {};
-	$scope.devicetypes=[
-						{
-							name:"Kiosk"
-						},
-						{
-						   name:"Barista"
-						},{
-							name:"Dashboard"
-						}
+	$scope.devicetypes=[{name:"Kiosk"},
+						{name:"Barista"},
+						{name:"Dashboard"}
 		];
 		
-    
 	$scope.formScope=null;
 	
 	$scope.setFormScope = function(frmDevice){
 		$scope.formScope = frmDevice;
+	}
+	
+	function tagidExist(tagid){
+		for(var key in $scope.devices){
+			if($scope.devices[key]==tagid) return true;
+		}
+		
+		return false;
 	}
 	
 	$scope.deviceSubmit = function() {
@@ -49,7 +61,10 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
 			return;
 		}
 		
-		
+		if(tagidExist($scope.newdevice.tagid)){
+			Toast.show("The field Tag ID exist.");
+			return;
+		}
 		
 		if(!$scope.newdevice.devicelocation) {
 			Toast.show("The field Location is required.");
@@ -72,7 +87,17 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
 			Toast.show("The field Server is required.");
 			return;
 		}
-				
+		
+		for(var key in $scope.servers){
+			if($scope.servers[key].name==$scope.newdevice.server){
+				$scope.newdevice.serverUrl = $scope.servers[key].url;
+				$scope.newdevice.serverId = $scope.servers[key]._id;
+				break;
+			}
+		}
+		
+		console.log("newdevice --> ",$scope.newdevice);
+		
 		
 		Api.Device.save({}, $scope.newdevice, 
         function(data){
@@ -112,13 +137,18 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
 	 };
 	 
 	 
-	 $scope.doRefresh = function() {
-        $scope.$broadcast('scroll.refreshComplete');
+	 function doRefresh() {
+	 	$scope.$broadcast('scroll.refreshComplete');
         Toast.show('Loading...');
         Api.Device.query({}, function(data){
             $scope.devices = data;
+            baristaFilter(data);
             $scope.refreshDataAmount();
         });
+	 }
+	 
+	 $scope.doRefresh = function() {
+        doRefresh();
     }
 	 
 }]);

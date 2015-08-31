@@ -7,6 +7,8 @@ var deviceSchema = mongoose.Schema({
     type : String,
     master: String,
     server: String,
+    serverId: String,
+    serverUrl: String,
     featured : Boolean,
     status : String
 });
