@@ -29,7 +29,7 @@ var stringify = require('json-stringify');
 var faker  = require('faker');
 //setup, configure, and connect to MongoDB
 var mongoose = require('mongoose');
-var configDB = require('./server/config/database.js');
+var configDB = require('./server/config/config.js');
 var sessionsStore = require('./server/models/session');
 var sessionMgm = require("./server/services/sessionManagement");
 mongoose.connect(configDB.url);
@@ -37,6 +37,7 @@ var Firebase = require('firebase');
 var appfire = new Firebase(configDB.firebase);
 var DeviceList = require('./server/models/device');
 var ServerList = require('./server/models/server');
+var ProductsList = require('./server/models/product');
 app.use(session);
 app.use(cors());
 app.use(bodyParser.json());
@@ -86,11 +87,11 @@ io.on('connection', function(socket) {
   
   socket.on('message', function(data){
       io.emit('message', {devicename: devicename, message: "room : " + data.message });
-  })
+  });
   
   socket.on('xternal', function(data){
       io.emit('message', {devicename: devicename, message: {action: data.action , value: data.value }});
-  })
+  });
   
   socket.on('add-device', function(data){
 
@@ -139,45 +140,12 @@ io.on('connection', function(socket) {
     console.log(socket.id + ' has Disconnected!');
     devices.splice(devices.indexOf(devicename), 1);
     sessionMgm.remove(socket.id);
-  })
+  });
 });
-//POST method to create a chat message
-app.post("/xively", function(request, response) {
-
-
-  //The request body expects a param named "message"
-  var message = request.body.message;
-
-  // console.log(request.body);
-  //If the message is empty or wasn't sent it's a bad request
-  if(_.isUndefined(message) || _.isEmpty(message.trim())) {
-    return response.json(400, {error: "Message is invalid"});
-  }
-  if(_.isUndefined(request.body.action)) {
-    return response.json(400, {error: "Action Must be defined"});
-  }
-  if(_.isUndefined(request.body.value)) {
-    return response.json(400, {error: "Values must be defined"});
-  }
-  
-  //We also expect the sender's name with the message
-  var devicename = request.body.devicename;
-  var to = request.body.to;
-  var action = request.body.action;
-  var value = request.body.value;
-  messagesPoolCount += 1;
-  //let them know there was a new message
-  var fSession = _.find(sessionsConnections, function(sessionC){ return sessionC.name == to; });
-
-   if (fSession) {
-     console.log('Sending..');
-     io.sockets.connected[fSession.id].emit('xternal', {devicename: devicename, message: message, action: action, value: value});
-   } else {
-      io.sockets.emit("message", {message: message, devicename: devicename,  msgs: messagesPoolCount});
-       io.sockets.emit("xternal", {message: message, action: action, value: value, msgs: messagesPoolCount});
-   }
-  //Looks good, let the client know
-  response.json(200, {results: "Message received"});
+//Redirect Messages
+app.post("/xively", function(req, res) {
+   io.sockets.emit('message', req.body );
+   res.json(200, {results: "Message received"});
 
 });
 
@@ -203,6 +171,8 @@ app.post('/pong', function(req, res) {
 });
 
 app.get("/random-user", function (req, res) {
+ 
+    
     var user = faker.helpers.createCard();
     user.avatar = faker.image.avatar();
     res.status(200).json({user : user});
@@ -221,9 +191,28 @@ app.post("/add-people", function (req, res) {
   res.status(200).json({results: "People Added Successfully"});
 });
 
+app.post("/add-message", function (req, res) {
+  
+  var message = req.body.message;
+  var activeMessage = appfire.child('message/',message);
+  activeMessage
+    .once('value', function(snap) {
+      if(!snap.val()) {
+         activeMessage.set(message);
+       } 
+  });
+  res.status(200).json({results: "Message Added Successfully"});
+});
+
+
 
 app.get('/deviceslist', function (req, res) {
    DeviceList.find({}, function(err, data){
+         res.json(200, {devices : data});
+  });
+});
+app.get('/productslist', function (req, res) {
+   ProductsList.find({}, function(err, data){
          res.json(200, {devices : data});
   });
 });
@@ -366,8 +355,11 @@ function parallel(options, tasks, cb) {
 http.listen(port, function() {
   console.log('SERVER RUNNING... PORT: ' + port + " : " + process.env.IP);
 })
+
 function  escapeEmail(email) {
-    return (email || '').replace('.', ',');
+    while (email.toString().indexOf(".") != -1)
+      email = email.toString().replace(".",",");
+  return email;
 }
 function authenticate(req,res, next) {
   var body =  req.body;

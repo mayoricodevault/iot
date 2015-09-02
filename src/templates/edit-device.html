@@ -51,10 +51,22 @@
 						
 						<!-- <input type="text" placeholder="Barista" ng-model="newdevice.master"> -->
 						<select ng-model="newdevice.master" ng-options="o._id as o.devicename for o in deviceList">
-							<option value="">Select</option>
+							<option value="">{{newdevice.master}}</option>
 						</select>
 					</label>
 				</div>
+				
+				<div class="item item-divider">
+					Server
+				</div>
+				<label class="item item-input item-select">
+					<div class="input-label">
+					Select Server
+					</div>
+					<select ng-model="newdevice.server" ng-options="d.name as (d.name+' - '+d.url) for d in servers">
+						<option value="" >Select</option>
+					</select>
+				</label>
 				
 				<div class="item item-divider">
 				Featured

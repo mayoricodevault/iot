@@ -6,6 +6,7 @@ var deviceSchema = mongoose.Schema({
     tagid :{type:String,required:true,index:{unique:true}},
     type : String,
     master: String,
+    masterUrl: String,
     server: String,
     serverId: String,
     serverUrl: String,

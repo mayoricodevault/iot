@@ -37,10 +37,13 @@
 				</li>
 			</div>
 			<ion-list can-swipe="listCanSwipe">
-				<ion-item ng-repeat="session in sessionArray">
+				<ion-item ng-hide="!validSession(session.ping_dt)"  ng-repeat="session in sessionArray">
 					<div on-tap="deviceTap('router.device', device)">
 						<i class="icon" ng-class="device.icon"></i>
-						{{ session.deviceName }}
+						{{ session.deviceName }} 
+						<span ng-hide="!validSession(session.ping_dt)" class="item-note" ng-class="device.color">
+							 ( Online )
+						</span>
 						<span class="item-note" ng-class="device.color">
 						{{ session.socketid }}
 						</span>

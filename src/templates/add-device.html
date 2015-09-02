@@ -18,10 +18,19 @@
 					<span class="input-label">Name</span>
 					<input type="text" placeholder="Name" ng-model="newdevice.devicename">
 				</label>
-				<label class="item item-input item-stacked-label">
+				<!--<label class="item item-input item-stacked-label">
 					<span class="input-label">Icon</span>
 					<input type="text" placeholder="Icon" ng-model="newdevice.icon">
+				</label> -->
+				
+				<label class="item item-input item-select">
+					<span class="input-label">Image</span>
+					<!-- <input type="text" placeholder="Icon" ng-model="newdevice.icon"> -->
+					<select ng-model="newdevice.icon" ng-options="o.src as o.name for o in imageList">
+						<option value="" >Select</option>
+					</select>
 				</label>
+				
 				<label class="item item-input item-stacked-label">
 					<span class="input-label">Tag Id Assigned</span>
 					<input type="text" placeholder="Tag Id" ng-model="newdevice.tagid">
@@ -58,7 +67,7 @@
 						<div class="input-label">
 						Select Barista
 						</div>
-						<select ng-model="newdevice.master" ng-options="d.devicename as d.devicename for d in baristas">
+						<select ng-model="newdevice.master" ng-options="d.tagid as d.devicename for d in baristas">
 							<option value="" >Select</option>
 						</select>
 					</label>
@@ -71,7 +80,7 @@
 					<div class="input-label">
 					Select Server
 					</div>
-					<select ng-model="newdevice.server" ng-options="d.name as d.name for d in servers">
+					<select ng-model="newdevice.server" ng-options="d.name as (d.name+' - '+d.url) for d in servers">
 						<option value="" >Select</option>
 					</select>
 				</label>

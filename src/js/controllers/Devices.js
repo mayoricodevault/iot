@@ -4,6 +4,11 @@ app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSe
     $scope.form = {};
     $scope.cleanSessions =[];
     $scope.listCanSwipe = true;
+    Api.Device.query({}, function(data){
+            $scope.devices = data;
+            $scope.refreshDataAmount();
+        });
+    
     $scope.$on('$ionicView.beforeEnter', function () {
             // update campaigns everytime the view becomes active
         doRefreshAll();
@@ -40,6 +45,7 @@ app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSe
         Toast.show('Loading...');
         Api.Device.query({}, function(data){
             $scope.devices = data;
+            console.log("devices:",data);
             $scope.refreshDataAmount();
         });
     }

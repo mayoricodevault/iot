@@ -1,3 +1,5 @@
+
+
 <ion-view title="Devices">
 	<ion-content class="padding-vertical">
 		<ion-refresher pulling-text="Pull to refresh"
@@ -9,31 +11,47 @@
 		<div class="padding-horizontal">	
 			<h4>Snapshots</h4>
 		</div>
-		<wrap-owlcarousel
+		<!-- <wrap-owlcarousel
 			class="owl-carousel padding"
 			data-options="{
 				autoPlay: false,
 				slideSpeed : 300,
 				paginationSpeed : 400,
-				items: 2,
-				itemsDesktop: [1199,3],
-				itemsTablet: [768,2]                                                                                  ,
+				items: 1,
+				itemsDesktop: [900,3],
+				itemsTablet: [600,2]                                                                                  ,
 				itemsMobile: [479,1],
 				navigation: false,
 			}">
+			
 			<div class="owl-item">
 				<img src="img/constitution-dg.png" />
 			</div>
 			<div class="owl-item">
 				<img src="img/layout.png"/>
 			</div>
-		</wrap-owlcarousel>
+		</wrap-owlcarousel> -->
+		<!-- <data-owl-carousel class="owl-carousel" data-options="{navigation: false, pagination: true, rewindNav : false}">
+	      <div owl-carousel-item="" ng-repeat="item in ::items2" class="item">
+	        <p>{{::item}}</p>
+	      </div>
+	    </data-owl-carousel> -->
+	    <!-- <data-owl-carousel class="owl-carousel" data-options="{items: 1, navigation: false, pagination: true, rewindNav : false}"> 
+	      <div owl-carousel-item="" ng-repeat="item in devices" class="item">
+	        <p>{{::item.icon}}</p>
+	      </div>
+	    </data-owl-carousel>-->
+	    
+	    <ul rn-carousel class="image carousel">
+		  <li ng-repeat="device in devices">
+		  	<img src="{{device.icon}}" class="imageCarousel"/>
+		  </li>
+		</ul>
 		
 		<ion-list can-swipe="listCanSwipe">
 			
 			<ion-item ng-repeat="device in devices | orderBy:'devicename':reverse">
 				<div on-tap="deviceSelect('router.device', device)">
-					
 					<i class="icon" ng-class="device.icon"></i>
 					{{ device.devicename }}
 					<span class="item-note" ng-class="device.color">

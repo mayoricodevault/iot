@@ -18,13 +18,12 @@ app.controller('addPerson',['$scope','Api','$ionicPopup','$cordovaToast','Toast'
 		$http.get(API_URL + '/random-user')
 		.success(function(data){
 			
-		var arrayDrink=['amer','cap','dec','esp','reg','tea'];	
+		var arrayDrink=['Americano','Cappuccino','Decaf Coffee','Espreso','Regular Coffee','Tea'];	
 		var pos=Math.floor((Math.random() * 6) + 0);
 			 $scope.coffee=arrayDrink[pos];
 			$scope.new_person = data.user;
 		})
 	} // end function
-	
 	
 	$scope.addPerson = function(){
 		

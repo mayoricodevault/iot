@@ -1,23 +1,348 @@
 0 info it worked if it ends with ok
 1 verbose cli [ '/home/ubuntu/.nvm/v0.10.35/bin/node',
 1 verbose cli   '/home/ubuntu/.nvm/v0.10.35/bin/npm',
-1 verbose cli   'install' ]
+1 verbose cli   'install',
+1 verbose cli   'mongoose-auto-increment' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.35
-4 error install Couldn't read dependencies
-5 error Failed to parse json
-5 error Unexpected string
-6 error File: /home/ubuntu/workspace/package.json
-7 error Failed to parse package.json data.
-7 error package.json must be actual JSON, not just JavaScript.
-7 error
-7 error This is not a bug in npm.
-7 error Tell the package author to fix their package.json file. JSON.parse
-8 error System Linux 3.14.13-c9
-9 error command "/home/ubuntu/.nvm/v0.10.35/bin/node" "/home/ubuntu/.nvm/v0.10.35/bin/npm" "install"
-10 error cwd /home/ubuntu/workspace
-11 error node -v v0.10.35
-12 error npm -v 1.4.28
-13 error file /home/ubuntu/workspace/package.json
-14 error code EJSONPARSE
-15 verbose exit [ 1, true ]
+4 warn package.json controler@1.0.0 No description
+5 warn package.json controler@1.0.0 No repository field.
+6 verbose readDependencies using package.json deps
+7 verbose cache add [ 'mongoose-auto-increment', null ]
+8 verbose cache add name=undefined spec="mongoose-auto-increment" args=["mongoose-auto-increment",null]
+9 verbose parsed url { protocol: null,
+9 verbose parsed url   slashes: null,
+9 verbose parsed url   auth: null,
+9 verbose parsed url   host: null,
+9 verbose parsed url   port: null,
+9 verbose parsed url   hostname: null,
+9 verbose parsed url   hash: null,
+9 verbose parsed url   search: null,
+9 verbose parsed url   query: null,
+9 verbose parsed url   pathname: 'mongoose-auto-increment',
+9 verbose parsed url   path: 'mongoose-auto-increment',
+9 verbose parsed url   href: 'mongoose-auto-increment' }
+10 silly lockFile a2b637ad-mongoose-auto-increment mongoose-auto-increment
+11 verbose lock mongoose-auto-increment /home/ubuntu/.npm/a2b637ad-mongoose-auto-increment.lock
+12 silly lockFile a2b637ad-mongoose-auto-increment mongoose-auto-increment
+13 silly lockFile a2b637ad-mongoose-auto-increment mongoose-auto-increment
+14 verbose addNamed [ 'mongoose-auto-increment', '' ]
+15 verbose addNamed [ null, '*' ]
+16 silly lockFile 625aec1e-mongoose-auto-increment mongoose-auto-increment@
+17 verbose lock mongoose-auto-increment@ /home/ubuntu/.npm/625aec1e-mongoose-auto-increment.lock
+18 silly addNameRange { name: 'mongoose-auto-increment', range: '*', hasData: false }
+19 verbose request where is /mongoose-auto-increment
+20 verbose request registry https://registry.npmjs.org/
+21 verbose request id 9e8d1b7f8c1eccbc
+22 verbose url raw /mongoose-auto-increment
+23 verbose url resolving [ 'https://registry.npmjs.org/', './mongoose-auto-increment' ]
+24 verbose url resolved https://registry.npmjs.org/mongoose-auto-increment
+25 verbose request where is https://registry.npmjs.org/mongoose-auto-increment
+26 info trying registry request attempt 1 at 13:27:52
+27 verbose etag "HVREF0HN8SWDQOQWFQY5549N"
+28 http GET https://registry.npmjs.org/mongoose-auto-increment
+29 http 304 https://registry.npmjs.org/mongoose-auto-increment
+30 silly registry.get cb [ 304,
+30 silly registry.get   { date: 'Wed, 02 Sep 2015 13:27:52 GMT',
+30 silly registry.get     via: '1.1 varnish',
+30 silly registry.get     'cache-control': 'max-age=60',
+30 silly registry.get     etag: '"HVREF0HN8SWDQOQWFQY5549N"',
+30 silly registry.get     age: '1',
+30 silly registry.get     connection: 'keep-alive',
+30 silly registry.get     'x-served-by': 'cache-jfk1030-JFK',
+30 silly registry.get     'x-cache': 'HIT',
+30 silly registry.get     'x-cache-hits': '1',
+30 silly registry.get     'x-timer': 'S1441200472.800096,VS0,VE0',
+30 silly registry.get     vary: 'Accept' } ]
+31 verbose etag https://registry.npmjs.org/mongoose-auto-increment from cache
+32 silly addNameRange number 2 { name: 'mongoose-auto-increment', range: '*', hasData: true }
+33 silly addNameRange versions [ 'mongoose-auto-increment',
+33 silly addNameRange   [ '1.0.0',
+33 silly addNameRange     '1.0.1',
+33 silly addNameRange     '1.1.0',
+33 silly addNameRange     '1.2.0',
+33 silly addNameRange     '1.1.1',
+33 silly addNameRange     '1.2.1',
+33 silly addNameRange     '1.2.2',
+33 silly addNameRange     '1.2.3',
+33 silly addNameRange     '1.3.0',
+33 silly addNameRange     '1.3.1',
+33 silly addNameRange     '2.0.0',
+33 silly addNameRange     '2.0.1',
+33 silly addNameRange     '2.0.2',
+33 silly addNameRange     '2.0.3',
+33 silly addNameRange     '2.0.4',
+33 silly addNameRange     '2.1.0',
+33 silly addNameRange     '2.1.1',
+33 silly addNameRange     '2.1.2',
+33 silly addNameRange     '2.1.3',
+33 silly addNameRange     '2.1.4',
+33 silly addNameRange     '3.0.0',
+33 silly addNameRange     '3.0.1',
+33 silly addNameRange     '3.0.2',
+33 silly addNameRange     '3.0.3',
+33 silly addNameRange     '3.0.4',
+33 silly addNameRange     '3.0.5',
+33 silly addNameRange     '3.0.6',
+33 silly addNameRange     '3.0.7',
+33 silly addNameRange     '3.0.8',
+33 silly addNameRange     '3.1.0',
+33 silly addNameRange     '3.2.0',
+33 silly addNameRange     '3.2.2',
+33 silly addNameRange     '3.2.3',
+33 silly addNameRange     '4.0.0',
+33 silly addNameRange     '3.2.4' ] ]
+34 verbose addNamed [ 'mongoose-auto-increment', '4.0.0' ]
+35 verbose addNamed [ '4.0.0', '4.0.0' ]
+36 silly lockFile d4c52210-mongoose-auto-increment-4-0-0 mongoose-auto-increment@4.0.0
+37 verbose lock mongoose-auto-increment@4.0.0 /home/ubuntu/.npm/d4c52210-mongoose-auto-increment-4-0-0.lock
+38 silly lockFile d4c52210-mongoose-auto-increment-4-0-0 mongoose-auto-increment@4.0.0
+39 silly lockFile d4c52210-mongoose-auto-increment-4-0-0 mongoose-auto-increment@4.0.0
+40 silly lockFile 625aec1e-mongoose-auto-increment mongoose-auto-increment@
+41 silly lockFile 625aec1e-mongoose-auto-increment mongoose-auto-increment@
+42 silly resolved [ { name: 'mongoose-auto-increment',
+42 silly resolved     version: '4.0.0',
+42 silly resolved     description: 'This plugin allows you to auto-increment any field on any mongoose schema that you wish.',
+42 silly resolved     repository:
+42 silly resolved      { type: 'git',
+42 silly resolved        url: 'git://github.com/codetunnel/mongoose-auto-increment.git' },
+42 silly resolved     dependencies: { extend: '^2.0.0' },
+42 silly resolved     peerDependencies: { mongoose: '~4.0.0' },
+42 silly resolved     devDependencies: { async: '*', chai: '*', mocha: '*', mongoose: '~4.0.0' },
+42 silly resolved     keywords:
+42 silly resolved      [ 'mongoose',
+42 silly resolved        'plugin',
+42 silly resolved        'auto-increment',
+42 silly resolved        'auto',
+42 silly resolved        'increment',
+42 silly resolved        'automatic',
+42 silly resolved        'autoincrement',
+42 silly resolved        'auto_increment',
+42 silly resolved        'autoinc',
+42 silly resolved        'auto-inc',
+42 silly resolved        'auto_inc',
+42 silly resolved        'pureautoinc',
+42 silly resolved        'mongoose-pureautoinc' ],
+42 silly resolved     author:
+42 silly resolved      { name: 'Alex Ford',
+42 silly resolved        email: 'alex.ford@codetunnel.com',
+42 silly resolved        url: 'Chevex' },
+42 silly resolved     contributors: [ [Object], [Object], [Object], [Object] ],
+42 silly resolved     scripts: { test: 'node_modules/mocha/bin/mocha' },
+42 silly resolved     bugs: { url: 'https://github.com/codetunnel/mongoose-auto-increment/issues' },
+42 silly resolved     gitHead: '7b36fc6ef64eee3ac85bd086b208eaaf986d99f5',
+42 silly resolved     homepage: 'https://github.com/codetunnel/mongoose-auto-increment',
+42 silly resolved     _id: 'mongoose-auto-increment@4.0.0',
+42 silly resolved     _shasum: '86531b5b07a434fa88ba0c04694c214230b435cc',
+42 silly resolved     _from: 'mongoose-auto-increment@',
+42 silly resolved     _npmVersion: '2.6.1',
+42 silly resolved     _nodeVersion: '0.12.0',
+42 silly resolved     _npmUser: { name: 'chevex', email: 'alex.ford@codetunnel.com' },
+42 silly resolved     maintainers: [ [Object] ],
+42 silly resolved     dist:
+42 silly resolved      { shasum: '86531b5b07a434fa88ba0c04694c214230b435cc',
+42 silly resolved        tarball: 'http://registry.npmjs.org/mongoose-auto-increment/-/mongoose-auto-increment-4.0.0.tgz' },
+42 silly resolved     directories: {},
+42 silly resolved     _resolved: 'https://registry.npmjs.org/mongoose-auto-increment/-/mongoose-auto-increment-4.0.0.tgz',
+42 silly resolved     readme: 'ERROR: No README data found!' } ]
+43 info install mongoose-auto-increment@4.0.0 into /home/ubuntu/workspace
+44 info installOne mongoose-auto-increment@4.0.0
+45 verbose node_modules/mongoose-auto-increment unbuild
+46 info preuninstall mongoose-auto-increment@4.0.0
+47 info uninstall mongoose-auto-increment@4.0.0
+48 verbose true,/home/ubuntu/workspace/node_modules,/home/ubuntu/workspace/node_modules unbuild mongoose-auto-increment@4.0.0
+49 info postuninstall mongoose-auto-increment@4.0.0
+50 verbose tar unpack /home/ubuntu/.npm/mongoose-auto-increment/4.0.0/package.tgz
+51 silly lockFile 46ea0d1c--modules-mongoose-auto-increment tar:///home/ubuntu/workspace/node_modules/mongoose-auto-increment
+52 verbose lock tar:///home/ubuntu/workspace/node_modules/mongoose-auto-increment /home/ubuntu/.npm/46ea0d1c--modules-mongoose-auto-increment.lock
+53 silly lockFile 0fc10d34-auto-increment-4-0-0-package-tgz tar:///home/ubuntu/.npm/mongoose-auto-increment/4.0.0/package.tgz
+54 verbose lock tar:///home/ubuntu/.npm/mongoose-auto-increment/4.0.0/package.tgz /home/ubuntu/.npm/0fc10d34-auto-increment-4-0-0-package-tgz.lock
+55 silly gunzTarPerm modes [ '755', '644' ]
+56 silly gunzTarPerm extractEntry package.json
+57 silly gunzTarPerm extractEntry .npmignore
+58 silly gunzTarPerm extractEntry README.md
+59 silly gunzTarPerm extractEntry LICENSE
+60 silly gunzTarPerm extractEntry index.js
+61 silly gunzTarPerm extractEntry .travis.yml
+62 silly gunzTarPerm extractEntry CONTRIBUTING.md
+63 silly gunzTarPerm extractEntry test/test.js
+64 silly gunzTarPerm extractEntry test/mocha.opts
+65 silly lockFile 46ea0d1c--modules-mongoose-auto-increment tar:///home/ubuntu/workspace/node_modules/mongoose-auto-increment
+66 silly lockFile 46ea0d1c--modules-mongoose-auto-increment tar:///home/ubuntu/workspace/node_modules/mongoose-auto-increment
+67 silly lockFile 0fc10d34-auto-increment-4-0-0-package-tgz tar:///home/ubuntu/.npm/mongoose-auto-increment/4.0.0/package.tgz
+68 silly lockFile 0fc10d34-auto-increment-4-0-0-package-tgz tar:///home/ubuntu/.npm/mongoose-auto-increment/4.0.0/package.tgz
+69 info preinstall mongoose-auto-increment@4.0.0
+70 verbose readDependencies using package.json deps
+71 verbose readDependencies using package.json deps
+72 verbose cache add [ 'extend@^2.0.0', null ]
+73 verbose cache add name=undefined spec="extend@^2.0.0" args=["extend@^2.0.0",null]
+74 verbose parsed url { protocol: null,
+74 verbose parsed url   slashes: null,
+74 verbose parsed url   auth: null,
+74 verbose parsed url   host: null,
+74 verbose parsed url   port: null,
+74 verbose parsed url   hostname: null,
+74 verbose parsed url   hash: null,
+74 verbose parsed url   search: null,
+74 verbose parsed url   query: null,
+74 verbose parsed url   pathname: 'extend@^2.0.0',
+74 verbose parsed url   path: 'extend@^2.0.0',
+74 verbose parsed url   href: 'extend@^2.0.0' }
+75 verbose cache add name="extend" spec="^2.0.0" args=["extend","^2.0.0"]
+76 verbose parsed url { protocol: null,
+76 verbose parsed url   slashes: null,
+76 verbose parsed url   auth: null,
+76 verbose parsed url   host: null,
+76 verbose parsed url   port: null,
+76 verbose parsed url   hostname: null,
+76 verbose parsed url   hash: null,
+76 verbose parsed url   search: null,
+76 verbose parsed url   query: null,
+76 verbose parsed url   pathname: '^2.0.0',
+76 verbose parsed url   path: '^2.0.0',
+76 verbose parsed url   href: '^2.0.0' }
+77 verbose addNamed [ 'extend', '^2.0.0' ]
+78 verbose addNamed [ null, '>=2.0.0-0 <3.0.0-0' ]
+79 silly lockFile c49faa5d-extend-2-0-0 extend@^2.0.0
+80 verbose lock extend@^2.0.0 /home/ubuntu/.npm/c49faa5d-extend-2-0-0.lock
+81 silly addNameRange { name: 'extend', range: '>=2.0.0-0 <3.0.0-0', hasData: false }
+82 verbose request where is /extend
+83 verbose request registry https://registry.npmjs.org/
+84 verbose url raw /extend
+85 verbose url resolving [ 'https://registry.npmjs.org/', './extend' ]
+86 verbose url resolved https://registry.npmjs.org/extend
+87 verbose request where is https://registry.npmjs.org/extend
+88 info trying registry request attempt 1 at 13:27:52
+89 verbose etag "C1I6NMXYFPLWYM2UZ47VPVXL4"
+90 http GET https://registry.npmjs.org/extend
+91 http 304 https://registry.npmjs.org/extend
+92 silly registry.get cb [ 304,
+92 silly registry.get   { date: 'Wed, 02 Sep 2015 13:27:53 GMT',
+92 silly registry.get     via: '1.1 varnish',
+92 silly registry.get     'cache-control': 'max-age=60',
+92 silly registry.get     etag: '"C1I6NMXYFPLWYM2UZ47VPVXL4"',
+92 silly registry.get     age: '0',
+92 silly registry.get     connection: 'keep-alive',
+92 silly registry.get     'x-served-by': 'cache-ord1722-ORD',
+92 silly registry.get     'x-cache': 'HIT',
+92 silly registry.get     'x-cache-hits': '1',
+92 silly registry.get     'x-timer': 'S1441200473.011461,VS0,VE37',
+92 silly registry.get     vary: 'Accept' } ]
+93 verbose etag https://registry.npmjs.org/extend from cache
+94 silly addNameRange number 2 { name: 'extend', range: '>=2.0.0-0 <3.0.0-0', hasData: true }
+95 silly addNameRange versions [ 'extend',
+95 silly addNameRange   [ '1.0.0',
+95 silly addNameRange     '1.1.0',
+95 silly addNameRange     '1.1.1',
+95 silly addNameRange     '1.1.3',
+95 silly addNameRange     '1.2.0',
+95 silly addNameRange     '1.2.1',
+95 silly addNameRange     '1.3.0',
+95 silly addNameRange     '2.0.0',
+95 silly addNameRange     '2.0.1',
+95 silly addNameRange     '3.0.0' ] ]
+96 verbose addNamed [ 'extend', '2.0.1' ]
+97 verbose addNamed [ '2.0.1', '2.0.1' ]
+98 silly lockFile 6f1e8ae3-extend-2-0-1 extend@2.0.1
+99 verbose lock extend@2.0.1 /home/ubuntu/.npm/6f1e8ae3-extend-2-0-1.lock
+100 silly lockFile 6f1e8ae3-extend-2-0-1 extend@2.0.1
+101 silly lockFile 6f1e8ae3-extend-2-0-1 extend@2.0.1
+102 silly lockFile c49faa5d-extend-2-0-0 extend@^2.0.0
+103 silly lockFile c49faa5d-extend-2-0-0 extend@^2.0.0
+104 silly resolved [ { name: 'extend',
+104 silly resolved     author:
+104 silly resolved      { name: 'Stefan Thomas',
+104 silly resolved        email: 'justmoon@members.fsf.org',
+104 silly resolved        url: 'http://www.justmoon.net' },
+104 silly resolved     version: '2.0.1',
+104 silly resolved     description: 'Port of jQuery.extend for node.js and the browser',
+104 silly resolved     main: 'index',
+104 silly resolved     scripts:
+104 silly resolved      { test: 'npm run lint && node test/index.js && npm run coverage-quiet',
+104 silly resolved        coverage: 'covert test/index.js',
+104 silly resolved        'coverage-quiet': 'covert test/index.js --quiet',
+104 silly resolved        lint: 'jscs *.js */*.js' },
+104 silly resolved     contributors: [ [Object] ],
+104 silly resolved     keywords: [ 'extend', 'clone', 'merge' ],
+104 silly resolved     repository:
+104 silly resolved      { type: 'git',
+104 silly resolved        url: 'git+https://github.com/justmoon/node-extend.git' },
+104 silly resolved     dependencies: {},
+104 silly resolved     devDependencies: { tape: '^4.0.0', covert: '^1.0.1', jscs: '^1.11.3' },
+104 silly resolved     license: 'MIT',
+104 silly resolved     gitHead: 'ce3790222d3d2051f728f74be9565f155ed599c3',
+104 silly resolved     bugs: { url: 'https://github.com/justmoon/node-extend/issues' },
+104 silly resolved     homepage: 'https://github.com/justmoon/node-extend#readme',
+104 silly resolved     _id: 'extend@2.0.1',
+104 silly resolved     _shasum: '1ee8010689e7395ff9448241c98652bc759a8260',
+104 silly resolved     _from: 'extend@^2.0.0',
+104 silly resolved     _npmVersion: '2.8.3',
+104 silly resolved     _nodeVersion: '1.8.1',
+104 silly resolved     _npmUser: { name: 'ljharb', email: 'ljharb@gmail.com' },
+104 silly resolved     dist:
+104 silly resolved      { shasum: '1ee8010689e7395ff9448241c98652bc759a8260',
+104 silly resolved        tarball: 'http://registry.npmjs.org/extend/-/extend-2.0.1.tgz' },
+104 silly resolved     maintainers: [ [Object], [Object] ],
+104 silly resolved     directories: {},
+104 silly resolved     _resolved: 'https://registry.npmjs.org/extend/-/extend-2.0.1.tgz',
+104 silly resolved     readme: 'ERROR: No README data found!' } ]
+105 info install extend@2.0.1 into /home/ubuntu/workspace/node_modules/mongoose-auto-increment
+106 info installOne extend@2.0.1
+107 verbose node_modules/mongoose-auto-increment/node_modules/extend unbuild
+108 verbose tar unpack /home/ubuntu/.npm/extend/2.0.1/package.tgz
+109 silly lockFile 02dd7811-to-increment-node-modules-extend tar:///home/ubuntu/workspace/node_modules/mongoose-auto-increment/node_modules/extend
+110 verbose lock tar:///home/ubuntu/workspace/node_modules/mongoose-auto-increment/node_modules/extend /home/ubuntu/.npm/02dd7811-to-increment-node-modules-extend.lock
+111 silly lockFile f816d243-ntu-npm-extend-2-0-1-package-tgz tar:///home/ubuntu/.npm/extend/2.0.1/package.tgz
+112 verbose lock tar:///home/ubuntu/.npm/extend/2.0.1/package.tgz /home/ubuntu/.npm/f816d243-ntu-npm-extend-2-0-1-package-tgz.lock
+113 silly gunzTarPerm modes [ '755', '644' ]
+114 silly gunzTarPerm extractEntry package.json
+115 silly gunzTarPerm extractEntry .npmignore
+116 silly gunzTarPerm extractEntry README.md
+117 silly gunzTarPerm extractEntry LICENSE
+118 silly gunzTarPerm extractEntry index.js
+119 silly gunzTarPerm extractEntry .jscs.json
+120 silly gunzTarPerm extractEntry component.json
+121 silly gunzTarPerm extractEntry .travis.yml
+122 silly gunzTarPerm extractEntry CHANGELOG.md
+123 silly lockFile 02dd7811-to-increment-node-modules-extend tar:///home/ubuntu/workspace/node_modules/mongoose-auto-increment/node_modules/extend
+124 silly lockFile 02dd7811-to-increment-node-modules-extend tar:///home/ubuntu/workspace/node_modules/mongoose-auto-increment/node_modules/extend
+125 silly lockFile f816d243-ntu-npm-extend-2-0-1-package-tgz tar:///home/ubuntu/.npm/extend/2.0.1/package.tgz
+126 silly lockFile f816d243-ntu-npm-extend-2-0-1-package-tgz tar:///home/ubuntu/.npm/extend/2.0.1/package.tgz
+127 info preinstall extend@2.0.1
+128 verbose readDependencies using package.json deps
+129 verbose readDependencies using package.json deps
+130 silly resolved []
+131 verbose about to build /home/ubuntu/workspace/node_modules/mongoose-auto-increment/node_modules/extend
+132 info build /home/ubuntu/workspace/node_modules/mongoose-auto-increment/node_modules/extend
+133 verbose linkStuff [ false,
+133 verbose linkStuff   false,
+133 verbose linkStuff   false,
+133 verbose linkStuff   '/home/ubuntu/workspace/node_modules/mongoose-auto-increment/node_modules' ]
+134 info linkStuff extend@2.0.1
+135 verbose linkBins extend@2.0.1
+136 verbose linkMans extend@2.0.1
+137 verbose rebuildBundles extend@2.0.1
+138 info install extend@2.0.1
+139 info postinstall extend@2.0.1
+140 verbose about to build /home/ubuntu/workspace/node_modules/mongoose-auto-increment
+141 info build /home/ubuntu/workspace/node_modules/mongoose-auto-increment
+142 verbose linkStuff [ false, false, false, '/home/ubuntu/workspace/node_modules' ]
+143 info linkStuff mongoose-auto-increment@4.0.0
+144 verbose linkBins mongoose-auto-increment@4.0.0
+145 verbose linkMans mongoose-auto-increment@4.0.0
+146 verbose rebuildBundles mongoose-auto-increment@4.0.0
+147 verbose rebuildBundles [ 'extend' ]
+148 info install mongoose-auto-increment@4.0.0
+149 info postinstall mongoose-auto-increment@4.0.0
+150 verbose readDependencies using package.json deps
+151 verbose already installed skipping mongoose@~4.0.0 /home/ubuntu/workspace
+152 silly resolved []
+153 error peerinvalid The package mongoose does not satisfy its siblings' peerDependencies requirements!
+153 error peerinvalid Peer mongoose-auto-increment@4.0.0 wants mongoose@~4.0.0
+154 error System Linux 3.14.13-c9
+155 error command "/home/ubuntu/.nvm/v0.10.35/bin/node" "/home/ubuntu/.nvm/v0.10.35/bin/npm" "install" "mongoose-auto-increment"
+156 error cwd /home/ubuntu/workspace
+157 error node -v v0.10.35
+158 error npm -v 1.4.28
+159 error code EPEERINVALID
+160 verbose exit [ 1, true ]

@@ -1,6 +1,16 @@
 'use strict';
 
-var app = angular.module('iot', ['ionic','ngCordova','chart.js', 'btford.socket-io','ngResource', 'firebase'])
+var app = angular.module('iot', [
+  'ionic',
+  'ngCordova',
+  'chart.js', 
+  'btford.socket-io',
+  'ngResource', 
+  'firebase',
+  'ngTouch',
+  'angular-carousel',
+  'ui.bootstrap.datetimepicker'
+])
 
 app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
   
@@ -268,7 +278,17 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
           resolve: { authenticate: authenticate }
         }
       }
-    })     
+    })
+  .state('router.addMessage', {
+    url: "/add-message",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/add-message.html",
+        controller: "addMessage",
+        resolve: { authenticate: authenticate }
+      }
+    }
+  })  
 	.state('intro', {
       url: "/intro",
       templateUrl: "templates/intro.html",
@@ -317,12 +337,35 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
 .constant('FIREBASE_URI_ROOT', 'https://kxively.firebaseio.com')
 .constant('FIREBASE_URI_SESSIONS', 'https://kxively.firebaseio.com/sessions');
 
-app.directive('wrapOwlcarousel', function () {
+app.directive("owlCarousel", function() {
     return {
         restrict: 'E',
-        link: function (scope, element, attrs) {
-            var options = scope.$eval($(element).attr('data-options'));
-            $(element).owlCarousel(options);
+        transclude: false,
+        link: function (scope) {
+            scope.initCarousel = function(element) {
+              // provide any default options you want
+                var defaultOptions = {
+                };
+                var customOptions = scope.$eval($(element).attr('data-options'));
+                // combine the two options objects
+                for(var key in customOptions) {
+                    defaultOptions[key] = customOptions[key];
+                }
+                // init carousel
+                $(element).owlCarousel(defaultOptions);
+            };
         }
     };
-});
+})
+app.directive('owlCarouselItem', [function() {
+    return {
+        restrict: 'A',
+        transclude: false,
+        link: function(scope, element) {
+          // wait for the last item in the ng-repeat then call init
+            if(scope.$last) {
+                scope.initCarousel(element.parent());
+            }
+        }
+    };
+}]);

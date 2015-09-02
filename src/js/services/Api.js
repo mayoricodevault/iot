@@ -7,5 +7,7 @@ app.factory('Api', ['$resource', function($resource){
         //User: $resource('/api/deviceusers/:id', {id: '@id'}),
         User: $resource('/api/users/:id', {id: '@id'}),
         Server: $resource('/api/servers/:id', {id: '@id'}),
+        Message: $resource('/api/messages/:id',{id: '@id'}),
+        Transaction: $resource('/api/transaction/:id',{id: '@id'})
     }
 }]);

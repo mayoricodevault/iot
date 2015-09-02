@@ -1,0 +1,72 @@
+<ion-view title="Add New Message">
+	<ion-content>
+		
+		<ion-refresher pulling-text="Pull to refresh"
+	         refreshing-text="Loading..."
+	         refreshing-icon="ion-loading-c"
+	         pulling-icon="ion-ios7-arrow-thin-down"
+	         on-refresh="doRefresh()">
+        </ion-refresher>
+		
+		<form name="addMessageForm" ng-init="setFormScope(this)">
+			<div class="list" style="background:#ffffff;">
+				<div class="item item-divider">
+					Text
+				</div>
+				<label class="item item-input item-stacked-label">
+					<!-- <span class="input-label">Text</span> -->
+					<input type="text" placeholder="Text" ng-model="newmessage.text">
+				</label>
+				
+				<div class="item item-divider">
+					Expositor
+				</div>
+				<label class="item item-input item-stacked-label">
+					<!-- <span class="input-label">Expositor</span> -->
+					<input type="text" placeholder="Expositor" ng-model="newmessage.expositor">
+				</label>
+				
+				<div class="item item-divider">
+					Date Time
+				</div>
+				<div class="row">
+					
+					<div class="col">
+						
+						<div class="dropdown">
+							<span class="input-label">Start</span>
+							<a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#" href="#">
+								<div class="input-group"><input type="text" class="form-control" data-ng-model="newmessage.start"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+								</div>
+							</a>
+							<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+								<datetimepicker data-ng-model="newmessage.start" data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"/>
+							</ul>
+						</div>
+					
+					</div>
+					
+					<div class="col">
+						 <div class="dropdown">
+						  <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="#">
+						  	<span class="input-label">End</span>
+						    <div class="input-group"><input type="text" class="form-control" data-ng-model="newmessage.end"><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+						    </div>
+						  </a>
+						  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						    <datetimepicker data-ng-model="newmessage.end" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"/>
+						  </ul>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+			<div class="padding">
+				<button class="button button-balanced" ng-click="messageSubmit(newmessage)">
+					Add
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>

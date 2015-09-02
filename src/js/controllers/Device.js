@@ -1,30 +1,39 @@
-app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL','VisitorsService','storeService','$state','shareComponentService', 'Socket', '$stateParams', function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL,VisitorsService,storeService,$state,shareComponentService, Socket, $stateParams) {
+app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL','VisitorsService','storeService','$state','shareComponentService', 'Socket', '$stateParams','Sessions','FIREBASE_URI_SESSIONS', function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL,VisitorsService,storeService,$state,shareComponentService, Socket, $stateParams, Sessions, FIREBASE_URI_SESSIONS) {
     $scope.activeSessions ={};
     $scope.sessionArray = [];
     $scope.selTagId = $stateParams.tagid;
-    $scope.timeStamp = new Date().getTime();;
-    var fbBind =  SessionService.getSessions();
-    fbBind.$bindTo($scope, "activeSessions").then(function() {
+    $scope.timeStamp = new Date().getTime();
+    Sessions(FIREBASE_URI_SESSIONS).$bindTo($scope, "fbBind");
+    
+    $scope.$on('$ionicView.beforeEnter', function () {
+            // update campaigns everytime the view becomes active
         doRefreshAll();
+    });   
+    
+    $scope.$watch('fbBind', function() {
+        doRefreshAll();
+    });    
+   
+    function doRefreshAll() {
+        $scope.$broadcast('scroll.refreshComplete');
+        Toast.show('Loading...');
         var total = 0;
-		$scope.sessionArray = [];
-		angular.forEach($scope.activeSessions, function(session){
-			if (!session || !session.deviceName) {
-				return;
-			}
-		
-			if (session.tagId === $scope.selTagId && typeof session.serverUrl != 'undefined') {
-			    if (isUrl(session.serverUrl)) {
-			        ping(session, $scope.timeStamp);
-			        
+        $scope.sessionArray = [];
+        angular.forEach($scope.fbBind, function(session){
+        	if (!session || !session.deviceName) {
+        		return;
+        	}
+        	if (session.tagId === $scope.selTagId && typeof session.serverUrl != 'undefined') {
+        	    if (isUrl(session.serverUrl)) {
+        	        sendPing(session, $scope.timeStamp);
                     $scope.sessionArray.push(session);    
         			total++;
-			    }
-			}
-		});
-		$scope.totalCount = total;        
+        	    }
+        	}
+        });
+        $scope.totalCount = total;        
 		
-    });    
+    }
    
     $scope.devices = [];
     $scope.listCanSwipe = true;
@@ -39,19 +48,37 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
     $scope.newSnapShot = "";
  
  
+    $scope.visitorsTmp = [];
     $scope.visitors = [];
     $scope.imgSelected = false;
+    
+    //$scope.cleanVisitors = VisitorsService.getVisitors();
     // $scope.singleProduct= storeService.jsonRead('singleDevice');
     $scope.showImage = false;
     
-//     $scope.$watch('cleanVisitors', function () {
-//         visitorsToArray($scope.cleanVisitors);
-// 	}, true);
-	
-	function doRefreshAll() {
-        $scope.$broadcast('scroll.refreshComplete');
-        Toast.show('Loading...');
-    }
+     /*$scope.$watch('cleanVisitors', function () {
+         $scope.visitors = $scope.cleanVisitors;
+ 	}, true);*/
+ 	
+ 	
+ 	var fbBindVisitors =  VisitorsService.getVisitors();
+    fbBindVisitors.$bindTo($scope, "visitorsTmp").then(function() {
+
+        
+        var total = 0;
+		$scope.visitors = [];
+		angular.forEach($scope.visitorsTmp, function(visitor){
+		    console.log("visitor--> ",visitor);
+			if (!visitor || !visitor.name) {
+				return;
+			}
+		
+            $scope.visitors.push(visitor);    
+		});
+		$scope.totalCount = total;
+    }); 
+ 	
+
 	
 	$scope.filterbyTag = function(session) {
 	    console.log(session);
@@ -118,7 +145,7 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
 	 };
 	 
 	 $scope.doRefresh = function() {
-     
+            doRefreshAll();
     };
     
     $scope.data = {};
@@ -150,17 +177,18 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                              if ( $scope.data.name.favcoffe) {
                                 favcoffee = $scope.data.name.favcoffe;
                             }
+                            
                             $http.post(API_URL + '/remotekiosk', { 
-                                
                                 name : $scope.data.name.name,
-                                favcoffe : favcoffee,
+                                favcoffee : $scope.data.name.favcoffee,
                                 zipcode : $scope.data.name.zipcode,
                                 email : $scope.data.name.email,
                                 zonefrom : "IoT",
-                                zoneto : session.sessionid,
+                                zoneto : session.socketid,
                                 companyname : $scope.data.name.companyname
                             }).
                               then(function(response) {
+                                  console.log("response: ",response);
                                  Toast.show("Sending ....", 30);
                               }, function(response) {
                                   Toast.show(response.statusText + " "+ response.data.error, 30);
@@ -236,7 +264,7 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                     text: '<b>Ping</b>',
                     type: 'button-positive',
                     onTap: function(e) {
-                            ping(session, $scope.timeStamp);
+                            sendPing(session, $scope.timeStamp);
                     }
                 },
                 { text: 'Cancel' }
@@ -245,19 +273,28 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
         });
     };
     
+    
     $scope.resetAll = function(){
         for(var idxSession in $scope.sessionArray){
             $scope.resetSession($scope.sessionArray[idxSession]);
         }
     };
     
-    function ping(session, timeStamp) {
-
+    $scope.validSession = function(ts) {
+        return $scope.timeStamp == ts;
+    };
+    
+    function sendPing(session, timeStamp) {
+ 
          if(!isUrl(session.serverUrl )){
             return;
              
          }
-         $http.post(session.serverUrl + '/ping', { 
+         var postUrl = session.serverUrl;
+         if (postUrl.slice(-1) == "/") {
+             postUrl = postUrl.slice(0, postUrl.length - 1);
+         }
+         $http.post(postUrl + '/alive', { 
              sessionid : session.sessionid , 
              ts :timeStamp 
          }).

@@ -1,87 +1,49 @@
 'use strict';
 
-app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','Toast', function($scope, Api, $ionicPopup, $cordovaToast,Toast) {
+app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','Toast', function($scope, Api, $ionicPopup, $cordovaToast,Toast) {
     
-    $scope.baristas=[];
     
-    $scope.$on('$ionicView.beforeEnter', function () {
+    /*$scope.$on('$ionicView.beforeEnter', function () {
             // update campaigns everytime the view becomes active
         doRefresh();
-    });   
+    });*/   
     
-    function baristaFilter(data){
-    	$scope.baristas=[];
-    	for(var idx in data){
-    		if(data[idx].type == 'Barista'){
-    			$scope.baristas.push(data[idx]);
-    		}
-    	}
-    }
-    
-    Api.Device.query({}, function(data){
-    	$scope.devices = data;
-    	baristaFilter(data);
-    }); // devices query
-    
-    Api.Server.query({}, function(data){
-    	$scope.servers=data;
-    }); // servers query
-    
-	$scope.newdevice = {};
-	$scope.devicetypes=[{name:"Kiosk"},
-						{name:"Barista"},
-						{name:"Dashboard"}
-		];
-		
-	$scope.imageList=[
-			{name:"Dashboard",src:"img/dashboard.jpg"},
-			{name:"Kiosk",src:"img/kiosk.jpg"},
-			{name:"Barista",src:"img/barista.png"}
-		];
-		
-	$scope.formScope=null;
+	//$scope.formScope=null;
+	$scope.newmessage = {
+		start:new moment()
+	};
 	
 	$scope.setFormScope = function(frmDevice){
 		$scope.formScope = frmDevice;
 	}
 	
-	function tagidExist(tagid){
-		for(var key in $scope.devices){
-			if($scope.devices[key].tagid==tagid) return true;
-		}
+	$scope.messageSubmit = function(message) {
+		console.log("message --> ",message);
+		console.log($scope.newmessage.start);
+		console.log($scope.newmessage.end);
 		
-		return false;
-	}
-	
-	function getMasterUrl(masterName){
-		for(var key in $scope.devices){
-			if($scope.devices[key].devicename == masterName)
-				return $scope.devices[key].serverUrl;
-		}
-		return "";
-	}
-	
-	$scope.deviceSubmit = function() {
+		$scope.newmessage.end = $scope.newmessage.start;
 		
-		if(!$scope.newdevice.devicename) {
-			Toast.show("The field Name is required.");
+		if(typeof message=='undefined'||!message.text) {
+			Toast.show("The field Text is required.");
 			return;
 		}
-		if(!$scope.newdevice.icon) {
-			$scope.newdevice.icon = "img/kiosk.jpg";
-		}
-		
-		if(!$scope.newdevice.tagid) {
-			Toast.show("The field Tag ID is required.");
+		if(!message.expositor) {
+			Toast.show("The field Expositor is required.");
 			return;
 		}
 		
-		if(tagidExist($scope.newdevice.tagid)){
-			Toast.show("The field Tag ID exist.");
+		if(!message.start) {
+			Toast.show("The field Start is required.");
 			return;
 		}
 		
-		if(!$scope.newdevice.devicelocation) {
+		if(!message.end){
+			Toast.show("The field End is required.");
+			return;
+		}
+		
+		/*if(!$scope.newdevice.devicelocation) {
 			Toast.show("The field Location is required.");
 			return;
 		}		
@@ -143,7 +105,8 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
         	Toast.show(err.data);
         	//$scope.showAlert("System Error!!!", err.statusText);
 			return false;
-        });
+        });*/
+        
 	
 	};
 
@@ -159,17 +122,12 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
 	 
 	 
 	 function doRefresh() {
-	 	$scope.$broadcast('scroll.refreshComplete');
+	 	//$scope.$broadcast('scroll.refreshComplete');
         Toast.show('Loading...');
-        Api.Device.query({}, function(data){
-            $scope.devices = data;
-            baristaFilter(data);
-            $scope.refreshDataAmount();
-        });
 	 }
 	 
 	 $scope.doRefresh = function() {
-        doRefresh();
+       // doRefresh();
     }
 	 
 }]);

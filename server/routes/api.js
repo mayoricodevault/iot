@@ -4,6 +4,7 @@ var Setting = require('../models/setting');
 var Location = require('../models/location');
 var User = require('../models/user');
 var Server = require('../models/server');
+var Transaction = require('../models/transaction');
 
 module.exports = function(router, socket){
     // Device
@@ -14,7 +15,10 @@ module.exports = function(router, socket){
         device.tagid = req.body.tagid;
         device.icon = req.body.icon;
         device.master = req.body.master;
+        device.masterUrl = req.body.masterUrl; 
         device.server = req.body.server;
+        device.serverUrl = req.body.serverUrl;
+        device.serverId = req.body.serverId;
         device.featured = req.body.featured;
         device.type = req.body.type;
         
@@ -61,7 +65,10 @@ module.exports = function(router, socket){
             device.icon = req.body.icon;
             device.tagid = req.body.tagid;
             device.master = req.body.master;
+            device.masterUrl = req.body.masterUrl; 
             device.server = req.body.server;
+            device.serverUrl = req.body.serverUrl;
+            device.serverId = req.body.serverId;
             device.featured = req.body.featured;
             device.type = req.body.type;
             device.save(function(err, data){
@@ -353,6 +360,76 @@ module.exports = function(router, socket){
         
       router.delete('/servers/:id', function(req, res){
         Server.remove({_id: req.params.id}, function(err){
+            res.json({result: err ? 'error' : 'ok'});
+        })
+    });
+    
+      // Transacionts
+    router.post('/transaction', function(req, res){
+        var trns = new Transaction();
+        
+        trns.trnsno = req.body.trnsno;
+        trns.email = req.body.email;
+        trns.product = req.body.product;
+        trns.tagid = req.body.tagid;
+        trns.zipcode = req.body.zipcode;
+        trns.region = req.body.region;
+        trns.dt = req.body.dt;
+        
+        console.log("trns --> ",trns);
+        trns.save(function(err, data){
+            if(err){
+                return res.status(400).end("The name field must be unique.");
+                //throw err;
+            }
+            res.json(data);
+        });
+    });
+    
+    router.get('/transaction/', function(req, res){
+        Transaction.find({}, function(err, data){
+            if(err){
+                return res.status(400).end("Error While Reading.");
+                //throw err;
+            }
+            res.json(data);
+        });
+    });
+    
+    router.post('/transaction/:id', function(req, res){
+        Transaction.findOne({_id: req.params.id}, function(err, data){
+            if(err){
+                return res.status(400).end("The name field must be unique.");
+                //throw err;
+            }
+            var trns = data;
+            trns.trnsno = req.body.trnsno;
+            trns.email = req.body.email;
+            trns.product = req.body.product;
+            trns.tagid = req.body.tagid;
+            trns.zipcode = req.body.zipcode;
+            trns.region = req.body.region;
+            trns.dt = req.body.dt;
+            trns.save(function(err, data){
+                if(err){
+                    return res.status(400).end("The name field must be unique.");
+                //throw err;
+                 }
+                res.json(data);
+            });
+            
+        });
+    });
+    
+    
+    router.delete('/transaction', function(req, res){
+        Transaction.remove({}, function(err){
+            res.json({result: err ? 'error' : 'ok'});
+        });
+    });
+        
+      router.delete('/transaction/:id', function(req, res){
+        Transaction.remove({_id: req.params.id}, function(err){
             res.json({result: err ? 'error' : 'ok'});
         })
     });
