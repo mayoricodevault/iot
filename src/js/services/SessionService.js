@@ -1,4 +1,4 @@
-app.factory('SessionService', ['$firebaseObject', 'FIREBASE_URI_SESSIONS', 'FIREBASE_URI_ROOT', function ($firebaseObject, FIREBASE_URI_SESSIONS, FIREBASE_URI_ROOT) {
+app.factory('SessionService', ['$firebaseObject', 'FIREBASE_URI_SESSIONS', 'FIREBASE_URI_ROOT','LSFactory',function ($firebaseObject, FIREBASE_URI_SESSIONS, FIREBASE_URI_ROOT, LSFactory) {
     var ref = new Firebase(FIREBASE_URI_SESSIONS);
     var activeSessions = $firebaseObject(ref);
     var getSessions = function () {
@@ -13,8 +13,22 @@ app.factory('SessionService', ['$firebaseObject', 'FIREBASE_URI_SESSIONS', 'FIRE
                 syncObject.$remove();
         });
     };
+    
+    var updateSessionStatus = function (socketid, ts, isdeleted) {
+        var syncObject =  $firebaseObject(ref.child(socketid));
+        syncObject.$loaded().then(function() {
+            if (syncObject.deviceName) {
+                syncObject.ping_dt = ts;
+                syncObject.isdeleted = isdeleted;
+                syncObject.$save();
+            }
+        });
+
+    };
+    
     return {
         getSessions: getSessions,
-        removeSession : removeSession
+        removeSession : removeSession,
+        updateSessionStatus:updateSessionStatus
     };
 }]);

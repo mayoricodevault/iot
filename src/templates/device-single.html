@@ -1,5 +1,5 @@
 <ion-view title="{{device.devicename}}">
-	<ion-content class="padding">
+	<ion-content class="padding-vertical">
 			<ion-refresher pulling-text="Pull to refresh"
 	         refreshing-text="Loading..."
 	         refreshing-icon="ion-loading-c"
@@ -16,17 +16,27 @@
 			</span>
 			
 			<div class="list">
-				<div class="item item-icon-left">
+				<!-- <div class="item item-icon-left">
 					<i class="icon" ng-class="device.icon"></i>
-					{{device.devicename}}
+					{{device.devicename}} 
 					<span class="item-note">
 					{{device.status}}
 					</span>
-				</div>
+				</div> -->
 				<div class="item item-divider">
-				Device Info
+					Device Info
 				</div>
-				<li class="item item-toggle">
+				<label class="item item-input">
+					Device Name: <span class="item-note">{{fromDevice.devicename}}</span>
+				</label>
+				<label class="item item-input">
+					Type: <span class="item-note">{{fromDevice.type}}</span>
+				</label>
+				<label class="item item-input">
+					Server Url: <span class="item-note">{{fromDevice.serverUrl}}</span>
+				</label>
+				
+				<!-- <li class="item item-toggle">
 					Featured
 					<label class="toggle toggle-balanced">
 						<input type="checkbox" checked ng-model="device.featured">
@@ -34,15 +44,15 @@
 							<div class="handle"></div>
 						</div>
 					</label>
-				</li>
+				</li> -->
 			</div>
 			<ion-list can-swipe="listCanSwipe">
-				<ion-item ng-hide="!validSession(session.ping_dt)"  ng-repeat="session in sessionArray">
+				<ion-item ng-repeat="session in sessionArray">
 					<div on-tap="deviceTap('router.device', device)">
 						<i class="icon" ng-class="device.icon"></i>
-						{{ session.deviceName }} 
-						<span ng-hide="!validSession(session.ping_dt)" class="item-note" ng-class="device.color">
-							 ( Online )
+						{{ session.deviceName }}  ( {{session.deviceDetected}} )
+						<span ng-show="validSession(session.ping_dt)" class="item-note" ng-class="device.color">
+							 ( Online ) 
 						</span>
 						<span class="item-note" ng-class="device.color">
 						{{ session.socketid }}
@@ -50,9 +60,18 @@
 						<ion-option-button side="right" class="button-positive" ng-click="resetSession(session)">
 					      Reset
 					    </ion-option-button>
-					    <ion-option-button class="button-info" ng-click="testSession(session)">
-					      Test
-					    </ion-option-button>
+					    <div ng-if="session.deviceType=='dashboard'">
+						    <ion-option-button class="button-info" ng-click="testDashboard(session)">
+						      Test Dashboard
+						    </ion-option-button>
+					    </div>
+					    <div ng-if="session.deviceType!='dashboard'">
+					    	<div ng-if="session.deviceType!='barista'">
+							    <ion-option-button class="button-info" ng-click="testSession(session)">
+							      Test
+							    </ion-option-button>
+						    </div>
+					    </div>
 					    <ion-option-button class="button-dark" ng-click="snapshot(session)">
 					    	<i class="icon ion-ios-camera-outline"></i>
 					    	<!-- Snapshot -->

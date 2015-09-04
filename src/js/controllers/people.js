@@ -154,7 +154,7 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
                         }
                         
                         $scope.transaction = {
-                            trnsno: 'uno',
+                            trnsno: 'dos',
                             email: 'tran@gmail.com',
                             product: 'Latte',
                             tagid: '2323',

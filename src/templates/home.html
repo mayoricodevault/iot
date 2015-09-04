@@ -25,7 +25,7 @@
 		</div>
 		<div ng-repeat="device in devices | filter: { featured: true}">
 			<div class="col-lg-50 padding-horizontal">
-				<div class="item item-icon-left" on-tap="deviceTap('router.device', device)">
+				<div class="item item-icon-left" on-tap="deviceSelect('router.device', device)">
 					<i class="icon" ng-class="device.icon"></i>
 					{{ device.devicename }}
 					<span class="item-note" ng-class="device.color">

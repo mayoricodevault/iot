@@ -5,7 +5,7 @@ var CounterSchema = mongoose.Schema({
 });
 var counter = mongoose.model('counter', CounterSchema);
 var transactionSchema = mongoose.Schema({
-	trnsno :String,//{type:String,required:true,index:{unique:true}},
+	trnsno : {type:String,required:true,index:{unique:true}},
 	email: String,
 	product :String,
 	tagid : String,
@@ -13,14 +13,17 @@ var transactionSchema = mongoose.Schema({
 	region : String,
 	dt: Date
 });
-/*transactionSchema.pre('save', function(next) {
+transactionSchema.pre('save', function(next) {
     var doc = this;
-    counter.findByIdAndUpdate({_id: 'entityId'}, {$inc: { seq: 1} }, function(error, counter)   {
+    console.log("next: ",next);
+    counter.findByIdAndUpdate({_id: 'trnsno'}, {$inc: { seq: 1} }, function(error, counter)   {
+        //console.log("error: ",error);
+        //console.log("error: ",counter);
         if(error)
             return next(error);
         doc.trnsno = counter.seq;
         next();
     });
-});*/
+});
 
 module.exports = mongoose.model('transaction', transactionSchema);

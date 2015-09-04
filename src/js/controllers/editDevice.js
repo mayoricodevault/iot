@@ -21,8 +21,9 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
     
 	$scope.typeList=[   {name:"Kiosk"},
 						{name:"Barista"},
-						{name:"Dashboard"}];    
-					
+						{name:"Dashboard"},
+						{name:"Welcome"}
+				];    
 					
     
    // $scope.newdevice=[]; 

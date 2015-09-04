@@ -378,6 +378,8 @@ module.exports = function(router, socket){
         
         console.log("trns --> ",trns);
         trns.save(function(err, data){
+            console.log("err--> ",err);
+            console.log("data--> ",data);
             if(err){
                 return res.status(400).end("The name field must be unique.");
                 //throw err;

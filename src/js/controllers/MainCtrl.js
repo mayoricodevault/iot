@@ -77,4 +77,10 @@ app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicP
 		Toast.show('Restarting....');
 		$window.location.href = API_URL;
 	}
+	
+	$scope.deviceSelect = function(route, data) {
+  		console.log("device select");
+  		storeService.jsonWrite('singleDevice',data);
+  		$state.go(route, {'tagid' : data.tagid});
+  	};
 })

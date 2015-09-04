@@ -30,13 +30,15 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
 	$scope.newdevice = {};
 	$scope.devicetypes=[{name:"Kiosk"},
 						{name:"Barista"},
-						{name:"Dashboard"}
+						{name:"Dashboard"},
+						{name:"Welcome"}
 		];
 		
 	$scope.imageList=[
 			{name:"Dashboard",src:"img/dashboard.jpg"},
 			{name:"Kiosk",src:"img/kiosk.jpg"},
-			{name:"Barista",src:"img/barista.png"}
+			{name:"Barista",src:"img/barista.png"},
+			{name:"Welcome",src:"img/welcome.png"}
 		];
 		
 	$scope.formScope=null;
@@ -117,6 +119,14 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
 		}
 		
 		console.log("newdevice --> ",$scope.newdevice);
+		
+		if(typeof $scope.newdevice.master == 'undefined'){
+			$scope.newdevice.master = 0;
+		}
+		
+		if(typeof $scope.newdevice.master == 'undefined'){
+			$scope.newdevice.master = 0;
+		}
 		
 		
 		Api.Device.save({}, $scope.newdevice, 

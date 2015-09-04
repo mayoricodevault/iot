@@ -152,18 +152,8 @@ app.get("/random-user", function (req, res) {
     res.status(200).json({user : user});
 });
 
-app.post("/remotedashboard", function (req, res) {
-  console.log(req);
+app.get("/remotedashboard", function (req, res) {
     var sessInfo = req.body;
-     if(_.isUndefined(sessInfo) || _.isEmpty(sessInfo) ){
-        return res.status(400).json({error: "Request is invalid"});
-    }
-    if(_.isUndefined(sessInfo.zonefrom) || _.isEmpty(sessInfo.zonefrom) ){
-        return res.status(400).json({error: "Request is invalid"});
-    }
-    if(_.isUndefined(sessInfo.zoneto) || _.isEmpty(sessInfo.zoneto) ){
-        return res.status(400).json({error: "Request is invalid"});
-    }
     var regionsObj = Object();
     regionsObj.west = faker.random.number();
     regionsObj.midwest = faker.random.number();

@@ -45,7 +45,6 @@ app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSe
         Toast.show('Loading...');
         Api.Device.query({}, function(data){
             $scope.devices = data;
-            console.log("devices:",data);
             $scope.refreshDataAmount();
         });
     }
