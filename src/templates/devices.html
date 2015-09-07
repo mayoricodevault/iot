@@ -53,21 +53,30 @@
 			<ion-item ng-repeat="device in devices | orderBy:'devicename':reverse">
 				<div on-tap="deviceSelect('router.device', device)">
 					<i class="icon" ng-class="device.icon"></i>
-					{{ device.devicename }}
+						{{ device.devicename }}
 					<span class="item-note" ng-class="device.color">
-					{{ device.status }}
+						{{ device.status }}
 					</span>
-					
+					<span class="item-note" ng-class="device.color">
+						{{ device.type }}
+					</span>
 					<ion-option-button class="button-positive" ng-click="delete(device)">
 				      Delete
 				    </ion-option-button>
 				    <ion-option-button class="button-info" ng-click="deviceTap('router.editdevice',device)">
 				      Edit
 				    </ion-option-button>
-				    
+				    <div ng-if="device.type=='welcome'">
+				    	<!-- <div ng-if="session.deviceType!='barista'"> -->
+					    <ion-option-button class="button-info" ng-click="testSession(session)">
+							Test
+					    </ion-option-button>
+					    <!-- </div> -->
+				    </div>
 				</div>
 			</ion-item>
 		</ion-list>
 		<div class="clearfix"></div>
 	</ion-content>
 </ion-view>
+

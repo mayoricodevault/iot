@@ -11,7 +11,18 @@ app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicP
 	$scope.visitors= [];
 	
 	$scope.refreshDataAmount = function(){
-		Api.Device.query({}, function(data){$scope.devices=data;});
+		Api.Device.query({}, function(data){
+			$scope.devices=data;
+			console.log(data.length);
+			console.log(data);
+			var count=0;
+			/*for(var idx in data){
+				if(data[idx].featured){
+					count++;
+				}
+			}*/
+			console.log(count);
+		});
 	    Api.Location.query({}, function(data){$scope.locations=data;});
 	    Api.Product.query({}, function(data){$scope.products = data;});
 	    Api.User.query({},function(data){$scope.users = data;});

@@ -1,5 +1,7 @@
 app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL','VisitorsService','storeService','$state','shareComponentService', 'Socket', function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL,VisitorsService,storeService,$state,shareComponentService, Socket) {
     
+    
+    
     $scope.devices = [];
     $scope.form = {};
     $scope.cleanSessions =[];
@@ -49,5 +51,36 @@ app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSe
         });
     }
     
+        
+        
+      $scope.sessionArray = [];
+      Sessions(FIREBASE_URI_SESSIONS).$bindTo($scope, "fbBind");
+        angular.forEach($scope.fbBind, function(session){
+        	if (!session || !session.deviceName) {
+        		return;
+        	}
+        	if (session.tagId == $scope.selTagId && isUrl(session.serverUrl) ) {
+        	    if (!session.isdeleted) {
+                    $scope.sessionArray.push(session);    
+            		total++;
+        	    } else {
+        	        if ($scope.timeStamp != session.ping_dt && session.isdeleted && $scope.resetRequestSend ) {
+            	         Toast.show("Resetting ....", 30);
+            	         $http.post(API_URL + '/sync', {sessionid : session.sessionid, socketid: session.socketid, action : 'reset', tagId : session.tagId, url : session.serverUrl}).
+                          then(function(response) {
+                      
+                         }, function(response) {
+                              Toast.show(response.statusText + " "+ response.data.error, 30);
+                         });
+                          	$scope.resetRequestSend = false;
+        	        } else {
+        	             SessionService.removeSession(session.socketid);
+        	        }
+        	    }
+        	}
+       
+        });
+        console.info("**** ARRAY "+$scope.sessionArray+" AAA");
+         
         
 }]);

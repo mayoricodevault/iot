@@ -7,15 +7,16 @@ app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$ro
 	$scope.messagesPoolCount=0;
   $scope.individualBoard=0;
   
-  $scope.doRefresh;
+   doRefreshAll();
 //	var maximum = 150;
 //	$scope.data = [[]];
-  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-  $scope.series = ['Series A', 'Series B'];
-  $scope.data = [
-    [65, 59, 80, 81, 56, 55, 40],
-    [28, 48, 40, 19, 86, 27, 90]
-  ];
+  $scope.labels = ["Msgs"];
+  $scope.series = ['Messages'];
+  $scope.data = [[]];
+  // $scope.data = [
+  //   [65, 59, 80, 81, 56, 55, 40],
+  //   [28, 48, 40, 19, 86, 27, 90]
+  // ];
 
 	$scope.options =  {
 		responsive: true,
@@ -27,25 +28,14 @@ app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$ro
 		maintainAspectRatio: false,
 		datasetStrokeWidth : 2,
   }; 
-  
-    Api.Device.query({}, function(data){
-         $scope.devices = data;
-    });
 
-    function getLiveChartData () {
-      if ($scope.data[0].length) {
-        $scope.labels = $scope.labels.slice(1);
-        $scope.data[0] = $scope.data[0].slice(1);
-      }
-      $scope.labels.push('');
-      $scope.data[0].push($scope.messagesPoolCount);
-    }
+
 
   	$interval(function () {
   		getLiveChartData();
   	}, 500);
 
-	//	getLiveChartData();
+	 // getLiveChartData();
 	
 	 Socket.on('xternal', function(data){
       $scope.messagesPoolCount = data.msgs;
@@ -53,7 +43,7 @@ app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$ro
       Toast.show('Incoming.....');
     });
     $scope.$on('socket:connect', function (ev, data) {
-			Toast.show('Connecting..sss...'+ data);
+			Toast.show('Connecting....'+ data);
     });
     Socket.on('message', function(data){
     		$scope.messagesPoolCount = data.msgs;
@@ -63,12 +53,26 @@ app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$ro
    //     Socket.disconnect(true);
    // })
 	
+	  
   $scope.doRefresh = function() {
-        $scope.$broadcast('scroll.refreshComplete');
+        doRefreshAll();
+    }
+	
+	function doRefreshAll() {
+	  $scope.$broadcast('scroll.refreshComplete');
         Toast.show('Loading Devices.....');
         Api.Device.query({}, function(data){
              $scope.devices = data;
-        });
+    });
+	}
+	
+	 function getLiveChartData () {
+      if ($scope.data[0].length) {
+        $scope.labels = $scope.labels.slice(1);
+        $scope.data[0] = $scope.data[0].slice(1);
+      }
+      $scope.labels.push('');
+      $scope.data[0].push($scope.messagesPoolCount);
     }
 	
 }]);

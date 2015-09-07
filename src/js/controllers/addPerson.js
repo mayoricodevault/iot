@@ -28,9 +28,7 @@ app.controller('addPerson',['$scope','Api','$ionicPopup','$cordovaToast','Toast'
 			$scope.new_person = data.user;
 			$scope.new_person.state=arrayStates[randomCity];
 			$scope.new_person.city=arrayCities[randomCity];
-		//	$scope.new_person.message=data.user.lorem.sentence;
-			console.info(">>> data:"+data);
-			//console.info("data.user.lorem.sentence:"+data.user.lorem.sentence);
+			$scope.new_person.message=$scope.new_person.posts[0].sentence;
 			
 		})
 	} // end function

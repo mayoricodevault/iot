@@ -241,6 +241,7 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
     function changeImage(){
         var sessionId = $scope.newSnapShot;
         console.log("sessionID: ",sessionId);
+        
         for(var id in $scope.sessionArray){
             if($scope.sessionArray[id].socketid==sessionId){
                 $scope.imgSelected = $scope.sessionArray[id].snapshot;
@@ -379,6 +380,34 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
     function isUrl(s) {
     	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
     	return regexp.test(s);
+    }
+    
+    $scope.testWelcome = function(session){
+        $ionicPopup.show({
+            template:   '',
+            title: 'Test',
+            scope: $scope,
+           buttons: [
+                {
+                    text: '<b>Send Random Data</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        $http.post(API_URL + '/remotedashboard', { 
+                            zonefrom : "IoT",
+                            zoneto : session.socketid
+                        }).
+                        then(function(response) {
+                           Toast.show("Sending ....", 30);
+                        }, function(response) {
+                             console.log(response);
+                              Toast.show(response.statusText + " "+ response.data.error, 30);
+                        });
+                    }
+                },
+                { text: 'Cancel' }
+              
+            ]
+        });
     }
         
 }]);

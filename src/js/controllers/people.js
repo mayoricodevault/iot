@@ -71,7 +71,14 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
                             'Select a Device'+
                         '</span>'+
                         '<select class="form-control margin-bottom" ng-model="data.name" ng-options="d.devicename as d.devicename for d in devices"><option></option></select>'+
+                        '<span class="input-label">'+
+                        '</span>'+
                       '</label>'+
+                    '</div>'+
+                    '<div class="list">'+
+                    '<span class="form-control margin-bottom">'+
+                    '<input type="checkbox" ng-model="inzone" name="inzone" value="true" checked/>In Zone<br/>'+
+                    '</span>'+
                     '</div>',
             title: 'Test',
             scope: $scope,
@@ -91,14 +98,15 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
                                 favcoffee = $scope.data.name.favcoffe;
                             }
                             $http.post(API_URL + '/remotekiosk', { 
-                                
                                 name : $scope.data.name.name,
                                 favcoffee : favcoffee,
                                 zipcode : $scope.data.name.zipcode,
                                 email : $scope.data.name.email,
                                 zonefrom : "IoT",
                                 zoneto : session.sessionid,
-                                companyname : $scope.data.name.companyname
+                                companyname : $scope.data.name.companyname,
+                                message : $scope.data.name.message,
+                                inzone : $socpe.data.inzone
                             }).
                               then(function(response) {
                                  Toast.show("Sending ....", 30);
@@ -141,9 +149,6 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
                     type: 'button-positive',
                     onTap: function(e) {
                         
-                        console.log("barista selected --> ",$scope.data.barista);
-                        console.log("product selected --> ",$scope.data.product);
-                        
                         if(typeof $scope.data.barista=='undefined'||!$scope.data.barista){
                             Toast.show("Please select a barista");
                             return;
@@ -154,7 +159,7 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
                         }
                         
                         $scope.transaction = {
-                            trnsno: 'dos',
+                            trnsno: new Date().getTime(),
                             email: 'tran@gmail.com',
                             product: 'Latte',
                             tagid: '2323',

@@ -143,7 +143,6 @@ io.on('connection', function(socket) {
 //Redirect Messages
 app.post("/xively", function(req, res) {
    io.sockets.emit('message', req.body );
-   
 });
 
 app.get("/random-user", function (req, res) {
@@ -226,8 +225,6 @@ app.post("/add-message", function (req, res) {
   res.status(200).json({results: "Message Added Successfully"});
 });
 
-
-
 app.get('/deviceslist', function (req, res) {
    DeviceList.find({}, function(err, data){
      if (err) {
@@ -270,7 +267,6 @@ app.post('/login', authenticate, function(req, res) {
 app.post('/me', function(req, res) {
     res.send(req.user);
 });
-
 app.post('/remotekiosk', function (req, res) {
   var remoteUrl = configDB.kiosk +'/xively';
   requestify.request(remoteUrl, {
@@ -284,8 +280,6 @@ app.post('/remotekiosk', function (req, res) {
         res.status(200).json(response);
     });
 });
-
-
 app.post("/sync", function(request, response) {
   var sync = request.body;
   if(_.isUndefined(sync) || _.isEmpty(sync) ){
