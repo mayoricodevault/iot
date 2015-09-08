@@ -1,4 +1,4 @@
-app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL','VisitorsService','storeService','$state','shareComponentService', 'Socket', function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL,VisitorsService,storeService,$state,shareComponentService, Socket) {
+app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionService', "$http",'API_URL','VisitorsService','storeService','$state','shareComponentService', 'Socket', 'Sessions','FIREBASE_URI_SESSIONS',function($scope, Api, $ionicPopup, Toast,SessionService, $http, API_URL,VisitorsService,storeService,$state,shareComponentService, Socket,Sessions,FIREBASE_URI_SESSIONS) {
     
     
     
@@ -17,6 +17,7 @@ app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSe
     });    
     
 	$scope.deviceSelect = function(route, data) {
+	   
 		$scope.device = data;
 		$scope.singleProduct = data;
 		//shareComponentService.addDevice(data);
@@ -25,15 +26,22 @@ app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSe
 	};
 	
     $scope.delete = function(device){
+        $scope.selTagId=device.tagid;
+         doRefreshAll();
         var confirmPopup = $ionicPopup.confirm({
          title: 'Delete!',
-         template: 'Delete this device? ' +device.tagid
+         template: 'Delete this device ' +device.devicename +'?'
        });
+       
        confirmPopup.then(function(res) {
          if(res) {
-            Api.Device.delete({id: device._id}, function(data){
-                 doRefreshAll();
-            });
+             if($scope.total>0){
+                Toast.show('Can not delete device:'+device.devicename);    
+             }else{
+                Api.Device.delete({id: device._id}, function(data){
+                     doRefreshAll();
+                });
+             }
          } 
        });
     };
@@ -43,44 +51,40 @@ app.controller('devicesCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSe
     };
     
     function doRefreshAll() {
+        $scope.total=0;
         $scope.$broadcast('scroll.refreshComplete');
         Toast.show('Loading...');
         Api.Device.query({}, function(data){
             $scope.devices = data;
             $scope.refreshDataAmount();
         });
+        angular.forEach($scope.fbBind, function(session){
+            
+	        if (!session || !session.deviceName) {
+            	    return;
+            }
+		  
+            if (session.tagId == $scope.selTagId && isUrl(session.serverUrl) ) {
+                if (!session.isdeleted) {
+                    $scope.sessionArray.push(session);    
+            		$scope.total++;
+        	    } 
+            }
+        });        
     }
     
         
+    $scope.$watch('fbBind', function() {
+        doRefreshAll();
+    });  
         
       $scope.sessionArray = [];
       Sessions(FIREBASE_URI_SESSIONS).$bindTo($scope, "fbBind");
-        angular.forEach($scope.fbBind, function(session){
-        	if (!session || !session.deviceName) {
-        		return;
-        	}
-        	if (session.tagId == $scope.selTagId && isUrl(session.serverUrl) ) {
-        	    if (!session.isdeleted) {
-                    $scope.sessionArray.push(session);    
-            		total++;
-        	    } else {
-        	        if ($scope.timeStamp != session.ping_dt && session.isdeleted && $scope.resetRequestSend ) {
-            	         Toast.show("Resetting ....", 30);
-            	         $http.post(API_URL + '/sync', {sessionid : session.sessionid, socketid: session.socketid, action : 'reset', tagId : session.tagId, url : session.serverUrl}).
-                          then(function(response) {
-                      
-                         }, function(response) {
-                              Toast.show(response.statusText + " "+ response.data.error, 30);
-                         });
-                          	$scope.resetRequestSend = false;
-        	        } else {
-        	             SessionService.removeSession(session.socketid);
-        	        }
-        	    }
-        	}
-       
-        });
-        console.info("**** ARRAY "+$scope.sessionArray+" AAA");
+    function isUrl(s) {
+    	var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    	return regexp.test(s);
+    }
          
+      
         
 }]);

@@ -73,11 +73,17 @@
 						    </div>
 					    </div>
 					    
-				    	<!-- <div ng-if="session.deviceType!='barista'"> -->
-					    <ion-option-button class="button-info" ng-click="testWelcome(session)">
-							Test Welcome
-					    </ion-option-button>
-					    <!-- </div> -->
+				    	<div ng-if="session.deviceType=='welcome'">
+						    <ion-option-button class="button-info" ng-click="testWelcome(session)">
+								Test Welcome
+						    </ion-option-button>
+					    </div>
+					    
+					    <div ng-if="session.deviceType=='welcome'">
+						    <ion-option-button class="button-info" ng-click="batchWelcome(session)">
+								Batch Welcome
+						    </ion-option-button>
+					    </div>
 					    
 					    <ion-option-button class="button-dark" ng-click="snapshot(session)">
 					    	<i class="icon ion-ios-camera-outline"></i>

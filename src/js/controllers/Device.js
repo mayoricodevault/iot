@@ -384,7 +384,15 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
     
     $scope.testWelcome = function(session){
         $ionicPopup.show({
-            template:   '',
+            template:
+                        '<div class="list">'+
+                        '<label class="item item-input item-select">'+
+                            '<span class="input-label">'+
+                                'Select a Person'+
+                            '</span>'+
+                            '<select class="form-control margin-bottom" ng-model="data.name" ng-options="person as person.name for person in visitors"><option></option></select>'+
+                        '</label>'+
+                        '</div>',
             title: 'Test',
             scope: $scope,
            buttons: [
@@ -392,16 +400,36 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                     text: '<b>Send Random Data</b>',
                     type: 'button-positive',
                     onTap: function(e) {
-                        $http.post(API_URL + '/remotedashboard', { 
-                            zonefrom : "IoT",
-                            zoneto : session.socketid
-                        }).
-                        then(function(response) {
-                           Toast.show("Sending ....", 30);
-                        }, function(response) {
-                             console.log(response);
-                              Toast.show(response.statusText + " "+ response.data.error, 30);
-                        });
+                        
+                        if(!$scope.data.name){
+                            Toast.show("No name selected", 100);
+                        }else{
+                            if ( $scope.data.name.favcoffee) {
+                                favcoffee = $scope.data.name.favcoffee;
+                            }
+                            if ( $scope.data.name.favcoffe) {
+                                favcoffee = $scope.data.name.favcoffe;
+                            }
+                            
+                            $http.post(API_URL + '/remotewelcome', { 
+                                name : $scope.data.name.name,
+                                favcoffee : $scope.data.name.favcoffee,
+                                zipcode : $scope.data.name.zipcode,
+                                email : $scope.data.name.email,
+                                zonefrom : "IoT",
+                                zoneto : session.socketid,
+                                companyname : $scope.data.name.companyname,
+                                city : $scope.data.name.city,
+                                state : $scope.data.name.state
+                            }).
+                              then(function(response) {
+                                 Toast.show("Sending ....", 1);
+                              }, function(response) {
+                                  console.log(response);
+                                  Toast.show(response.statusText + " "+ response.data.error, 30);
+                             });
+                            
+                        }
                     }
                 },
                 { text: 'Cancel' }
@@ -409,5 +437,62 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
             ]
         });
     }
+    
+    $scope.batchWelcome = function(session){
+        $ionicPopup.show({
+            template:
+                        '<div class="list">'+
+                            '<label class="item item-input">'+
+                                '<span class="input-label">People</span>'+
+                                '<input type="number">'+
+                            '</label>'+
+                        '</div>',
+            title: 'Test',
+            scope: $scope,
+            buttons: [
+                {
+                    text: '<b>Send Random Data</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        
+                        if(!$scope.data.name){
+                            Toast.show("No name selected", 100);
+                        }else{
+                            if ( $scope.data.name.favcoffee) {
+                                favcoffee = $scope.data.name.favcoffee;
+                            }
+                            if ( $scope.data.name.favcoffe) {
+                                favcoffee = $scope.data.name.favcoffe;
+                            }
+                            
+                            $http.post(API_URL + '/remotewelcome', { 
+                                name : $scope.data.name.name,
+                                favcoffee : $scope.data.name.favcoffee,
+                                zipcode : $scope.data.name.zipcode,
+                                email : $scope.data.name.email,
+                                zonefrom : "IoT",
+                                zoneto : session.socketid,
+                                companyname : $scope.data.name.companyname,
+                                city : $scope.data.name.city,
+                                state : $scope.data.name.state
+                            }).
+                              then(function(response) {
+                                 Toast.show("Sending ....", 1);
+                              }, function(response) {
+                                  console.log(response);
+                                  Toast.show(response.statusText + " "+ response.data.error, 30);
+                             });
+                            
+                        }
+                    }
+                },
+                { text: 'Cancel' }
+              
+            ]
+        });
+    }
+    
+
+    
         
 }]);

@@ -152,7 +152,6 @@ app.get("/random-user", function (req, res) {
 });
 
 app.post("/remotedashboard", function (req, res) {
-  console.log(req);
     var sessInfo = req.body;
      if(_.isUndefined(sessInfo) || _.isEmpty(sessInfo) ){
         return res.status(400).json({error: "Request is invalid"});
@@ -280,6 +279,21 @@ app.post('/remotekiosk', function (req, res) {
         res.status(200).json(response);
     });
 });
+app.post('/remotewelcome', function (req, res) {
+  var remoteUrl = configDB.kiosk +'/welcome';
+  requestify.request(remoteUrl, {
+    method: 'POST',
+    body: req.body,
+    headers : {
+            'Content-Type': 'application/json'
+    },
+    dataType: 'json'        
+    }).then(function(response) {
+        res.status(200).json(response);
+    });
+});
+
+
 app.post("/sync", function(request, response) {
   var sync = request.body;
   if(_.isUndefined(sync) || _.isEmpty(sync) ){

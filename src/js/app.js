@@ -80,7 +80,17 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
           resolve: { authenticate: authenticate }
         }
       }
-    })    
+    })
+  .state('router.messages', {
+      url: "/messages",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/messages.html",
+          controller: "messages",
+          resolve: { authenticate: authenticate }
+        }
+      }
+    }) 
 	.state('router.device', {
       url: "/device/:tagid",
       views: {
