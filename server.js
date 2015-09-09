@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var favicon = require('express-favicon');
 var http = require('http').Server(app);
-var _ = require("underscore");
 var io = require('socket.io')(http);
 var jwtSecret = 'asesam0/3uk';
 var session = require("express-session")({
@@ -11,6 +10,7 @@ var session = require("express-session")({
     saveUninitialized: true
   });
 var sharedsession = require("express-socket.io-session");
+var _ = require("underscore");
 app.use(favicon(__dirname + '/src/img/favicon.ico'));
 //native NodeJS module for resolving paths
 var path = require('path');
@@ -36,15 +36,20 @@ var appfire = new Firebase(configDB.firebase);
 var DeviceList = require('./server/models/device');
 var ServerList = require('./server/models/server');
 var ProductsList = require('./server/models/product');
+var fcsv = require('fast-csv');
+var multipart = require('connect-multiparty');
 app.use(session);
 app.use(cors());
 app.use(bodyParser.json());
 app.use(methodOverride());
-
+app.use(multipart({
+    uploadDir: 'upload'
+}));
 //Set our view engine to EJS, and set the directory our views will be stored in
 app.set('view engine', 'ejs');
 app.set('views', path.resolve(__dirname, 'src', 'views'));
 app.use(express.static(path.resolve(__dirname, 'src')));
+app.use(express.static(path.join(__dirname,'upload')));
 //io Specific Settings
 // io.set('heartbeat timeout',10000);
 // io.set('heartbeat interval',9000);
@@ -67,7 +72,6 @@ io.on('connection', function(socket) {
         
   var devicename = '';
   var CurrentDate = moment().format();
-  console.log(CurrentDate);
   numberofusers = io.sockets.server.eio.clientsCount;
   console.log("Number of Users : " + numberofusers);
   console.log("A Device has Connected!" + socket.id);
@@ -128,7 +132,7 @@ io.on('connection', function(socket) {
         dataType: 'json'        
          }).then(function(response) {
             // Get the response body
-            console.log(response);
+            // console.log(response);
         });
     }
   });
@@ -150,7 +154,6 @@ app.get("/random-user", function (req, res) {
     user.avatar = faker.image.avatar();
     res.status(200).json({user : user});
 });
-
 app.post("/remotedashboard", function (req, res) {
     var sessInfo = req.body;
      if(_.isUndefined(sessInfo) || _.isEmpty(sessInfo) ){
@@ -163,26 +166,99 @@ app.post("/remotedashboard", function (req, res) {
         return res.status(400).json({error: "Request is invalid"});
     }
     var regionsObj = Object();
-    regionsObj.west = faker.random.number();
-    regionsObj.midwest = faker.random.number();
-    regionsObj.neMidAtlantic = faker.random.number();
-    regionsObj.neNewEngland = faker.random.number();
-    regionsObj.sWestSouthCentral = faker.random.number();
-    regionsObj.sSouthAtlanticESCentral = faker.random.number();
+    regionsObj.west = faker.random.number({
+        'min': 1,
+        'max': 800
+      });
+    regionsObj.midwest = faker.random.number({
+        'min': 1,
+        'max': 800
+      });
+    regionsObj.neMidAtlantic = faker.random.number({
+        'min': 1,
+        'max': 800
+      });
+    regionsObj.neNewEngland = faker.random.number({
+        'min': 1,
+        'max': 800
+      });
+    regionsObj.sWestSouthCentral = faker.random.number({
+        'min': 1,
+        'max': 800
+      });
+    regionsObj.sSouthAtlanticESCentral = faker.random.number({
+        'min': 1,
+        'max': 800
+      });
     var drinkSelObj = Object();
-    drinkSelObj.esp = faker.random.number();
-    drinkSelObj.amer = faker.random.number();
-    drinkSelObj.reg = faker.random.number();
-    drinkSelObj.dcaf = faker.random.number();
-    drinkSelObj.cap = faker.random.number();
-    drinkSelObj.tea = faker.random.number();
+    drinkSelObj.esp = faker.random.number(
+      {
+        'min': 1,
+        'max': 15
+      });
+    drinkSelObj.amer = faker.random.number(
+      {
+        'min': 1,
+        'max': 15
+      });
+    drinkSelObj.reg = faker.random.number(
+      {
+        'min': 1,
+        'max': 17
+      });
+    drinkSelObj.dcaf = faker.random.number(
+      {
+        'min': 1,
+        'max': 15
+      });
+    drinkSelObj.cap = faker.random.number(
+      {
+        'min': 1,
+        'max': 15
+      });
+    drinkSelObj.tea = faker.random.number(
+      {
+        'min': 1,
+        'max': 17
+      });
+    var totVisitors = faker.random.number(
+      {
+        'min': 1,
+        'max': 100
+      });
+    var totalPerType = drinkSelObj.esp+drinkSelObj.amer+drinkSelObj.reg+drinkSelObj.dcaf+drinkSelObj.cap+drinkSelObj.tea;
+    if (totVisitors < totalPerType ) {
+      totVisitors = totalPerType + faker.random.number(
+      {
+        'min': 1,
+        'max': 100
+      });
+    }
+    
+    var stationSelObj = Object();
+    stationSelObj.station1 = faker.random.number({
+        'min': 1,
+        'max': 100
+      });
+    stationSelObj.station2 = faker.random.number({
+        'min': 1,
+        'max': 100
+      });
+    stationSelObj.station3 = faker.random.number({
+        'min': 1,
+        'max': 100
+      });
     var dashObj = Object();
-    dashObj.onzas = faker.random.number();
+    dashObj.onzas = faker.random.number({
+        'min': 1,
+        'max': 999
+      });
     dashObj.drinksServed =  drinkSelObj;
     dashObj.regions = regionsObj;
     dashObj.zoneto = sessInfo.zoneto;
     dashObj.zonefrom = sessInfo.zonefrom;
-    
+    dashObj.stations = stationSelObj;
+    dashObj.totVisitors = totVisitors;
     var remoteUrl = configDB.kiosk +'/dashboard';
     requestify.request(remoteUrl, {
     method: 'POST',
@@ -196,7 +272,6 @@ app.post("/remotedashboard", function (req, res) {
     });
 
 });
-
 app.post("/add-people", function (req, res) {
   var people = req.body.people;
   var activePeople = appfire.child('people/'+escapeEmail(people.email));
@@ -263,6 +338,70 @@ app.post('/login', authenticate, function(req, res) {
   });
 });
 
+app.post('/upload', function (req, res, cfg) {
+      var data = _.pick(req.body, 'type')
+        , uploadPath = path.normalize(cfg.data + '/uploads')
+        , file = req.files.file;
+      res.status(200);
+});
+
+app.get('/importfile', function (req, res) {
+    fcsv.fromPath("x.csv")
+   .on("data", function(data){
+      if(!_.isEmpty(data)) {
+          var people = new Object();
+          people.id = data[0];
+          people.name = removeSpecials(data[2]);
+          people.fname = removeSpecials(data[7]);
+          people.lname = removeSpecials(data[8]);
+          people.email = data[8]+data[7]+'@xively,com';
+          people.favcoffee = removeSpecials(data[12].toLowerCase());
+          people.state = removeSpecials(data[10]);
+          // people.city = data[9];
+          people.region = removeSpecials(data[11]);
+          people.crcombined = removeSpecials(data[5]);
+          people.companyname = removeSpecials(data[4]);
+          people.industry = removeSpecials(data[13]);
+          people.greeting = removeSpecials(data[15]);
+          people.msg1 = removeSpecials(data[16]);
+          people.msg2 = removeSpecials(data[17]);
+          people.zonefrom = "";
+          people.zoneto ="";
+          var pos = data[5].indexOf(",");
+          people.city = data[5].substr(0, pos);
+          if (people.favcoffee == "cofee"){
+            people.favcoffee = "Regular Coffee";
+          }
+          if (people.favcoffee == "expresso"){
+            people.favcoffee = "Espresso";
+          }
+          if (people.favcoffee == "cappuchino"){
+            people.favcoffee = "Capuccino";
+          }
+           if (people.favcoffee == "decaf"){
+            people.favcoffee = "Decaf coffee";
+          }
+          if (people.favcoffee == "americano"){
+            people.favcoffee = "Americano";
+          }
+          if (people.favcoffee == "tea"){
+            people.favcoffee = "Tea";
+          }
+          var activePeople = appfire.child('people/'+ escapeEmail(people.email));
+          activePeople
+            .once('value', function(snap) {
+              if(!snap.val()) {
+                 activePeople.set(people);
+                 io.emit('message', people);
+               }
+          });
+      }
+   })
+   .on("end", function(){
+       res.status(200).json({results : "done"});
+   });
+});
+
 app.post('/me', function(req, res) {
     res.send(req.user);
 });
@@ -281,6 +420,7 @@ app.post('/remotekiosk', function (req, res) {
 });
 app.post('/remotewelcome', function (req, res) {
   var remoteUrl = configDB.kiosk +'/welcome';
+  console.log(req.body);
   requestify.request(remoteUrl, {
     method: 'POST',
     body: req.body,
@@ -292,7 +432,6 @@ app.post('/remotewelcome', function (req, res) {
         res.status(200).json(response);
     });
 });
-
 
 app.post("/sync", function(request, response) {
   var sync = request.body;
@@ -345,6 +484,17 @@ function  escapeEmail(email) {
     while (email.toString().indexOf(".") != -1)
       email = email.toString().replace(".",",");
   return email;
+}
+
+function removeSpecials(str) {
+    var lower = str.toLowerCase();
+    var upper = str.toUpperCase();
+    var res = "";
+    for(var i=0; i<lower.length; ++i) {
+        if(lower[i] != upper[i] || lower[i].trim() === '')
+            res += str[i];
+    }
+    return res;
 }
 function authenticate(req,res, next) {
   var body =  req.body;

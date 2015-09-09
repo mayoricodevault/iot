@@ -13,8 +13,6 @@ app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicP
 	$scope.refreshDataAmount = function(){
 		Api.Device.query({}, function(data){
 			$scope.devices=data;
-			console.log(data.length);
-			console.log(data);
 			var count=0;
 			/*for(var idx in data){
 				if(data[idx].featured){

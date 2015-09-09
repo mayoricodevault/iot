@@ -1,3 +1,35 @@
+
+<style type="text/css">
+  
+  
+  .thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+
+form .progress {
+    line-height: 15px;
+}
+
+
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+  
+  
+  </style>
+
 <ion-view title="Add New Person">
 	<ion-content>
 		<div class="list">
@@ -9,6 +41,24 @@
 			<div class="row">
 			  <div class="col"  ng-model="new_person"></div>
 			</div>
+			
+			
+			
+
+ <h4>Upload on file select</h4>
+  <button type="file" ngf-select="uploadFiles($file)"
+          accept=".csv" ngf-max-height="2000" ngf-max-size="50MB">
+      Select File</button>
+  <br><br>
+  File:
+  <div style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+      <span class="progress" ng-show="f.progress >= 0">
+          <div style="width:{{f.progress}}%"  
+               ng-bind="f.progress + '%'"></div>
+      </span>
+  </div>     
+  {{errorMsg}}
+			
 		</div>	
 		
 			<div class="list">

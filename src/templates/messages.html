@@ -1,4 +1,4 @@
-<ion-view title="People">
+<ion-view title="Messages">
 	
 	<ion-content class="padding-vertical">
 	<ion-refresher pulling-text="Pull to refresh"
@@ -9,41 +9,21 @@
      </ion-refresher>		
      
 		<ion-list can-swipe="listCanSwipe">
-			<div>
-				<button ng-show="!selectPeople" type="button" class="button button-default" style="margin-bottom:10px;" ng-click="showCheckBoxes()">Show Select People</button>
-				<button ng-show="selectPeople" type="button" class="button button-default" style="margin-bottom:10px;" ng-click="hideCheckBoxes()">Hide Select People</button>
+			
+			<ion-item ng-repeat="message in messages | orderBy:'name':reverse">
 				
-				<button ng-show="selectPeople" type="button" class="button button-default" style="float:right;" ng-click="test()">Test</button>
-				
-			</div>
-			<ion-item ng-repeat="p in visitors | orderBy:'name':reverse">
-				
-				<div > <!-- on-tap="deviceTap('router.viewPerson',p)" -->
+				<div> <!-- on-tap="deviceTap('router.viewPerson',p)" -->
 					
-					<input ng-show="selectPeople" type="checkbox" class="checkbox" ng-model="p.checked" /> 
-					{{ p.name }}
-					<ion-option-button class="button-positive" ng-click="deviceTap('router.viewPerson',p)">
-				      View
-				    </ion-option-button>
-   					<ion-option-button class="button-info" ng-click="testSession(session)">
-					      Test
+					{{ message.expositor }}
+					<span class="item-note" ng-class="device.color">
+						{{ message.start | date:"MM/dd/yyyy ' ' h:mma"}}
+					</span>
+   					<ion-option-button class="button-info" ng-click="deleteMessage(message)">
+   						Delete
 					</ion-option-button>				    
-				    <!-- 
-				    <ion-option-button class="button-balanced" ng-click="testTransaction(session)">
-				      Test Transaction
-				    </ion-option-button> -->
-				    <!-- 
-				    <ion-option-button class="button-info" ng-click="deviceTap('router.editLocation',p)">
-				      Edit
-				    </ion-option-button>
-				    -->
 				</<div>
 				
 			</ion-item>
 		</ion-list>
 	</ion-content>
-	
-	
-	
-	
 </ion-view>

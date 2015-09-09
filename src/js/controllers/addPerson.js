@@ -1,17 +1,16 @@
 'use strict';
-app.controller('addPerson',['$scope','Api','$ionicPopup','$cordovaToast','Toast', '$http', 'API_URL', function($scope,Api,$ionicPopup,$cordovaToast,Toast, $http, API_URL) {
-
-		  $scope.new_person=[];
-		  $scope.new_person = {
-		  		 name: '',
-		  		 email: '',
-		  		 companyname: '',
-		  		 zipcode: '',
-		  		 zonefrom: "",
-		  		 zoneto: "",
-		  		 favcoffee: ''
-		  };
-	
+app.controller('addPerson',['$scope','Api','$ionicPopup','$cordovaToast','Toast', '$http', 'API_URL', 'Upload', '$timeout',function($scope,Api,$ionicPopup,$cordovaToast,Toast, $http, API_URL,Upload,$timeout) {
+	  $scope.new_person=[];
+	  $scope.new_person = {
+	  		 name: '',
+	  		 email: '',
+	  		 companyname: '',
+	  		 zipcode: '',
+	  		 zonefrom: "",
+	  		 zoneto: "",
+	  		 favcoffee: ''
+	  };
+	$scope.log = '';
 	
 	$scope.newPerson = function(){
 		Toast.show("Getting New User");
@@ -33,6 +32,38 @@ app.controller('addPerson',['$scope','Api','$ionicPopup','$cordovaToast','Toast'
 		})
 	} // end function
 	
+
+        $scope.uploadFiles = function(file) {
+        $scope.f = file;
+        if (file && !file.$error) {
+        	console.info("*** INDO");
+            file.upload = Upload.upload({
+                url:API_URL + '/upload',
+                method: 'POST',
+                file: $scope.f,
+            });
+
+            file.upload.then(function (response) {
+                $timeout(function () {
+                    file.result = response.data;
+                    console.info("**** OK FILE ",file.result);
+                });
+            }, function (response) {
+                if (response.status > 0)
+                    $scope.errorMsg = response.status + ': ' + response.data;
+                    console.info("*** ERROR ",$scope.errorMsg);
+            });
+
+            file.upload.progress(function (evt) {
+                file.progress = Math.min(100, parseInt(100.0 * 
+                                                       evt.loaded / evt.total));
+            });
+        }   
+    }
+    
+    
+    
+    
 	$scope.addPerson = function(){
 		
 			

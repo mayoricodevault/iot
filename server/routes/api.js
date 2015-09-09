@@ -5,7 +5,6 @@ var Location = require('../models/location');
 var User = require('../models/user');
 var Server = require('../models/server');
 var Transaction = require('../models/transaction');
-
 module.exports = function(router, socket){
     // Device
     router.post('/devices', function(req, res){
@@ -29,35 +28,27 @@ module.exports = function(router, socket){
             res.json(data);
         });
     });
-    
-    
     router.get('/devices', function(req, res){
         Device.find({}, function(err, data){
-            console.log(data);
             res.json(data);
         });
     });
-    
     router.delete('/devices', function(req, res){
         Device.remove({}, function(err){
             res.json({result: err ? 'error' : 'ok'});
         });
     });
-    
     router.get('/devices/:id', function(req, res){
         Device.findOne({_id: req.params.id}, function(err, data){
             res.json(data);
-        })
-    })
-    
+        });
+    });
     router.delete('/devices/:id', function(req, res){
         Device.remove({_id: req.params.id}, function(err){
             res.json({result: err ? 'error' : 'ok'});
-        })
-    })
-    
+        });
+    });
     router.post('/devices/:id', function(req, res){
-        
         Device.findOne({_id: req.params.id}, function(err, data){
             var device = data;
             device.devicename = req.body.devicename;
@@ -83,7 +74,6 @@ module.exports = function(router, socket){
     
     // Produts
     router.post('/products', function(req, res){
-     
         var product = new Product();
         product.productname = req.body.productname;
         product.icon = req.body.icon;
@@ -94,29 +84,30 @@ module.exports = function(router, socket){
         
         product.save(function(err, data){
             if(err)
-                return res.status(400).end("The name field must be unique.");
+                return res.status(400).json({error : "Error while Saving Product."});
             res.json(data);
         });
     });
     
     router.get('/products', function(req, res){
         Product.find({}, function(err, data){
-            console.log(data);
+             if(err)
+                return res.status(400).json({error : "Error while gettings products."});
             res.json(data);
         });
     });
     
     router.delete('/products', function(req, res){
         Product.remove({}, function(err){
-            res.json({result: err ? 'error' : 'ok'});
+            res.status(200).json({result: err ? 'error' : 'ok'});
         });
     });
     
     router.get('/products/:id', function(req, res){
         Product.findOne({_id: req.params.id}, function(err, data){
             res.json(data);
-        })
-    })
+        });
+    });
     
     router.delete('/products/:id', function(req, res){
         Product.remove({_id: req.params.id}, function(err){
@@ -166,7 +157,6 @@ module.exports = function(router, socket){
     
     router.get('/settings/', function(req, res){
         Setting.find({}, function(err, data){
-            console.log(data);
             res.json(data);
         });
     });
@@ -213,7 +203,6 @@ module.exports = function(router, socket){
     
     router.get('/locations/', function(req, res){
         Location.find({}, function(err, data){
-            console.log(data);
             res.json(data);
         });
     });
@@ -242,11 +231,11 @@ module.exports = function(router, socket){
         });
     });
         
-      router.delete('/locations/:id', function(req, res){
+    router.delete('/locations/:id', function(req, res){
         Location.remove({_id: req.params.id}, function(err){
             res.json({result: err ? 'error' : 'ok'});
-        })
-    })
+        });
+    });
     
     // User
     router.post('/users', function(req, res){
@@ -281,14 +270,14 @@ module.exports = function(router, socket){
     router.get('/users/:id', function(req, res){
         User.findOne({_id: req.params.id}, function(err, data){
             res.json(data);
-        })
-    })
+        });
+    });
     
     router.delete('/users/:id', function(req, res){
         User.remove({_id: req.params.id}, function(err){
             res.json({result: err ? 'error' : 'ok'});
-        })
-    })
+        });
+    });
     
     router.post('/users/:id', function(req, res){
         
@@ -310,9 +299,6 @@ module.exports = function(router, socket){
             
         });
     });
-    
-    
-    
      // Server
     router.post('/servers', function(req, res){
         var server = new Server();
@@ -330,7 +316,6 @@ module.exports = function(router, socket){
     
     router.get('/servers/', function(req, res){
         Server.find({}, function(err, data){
-            console.log(data);
             res.json(data);
         });
     });
@@ -361,7 +346,7 @@ module.exports = function(router, socket){
       router.delete('/servers/:id', function(req, res){
         Server.remove({_id: req.params.id}, function(err){
             res.json({result: err ? 'error' : 'ok'});
-        })
+        });
     });
     
       // Transacionts
@@ -375,13 +360,9 @@ module.exports = function(router, socket){
         trns.zipcode = req.body.zipcode;
         trns.region = req.body.region;
         trns.dt = req.body.dt;
-        
-        console.log("trns --> ",trns);
         trns.save(function(err, data){
-            console.log("err--> ",err);
-            console.log("data--> ",data);
             if(err){
-                return res.status(400).end("The name field must be unique.");
+                return res.status(400).end("Error while saving Transaction.");
                 //throw err;
             }
             res.json(data);
@@ -433,7 +414,7 @@ module.exports = function(router, socket){
       router.delete('/transaction/:id', function(req, res){
         Transaction.remove({_id: req.params.id}, function(err){
             res.json({result: err ? 'error' : 'ok'});
-        })
+        });
     });
     
-}
+};

@@ -10,8 +10,8 @@ var app = angular.module('iot', [
   'ngTouch',
   'angular-carousel',
   'ionic-timepicker',
-  'ionic-datepicker'
-  //'ui.bootstrap.datetimepicker'
+  'ionic-datepicker',
+  'ngFileUpload'
 ])
 
 app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
@@ -347,6 +347,7 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
 .constant("API_URL", 'http://iottemplate-mmayorivera.c9.io')
 .constant('FIREBASE_URI', 'https://kxively.firebaseio.com/people')
 .constant('FIREBASE_VISITORS', 'https://kxively.firebaseio.com/people')
+.constant('FIREBASE_MESSAGES', 'https://kxively.firebaseio.com/messages')
 .constant('FIREBASE_URI_ROOT', 'https://kxively.firebaseio.com')
 .constant('KIOSK_URL', 'https://kiosk-mmayorivera.c9.io')
 .constant('FIREBASE_URI_SESSIONS', 'https://kxively.firebaseio.com/sessions');

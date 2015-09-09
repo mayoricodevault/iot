@@ -211,17 +211,23 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                             }
                             
                             $http.post(API_URL + '/remotekiosk', { 
-                                name : $scope.data.name.name,
-                                favcoffee : $scope.data.name.favcoffee,
-                                zipcode : $scope.data.name.zipcode,
-                                email : $scope.data.name.email,
+                                 name : $scope.data.name.name.name,
+                                favcoffee : $scope.data.name.name.favcoffee,
+                                email : $scope.data.name.name.email,
                                 zonefrom : "IoT",
                                 zoneto : session.socketid,
-                                companyname : $scope.data.name.companyname,
-                                city : $scope.data.name.city,
-                                state : $scope.data.name.state
-                                
-                            }).
+                                companyname : $scope.data.name.name.companyname,
+                                city : $scope.data.name.name.city,
+                                state :$scope.data.name.name.state,
+                                msg1 : $scope.data.name.name.msg1,
+                                msg2 : $scope.data.name.name.msg2,
+                                lname : $scope.data.name.name.lname,
+                                fname : $scope.data.name.name.fname,
+                                greeting : $scope.data.name.name.greeting,
+                                region : $scope.data.name.name.region,
+                                id : $scope.data.name.name.id,
+                                crcombined : $scope.data.name.name.crcombined
+                             }).
                               then(function(response) {
                                  Toast.show("Sending ....", 30);
                               }, function(response) {
@@ -240,7 +246,6 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
     
     function changeImage(){
         var sessionId = $scope.newSnapShot;
-        console.log("sessionID: ",sessionId);
         
         for(var id in $scope.sessionArray){
             if($scope.sessionArray[id].socketid==sessionId){
@@ -309,7 +314,6 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
     };
     
     $scope.testDashboard = function(session){
-        console.log(session)
         $ionicPopup.show({
             template:   '<div class="list">'+
                         '<div >'+
@@ -410,19 +414,26 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                             if ( $scope.data.name.favcoffe) {
                                 favcoffee = $scope.data.name.favcoffe;
                             }
-                            
+                            var visitor = $scope.data.name;
                             $http.post(API_URL + '/remotewelcome', { 
-                                name : $scope.data.name.name,
-                                favcoffee : $scope.data.name.favcoffee,
-                                zipcode : $scope.data.name.zipcode,
-                                email : $scope.data.name.email,
-                                zonefrom : "IoT",
-                                zoneto : session.socketid,
-                                companyname : $scope.data.name.companyname,
-                                city : $scope.data.name.city,
-                                state : $scope.data.name.state
-                            }).
-                              then(function(response) {
+                                    name : visitor.name,
+                                    favcoffee : visitor.favcoffee,
+                                    email : visitor.email,
+                                    zonefrom : "IoT",
+                                    zoneto : session.socketid,
+                                    companyname : visitor.companyname,
+                                    city : visitor.city,
+                                    state : visitor.state,
+                                    msg1 : visitor.msg1,
+                                    msg2 : visitor.msg2,
+                                    lname : visitor.lname,
+                                    fname : visitor.fname,
+                                    greeting : visitor.greeting,
+                                    region : visitor.region,
+                                    id : visitor.id,
+                                    crcombined : visitor.crcombined
+                                }
+                            ).then(function(response) {
                                  Toast.show("Sending ....", 1);
                               }, function(response) {
                                   console.log(response);
@@ -437,52 +448,53 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
             ]
         });
     }
-    
+    $scope.randomnumber={number:0};
     $scope.batchWelcome = function(session){
         $ionicPopup.show({
-            template:
-                        '<div class="list">'+
-                            '<label class="item item-input">'+
-                                '<span class="input-label">People</span>'+
-                                '<input type="number">'+
-                            '</label>'+
-                        '</div>',
-            title: 'Test',
+            template:'<div class="list"><label class="item item-input"><span class="input-label">People</span><input ng-model="randomnumber.number" type="number"></label></div>',
+            title: 'Random Batch',
             scope: $scope,
             buttons: [
                 {
                     text: '<b>Send Random Data</b>',
                     type: 'button-positive',
                     onTap: function(e) {
-                        
-                        if(!$scope.data.name){
-                            Toast.show("No name selected", 100);
+                        if(!$scope.randomnumber.number || $scope.randomnumber.number==0){
+                            Toast.show("No Random Number selected", 100);
+                             e.preventDefault();
                         }else{
-                            if ( $scope.data.name.favcoffee) {
-                                favcoffee = $scope.data.name.favcoffee;
-                            }
-                            if ( $scope.data.name.favcoffe) {
-                                favcoffee = $scope.data.name.favcoffe;
-                            }
-                            
-                            $http.post(API_URL + '/remotewelcome', { 
-                                name : $scope.data.name.name,
-                                favcoffee : $scope.data.name.favcoffee,
-                                zipcode : $scope.data.name.zipcode,
-                                email : $scope.data.name.email,
-                                zonefrom : "IoT",
-                                zoneto : session.socketid,
-                                companyname : $scope.data.name.companyname,
-                                city : $scope.data.name.city,
-                                state : $scope.data.name.state
-                            }).
-                              then(function(response) {
-                                 Toast.show("Sending ....", 1);
-                              }, function(response) {
-                                  console.log(response);
-                                  Toast.show(response.statusText + " "+ response.data.error, 30);
-                             });
-                            
+                            var newArr=[];
+                            newArr = getRandomArrayElements($scope.visitors, $scope.randomnumber.number);
+                        	angular.forEach(newArr, function(visitor){
+                    			if (!visitor || !visitor.name) {
+                    				return;
+                    			}
+                    		   
+                			 $http.post(API_URL + '/remotewelcome',{ 
+                			        name : visitor.name,
+                                    favcoffee : visitor.favcoffee,
+                                    email : visitor.email,
+                                    zonefrom : "IoT",
+                                    zoneto : session.socketid,
+                                    companyname : visitor.companyname,
+                                    city : visitor.city,
+                                    state : visitor.state,
+                                    msg1 : visitor.msg1,
+                                    msg2 : visitor.msg2,
+                                    lname : visitor.lname,
+                                    fname : visitor.fname,
+                                    greeting : visitor.greeting,
+                                    region : visitor.region,
+                                    id : visitor.id,
+                                    crcombined : visitor.crcombined
+                			   }).
+                                  then(function(response) {
+                                     Toast.show("Sending .... " + visitor.name, 1);
+                                  }, function(response) {
+                                      console.log(response);
+                                      Toast.show(response.statusText + " "+ response.data.error, 30);
+                                 });
+                    		});
                         }
                     }
                 },
@@ -492,6 +504,18 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
         });
     }
     
+    
+    function getRandomArrayElements(arr, count) {
+    var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
+        while (i-- > min) {
+            index = Math.floor((i + 1) * Math.random());
+            temp = shuffled[index];
+            shuffled[index] = shuffled[i];
+            shuffled[i] = temp;
+        }
+    return shuffled.slice(min);
+}
+
 
     
         
