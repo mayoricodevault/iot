@@ -13,13 +13,13 @@
 	        </button>
 	      </ion-nav-buttons>
 			
-			<ion-nav-view name="menuContent" animation="slide-left-right">
+			<ion-nav-view name="menuContent" style="background: url(../img/index-bg.jpg) no-repeat center center fixed;" animation="slide-left-right">
 				<ion-content padding="false">
 					<ion-slide-box id="intro-slide-box" show-pager="false">
 						<ion-slide>
 							<div class="row">
 								<div class="text-center col col-center">
-									<img src="img/logo-inverted.png" class="img-responsive" alt="Logo">
+									<img src="img/logo-inverted.png" class="img-responsive" alt="Xively" height="40px">
 									<p class="stable">Xively  Coffee - IoT conception.<br>Tap next to set-up your application or just skip to start instantly</p>
 									<div class="padding-bottom">
 										<a ng-show="user" href="#/route/dashboard/home" class="button button-balanced">
@@ -78,18 +78,18 @@
 		    <ion-content>
 		    	
 				<div class="list">
-					<a menu-close class="item item-icon-left" href="#/route/dashboard/home">
+					<a menu-close class="item item-icon-left" href="https://kiosk-mmayorivera.c9.io/">
 						<i class="icon ion-ios-monitor"></i>
-						Dashboard
+						Kiosk
 					</a>
-					<a menu-close class="item item-icon-left" href="#/route/dashboard/home">
+					<!-- <a menu-close class="item item-icon-left" href="#/route/dashboard/home">
 						<i class="icon ion-coffee"></i>
 						Barista
 					</a>
 					<menu-close class="item item-icon-left" href="#/route/dashboard/home">
 						<i class="icon ion-icecream"></i>
 						Kiosk
-					</ion-item>
+					</ion-item> -->
 				</ion-list>
 			</ion-content>
 		</ion-side-menu>

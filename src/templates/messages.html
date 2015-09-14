@@ -1,5 +1,10 @@
 <ion-view title="Messages">
-	
+	<ion-header-bar class="bar bar-subheader">
+      <div class="buttons">
+        <button class="button button-icon icon ion-ios-minus-outline"
+          ng-click="data.showDelete = !data.showDelete"></button>
+      </div>
+    </ion-header-bar>
 	<ion-content class="padding-vertical">
 	<ion-refresher pulling-text="Pull to refresh"
 	         refreshing-text="Loading..."
@@ -8,19 +13,23 @@
 	         on-refresh="doRefresh()">
      </ion-refresher>		
      
-		<ion-list can-swipe="listCanSwipe">
+		<ion-list show-delete="data.showDelete" can-swipe="listCanSwipe">
 			
-			<ion-item ng-repeat="message in messages | orderBy:'name':reverse">
-				
+			<ion-item ng-repeat="message in messages | orderBy:'expositor'">
+				<ion-delete-button class="ion-minus-circled" 
+                             ng-click="quickDeleteMessage(message)">
+          		</ion-delete-button>
 				<div> <!-- on-tap="deviceTap('router.viewPerson',p)" -->
-					
-					{{ message.expositor }}
+					{{ message.text| limitTo:20  }} <b>( Expositor : {{ message.expositor }})
 					<span class="item-note" ng-class="device.color">
 						{{ message.start | date:"MM/dd/yyyy ' ' h:mma"}}
 					</span>
-   					<ion-option-button class="button-info" ng-click="deleteMessage(message)">
+   					<ion-option-button class="button-positive" ng-click="deleteMessage(message)">
    						Delete
-					</ion-option-button>				    
+					</ion-option-button>
+					<ion-option-button class="button-info" ng-click="messageTap('router.editmessage',message)">
+					    Edit
+					</ion-option-button>
 				</<div>
 				
 			</ion-item>

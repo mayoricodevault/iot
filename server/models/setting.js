@@ -8,7 +8,12 @@ var settingSchema = mongoose.Schema({
 		urgentalerts:Boolean,
 		devicesnotifications:Boolean,
 		devicenotrespondig:Boolean,
-		connectionlost:Boolean
+		connectionlost:Boolean,
+		dFooterFO:String,
+		dBodyFO: String,
+		kThanksFO: String,
+		wTimeFO: String,
+		wQueueTD: String
 });
 
 module.exports = mongoose.model('settings', settingSchema);

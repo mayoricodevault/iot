@@ -7,7 +7,16 @@
 	         pulling-icon="ion-ios7-arrow-thin-down"
 	         on-refresh="doRefresh()">
      </ion-refresher>		
-     
+     <div id="search-box" class="bar bar-header item-input-inset">
+        <div class="item-input-wrapper">
+          <i class="icon ion-ios7-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-model="data.searchQuery">
+          <i class="clear-search icon ion-ios7-close-empty" ng-click="clearSearch()"></i>
+        </div>
+        <button class="button button-clear">
+          Cancel
+        </button>
+      </div>
 		<ion-list can-swipe="listCanSwipe">
 			<div>
 				<button ng-show="!selectPeople" type="button" class="button button-default" style="margin-bottom:10px;" ng-click="showCheckBoxes()">Show Select People</button>
@@ -16,9 +25,9 @@
 				<button ng-show="selectPeople" type="button" class="button button-default" style="float:right;" ng-click="test()">Test</button>
 				
 			</div>
-			<ion-item ng-repeat="p in visitors | orderBy:'name':reverse">
+			<ion-item ng-repeat="p in visitors | orderBy:'name':reverse | filter: data.searchQuery">
 				
-				<div > <!-- on-tap="deviceTap('router.viewPerson',p)" -->
+				<div>
 					
 					<input ng-show="selectPeople" type="checkbox" class="checkbox" ng-model="p.checked" /> 
 					{{ p.name }}

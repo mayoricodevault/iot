@@ -147,6 +147,7 @@ io.on('connection', function(socket) {
 //Redirect Messages
 app.post("/xively", function(req, res) {
    io.sockets.emit('message', req.body );
+   res.status(200);
 });
 
 app.get("/random-user", function (req, res) {

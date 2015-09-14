@@ -36,7 +36,7 @@ app.controller('addPerson',['$scope','Api','$ionicPopup','$cordovaToast','Toast'
         $scope.uploadFiles = function(file) {
         $scope.f = file;
         if (file && !file.$error) {
-        	console.info("*** INDO");
+        	
             file.upload = Upload.upload({
                 url:API_URL + '/upload',
                 method: 'POST',

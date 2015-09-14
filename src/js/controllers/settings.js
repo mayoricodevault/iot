@@ -25,7 +25,12 @@ app.controller('settings', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','$ti
 				"urgentalerts" : true,
 				"devicesnotifications" : true,
 				"devicenotrespondig" : false,
-				"connectionlost" : false
+				"connectionlost" : false,
+				"dFooterFO": "",
+				"dBodyFO": "",
+				"kThanksFO": "",
+				"wTimeFO": "",
+				"wQueueTD": ""
 			};   //end json  		
     	} //en else
     }); // end query

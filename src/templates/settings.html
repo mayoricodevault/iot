@@ -80,11 +80,11 @@
 			<div class="item item-divider">
 				Notifications
 			</div>
-			<li class="item item-checkbox">
+			<!-- <li class="item item-checkbox">
 				<label class="item item-input">
 					<input type="text" placeholder="Email" ng-model="newsetting.email">
 				</label>
-			</li>
+			</li> -->
 			<li class="item item-checkbox">
 				<label class="item item-input">
 					<input type="text" placeholder="Sms" ng-model="newsetting.sms">
@@ -94,7 +94,7 @@
 			<div class="item item-divider">
 				Notifications Settings
 			</div>
-			<li class="item item-checkbox">
+			<!-- <li class="item item-checkbox">
 				<label class="checkbox">
 				<input type="checkbox" checked ng-model="newsetting.urgentalerts">
 				</label>
@@ -105,7 +105,7 @@
 				<input type="checkbox" checked ng-model="newsetting.devicesnotifications">
 				</label>
 				Devices Notifications
-			</li>
+			</li> -->
 			<!-- <li class="item item-checkbox">
 				<label class="checkbox">
 				<input type="checkbox" checked ng-model="newsetting.usernotresponding">
@@ -124,6 +124,30 @@
 				</label>
 				Connection Lost
 			</li>
+			<div class="item item-divider">
+				Dashboard
+			</div>
+			<label class="item item-input">
+				<input type="text" placeholder="Footer Message Fade Out" ng-model="newsetting.dFooterFO">
+			</label>
+			<label class="item item-input">
+				<input type="text" placeholder="Body Message Fade Out" ng-model="newsetting.dBodyFO">
+			</label>
+			<div class="item item-divider">
+				Kiosk
+			</div>
+			<label class="item item-input">
+				<input type="text" placeholder="Thank you Fade Out Time" ng-model="newsetting.kThanksFO">
+			</label>
+			<div class="item item-divider">
+				Welcome
+			</div>
+			<label class="item item-input">
+				<input type="text" placeholder="Fade Out Time Message" ng-model="newsetting.wTimeFO">
+			</label>
+			<label class="item item-input">
+				<input type="text" placeholder="Queue Time Dispatch" ng-model="newsetting.wQueueTD">
+			</label>
 		</ul>
 		
 		<div class="padding">

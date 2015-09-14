@@ -1,13 +1,6 @@
 <ion-view title="Add New Message">
 	<ion-content>
 		
-		<ion-refresher pulling-text="Pull to refresh"
-	         refreshing-text="Loading..."
-	         refreshing-icon="ion-loading-c"
-	         pulling-icon="ion-ios7-arrow-thin-down"
-	         on-refresh="doRefresh()">
-        </ion-refresher>
-		
 		<form name="addMessageForm" ng-init="setFormScope(this)">
 			<div class="list" style="background:#ffffff;">
 				<div class="item item-divider">
@@ -33,7 +26,7 @@
 					
 					<div class="col">
 						<ionic-datepicker input-obj="datepickerObject">
-						  <button class="button button-block button-positive" ng-click="setDate()"> {{datepickerObject.inputDate | date:'dd - MMMM - yyyy'}}</button>
+						  <button class="button button-block button-positive"> {{datepickerObject.inputDate | date:'dd - MMMM - yyyy'}}</button>
 						</ionic-datepicker>
 					</div>
 					
@@ -48,7 +41,7 @@
 					<div class="col">
 						<span class="input-label">Start</span>
 						<ionic-timepicker input-obj="timePickerObjectStart" style="width:300px">
-						  <button class="button button-block button-positive overflowShow" ng-click="setTime()">
+						  <button class="button button-block button-positive overflowShow">
 						    {{startHour}}:{{startMinute}}
 						  </button>
 						</ionic-timepicker>
@@ -57,7 +50,7 @@
 					<div class="col">
 						<span class="input-label">End</span>
 						<ionic-timepicker input-obj="timePickerObjectEnd" style="width:300px">
-						  <button class="button button-block button-positive overflowShow" ng-click="setTime()">
+						  <button class="button button-block button-positive overflowShow">
 						    {{endHour}}:{{endMinute}}
 						  </button>
 						</ionic-timepicker>
@@ -68,7 +61,7 @@
 			</div>
 			<div class="padding">
 				<button class="button button-balanced" ng-click="messageSubmit(newmessage)">
-					Add Message
+					Update Message
 				</button>
 			</div>
 		</form>

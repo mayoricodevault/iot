@@ -5,7 +5,7 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
 	$scope.cleanVisitors = VisitorsService.getVisitors();
     $scope.visitors = [];
     $scope.selectPeople = false
-    
+    $scope.data = {};
     //getDevices
     $scope.devices = [];
     $scope.baristas = [];
@@ -229,5 +229,7 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
     $scope.hideCheckBoxes = function(){
     	$scope.selectPeople = false;
     }
-    
+    $scope.clearSearch = function() {
+        $scope.data.searchQuery = '';
+    };
 }]);

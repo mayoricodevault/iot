@@ -1,4 +1,7 @@
-<ion-view view-title="<img src='img/logo.png' class='img-responsive'>">	
+<ion-view view-title="Xively Coffee XP" >	
+	<ion-nav-title>
+      <img src="img/logo.png" class='img-responsive' height='40px'>
+    </ion-nav-title>
 	<ion-content>
 		<ion-refresher pulling-text="Pull to refresh"
 	         refreshing-text="Loading..."
@@ -8,13 +11,12 @@
         </ion-refresher>
 		<div class="row chart-wrap">
 			<div class="col">
-				<h4>Messages</h4>
-				<canvas id="line" class="chart chart-line" 
+				<h4>Kiosk Messages</h4>
+				<canvas height="100px" id="line" class="chart chart-line" 
 						data="data" 
 						options="options" 
-						legend="true" 
 						labels="labels"
-						series="series"></canvas>
+						></canvas>
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -28,6 +30,8 @@
 				<div class="item item-icon-left" on-tap="deviceSelect('router.device', device)">
 					<i class="icon" ng-class="device.icon"></i>
 					{{ device.devicename }}
+
+					<span class="item-note">{{device.type}}</span>
 					<span class="item-note" ng-class="device.color">
 					{{ device.status }}
 					</span>

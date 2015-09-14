@@ -5,6 +5,8 @@ app.factory('MessagesService', ['$firebaseObject', 'FIREBASE_MESSAGES', function
         return messages;
     };
 
+
+
     return {
         getMessages: getMessages
     };

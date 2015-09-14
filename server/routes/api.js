@@ -148,6 +148,12 @@ module.exports = function(router, socket){
         setting.devicesnotifications=req.body.devicesnotifications;
         setting.devicenotrespondig=req.body.devicenotrespondig;
         setting.connectionlost=req.body.connectionlost;
+        setting.dFooterFO = req.body.dFooterFO;
+        setting.dBodyFO = req.body.dBodyFO;
+        setting.kThanksFO = req.body.kThanksFO;
+        setting.wTimeFO = req.body.wTimeFO;
+        setting.wQueueTD = req.body.wQueueTD;
+        
         setting.save(function(err, data){
             if(err)
                 throw err;
@@ -174,6 +180,11 @@ module.exports = function(router, socket){
             setting.devicesnotifications=req.body.devicesnotifications;
             setting.devicenotrespondig=req.body.devicenotrespondig;
             setting.connectionlost=req.body.connectionlost;
+            setting.dFooterFO = req.body.dFooterFO;
+            setting.dBodyFO = req.body.dBodyFO;
+            setting.kThanksFO = req.body.kThanksFO;
+            setting.wTimeFO = req.body.wTimeFO;
+            setting.wQueueTD = req.body.wQueueTD;
             setting.save(function(err, data){
                 if(err)
                     throw err;

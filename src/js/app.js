@@ -12,7 +12,10 @@ var app = angular.module('iot', [
   'ionic-timepicker',
   'ionic-datepicker',
   'ngFileUpload'
-])
+]).run(function($rootScope){
+  $rootScope.totalMessages = 0;
+  $rootScope.totalPeople = 0;
+});
 
 app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
   
@@ -300,7 +303,17 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
         resolve: { authenticate: authenticate }
       }
     }
-  })  
+  })
+  .state('router.editmessage', {
+    url: "/editmessage",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/edit-message.html",
+        controller: "editMessage",
+        resolve: { authenticate: authenticate }
+      }
+    }
+  })
 	.state('intro', {
       url: "/intro",
       templateUrl: "templates/intro.html",
@@ -344,7 +357,7 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       }
     }
 })
-.constant("API_URL", 'http://iottemplate-mmayorivera.c9.io')
+.constant("API_URL", 'https://iottemplate-mmayorivera.c9.io')
 .constant('FIREBASE_URI', 'https://kxively.firebaseio.com/people')
 .constant('FIREBASE_VISITORS', 'https://kxively.firebaseio.com/people')
 .constant('FIREBASE_MESSAGES', 'https://kxively.firebaseio.com/messages')

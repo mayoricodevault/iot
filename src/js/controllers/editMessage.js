@@ -1,18 +1,17 @@
 'use strict';
 
-app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','Toast','$http', 'API_URL', function($scope, Api, $ionicPopup, $cordovaToast,Toast,$http,API_URL) {
-    
-    
-    /*$scope.$on('$ionicView.beforeEnter', function () {
-            // update campaigns everytime the view becomes active
-        doRefresh();
-    });*/   
-    
-	//$scope.formScope=null;
-	$scope.newmessage = {
-		text:"",
-		expositor:""
-	};
+app.controller('editMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','storeService','Toast', function($scope, Api, $ionicPopup, $cordovaToast, storeService,Toast) {
+	$scope.messages = [];
+	$scope.newmessage = storeService.jsonRead("shareData");
+	console.log("new Message --> ",$scope.newmessage);
+	$scope.formScope=null;
+	$scope.setFormScope = function(frmMessage){
+		$scope.formScope = frmMessage;
+	}
+	
+	var dateStart = new Date($scope.newmessage.start);
+	var dateEnd = new Date($scope.newmessage.end);
+	
 	$scope.datepickerObject = {
       titleLabel: 'Title',  //Optional
       todayLabel: 'Today',  //Optional
@@ -30,7 +29,7 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
       modalHeaderColor: 'bar-positive', //Optional
       modalFooterColor: 'bar-positive', //Optional
       from: new Date(),   //Optional
-      to: new Date(2050, 8, 25),    //Optional
+      to: new Date(2030, 8, 25),    //Optional
       callback: function (val) {    //Mandatory
         datePickerCallback(val);
       }
@@ -48,15 +47,8 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	  }
 	};
 	
-	function getCurrentTime(){
-		return (((new Date()).getHours() * 60)+(new Date()).getMinutes()) * 60;
-	}
-	
-	$scope.startHour="";$scope.startMinute="";
-	$scope.endHour="";$scope.endMinute="";
-	
 	$scope.timePickerObjectStart = {
-		inputEpochTime:   getCurrentTime(),//Optional
+		inputEpochTime: (((new Date()).getHours() * 60)+(new Date()).getMinutes()) * 60,  //Optional
 		step: 1,  //Optional
 		format: 24,  //Optional
 		titleLabel: '24-hour Format',  //Optional
@@ -70,7 +62,7 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	};
 	
 	$scope.timePickerObjectEnd = {
-		inputEpochTime: getCurrentTime(),  //Optional
+		inputEpochTime: (((new Date()).getHours() * 60)+(new Date()).getMinutes()) * 60,  //Optional
 		step: 1,  //Optional
 		format: 24,  //Optional
 		titleLabel: '24-hour Format',  //Optional
@@ -82,7 +74,6 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 			timePickerCallbackEnd(val);
 		}
 	};
-	
 	
 	function setTimeSelectedStart(hour,minute){
 		$scope.startHour = hour;
@@ -97,6 +88,10 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	    $scope.endMinute = minute;
 	    if($scope.endMinute<10)$scope.endMinute='0'+$scope.endMinute;
 	}
+	
+	setTimeSelectedStart(dateStart.getHours(),dateStart.getMinutes())
+	setTimeSelectedEnd(dateEnd.getHours(),dateEnd.getMinutes())
+	
 	
 	function timePickerCallbackStart(val) {
 	  if (typeof (val) === 'undefined') {
@@ -117,14 +112,14 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	    if(currentHour<selected_hour){
 	    	setTimeSelectedStart(selected_hour,selected_minute);
 	    	$scope.timePickerObjectStart.inputEpochTime = (selected_hour*60+selected_minute)*60;	//set the timepicker-end
-	    	//$scope.timePickerObjectEnd.inputEpochTime = (selected_hour*60+selected_minute)*60;	//set the timepicker-end
-	    	//setTimeSelectedEnd(selected_hour,selected_minute);		//show the time in the button
+	    	$scope.timePickerObjectEnd.inputEpochTime = (selected_hour*60+selected_minute)*60;	//set the timepicker-end
+	    	setTimeSelectedEnd(selected_hour,selected_minute);		//show the time in the button
 	    }else{
 	    	if(currentHour==selected_hour&&currentMinute<=selected_minute){
 	    		setTimeSelectedStart(selected_hour,selected_minute);
 	    		$scope.timePickerObjectStart.inputEpochTime = (selected_hour*60+selected_minute)*60;	//set the timepicker-end
-	    		//$scope.timePickerObjectEnd.inputEpochTime = (selected_hour*60+selected_minute)*60;	//set the timepicker-end
-	    		//setTimeSelectedEnd(selected_hour,selected_minute);	//show the time in the button
+	    		$scope.timePickerObjectEnd.inputEpochTime = (selected_hour*60+selected_minute)*60;	//set the timepicker-end
+	    		setTimeSelectedEnd(selected_hour,selected_minute);	//show the time in the button
 	    	}else{
 	    		Toast.show("Select a valid time");
 	    	}
@@ -158,12 +153,9 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	  }
 	}
 	
-	$scope.setFormScope = function(frmDevice){
-		$scope.formScope = frmDevice;
-	}
+	
 	
 	$scope.messageSubmit = function(message) {
-		//console.log("message --> ",message);
 		
 		if(typeof message=='undefined'||!message.text) {
 			Toast.show("The field Text is required.");
@@ -184,83 +176,17 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 			return;
 		}
 		
-		var dateObj = new Date();
-		var month = dateObj.getUTCMonth() + 1; //months from 1-12
-		var day = dateObj.getUTCDate();
-		var year = dateObj.getUTCFullYear();
-		
-		
-		console.log(year+"<="+$scope.datepickerObject.inputDate.getFullYear()+"  "+month+"<="+($scope.datepickerObject.inputDate.getMonth()+1)+"  "+day+"<="+$scope.datepickerObject.inputDate.getDate());
-		
-		if(year<=$scope.datepickerObject.inputDate.getFullYear()&&month<=$scope.datepickerObject.inputDate.getMonth()+1&&day<=$scope.datepickerObject.inputDate.getDate()){}
-		else{
-			Toast.show("Please enter a valid Date");
-			return;
-		}
-		
-		var currentHour=(new Date()).getHours(),currentMinute=(new Date()).getMinutes();
-		
-		if(currentHour<$scope.startHour){}
-		else{
-			if(currentHour==$scope.startHour&&currentMinute<=$scope.startMinute){}
-			else {
-				Toast.show("Please enter a valid time");
-				return;
-			}
-		}
-		
-		if($scope.startHour<=$scope.endHour&&$scope.startMinute<=$scope.endMinute){}
-		else{
-			Toast.show("Please enter a valid time");
-			return;
-		}
-		
-		var month = $scope.datepickerObject.inputDate.getUTCMonth() + 1; //months from 1-12
-		var day = $scope.datepickerObject.inputDate.getUTCDate();
-		var year = $scope.datepickerObject.inputDate.getUTCFullYear();
-		
-		var startTimeStamp = moment(year+"-"+month+"-"+day+" "+$scope.startHour+":"+$scope.startMinute,"YYYY-MM-DD HH:mm");
-		var endTimeStamp = moment(year+"-"+month+"-"+day+" "+$scope.endHour+":"+$scope.endMinute,"YYYY-MM-DD HH:mm");
-	
-		var message = {
-			text: message.text,
-			expositor: message.expositor,
-			start: startTimeStamp,
-			end: endTimeStamp
-		}
-        
-        console.log("message: ",message);
-        
-		$http.post(API_URL + '/add-message', { message: message }).
-			then(function(response) {
-				Toast.show("Sending Request....", 30);
-				
-				$scope.newmessage = {
-					text:"",
-					expositor:""
-				};
-				$scope.datepickerObject.inputDate = new Date();
-				$scope.startHour = "";
-				$scope.startMinute = "";
-				$scope.endHour = "";
-				$scope.endMinute = "";
-				$scope.timePickerObjectStart.inputEpochTime= (((new Date()).getHours() * 60)+(new Date()).getMinutes()) * 60;  //Optional
-				$scope.timePickerObjectEnd.inputEpochTime= (((new Date()).getHours() * 60)+(new Date()).getMinutes()) * 60;  //Optional
-				//$scope.new_person=[];
-			}, function(response) {
-				Toast.show(response.statusText + " "+ response.data.error, 30);
-		});
+		Api.Product.save({id:$scope.newproduct._id}, $scope.newproduct, 
+        function(data){
+        	Toast.show("Update Successful.");
+			$scope.messages.push($scope.newmessage);
+        },
+        function(err){
+        	Toast.show("System Error." + err.statusText);
+			return false;
+        });
 	
 	};
-	
-	$scope.setTime = function(){
-		$scope.timePickerObjectStart.inputEpochTime = getCurrentTime();
-		$scope.timePickerObjectEnd.inputEpochTime = getCurrentTime();
-	}
-	$scope.setDate = function(){
-		$scope.datepickerObject.inputDate = new Date();
-		$scope.datepickerObject.from = new Date();
-	}
 
 	 $scope.showAlert = function(errTitle, errMsg) {
 	   var alertPopup = $ionicPopup.alert({
@@ -271,15 +197,4 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	     
 	   });
 	 };
-	 
-	 
-	 function doRefresh() {
-	 	//$scope.$broadcast('scroll.refreshComplete');
-        Toast.show('Loading...');
-	 }
-	 
-	 $scope.doRefresh = function() {
-       // doRefresh();
-    }
-	 
 }]);
