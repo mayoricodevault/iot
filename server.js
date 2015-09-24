@@ -38,6 +38,7 @@ var ServerList = require('./server/models/server');
 var ProductsList = require('./server/models/product');
 var fcsv = require('fast-csv');
 var multipart = require('connect-multiparty');
+var schedule = require('node-schedule');
 app.use(session);
 app.use(cors());
 app.use(bodyParser.json());
@@ -53,6 +54,93 @@ app.use(express.static(path.join(__dirname,'upload')));
 //io Specific Settings
 // io.set('heartbeat timeout',10000);
 // io.set('heartbeat interval',9000);
+var cronPerson = schedule.scheduleJob('*/5 * * * *', function(){
+    var postBody ={};
+    var CurrentDate = moment().format();
+    requestify.request(configDB.vizix_person, {
+        method: 'GET',
+        body: postBody,
+        headers : {'api_key':'root','Content-Type': 'application/json'},
+        dataType: 'json'        
+         }).then(function(response) {
+            // Get the response body
+            var data = JSON.parse(response.body);
+            var totalPersons = data.total;
+            var personsList = data.results;
+            _.each(personsList, function(person){
+                var otherFields = person.fields;
+                var people = new Object();
+                people.modifiedTime = person.modifiedTime;
+                people.activated = person.activated;
+                people.name = person.name;
+                people.id = person.serial;
+                people.email = person.serial;
+                _.each(otherFields, function(field) {
+                  if (field.name == "region") {
+                    people.region = field.value;
+                  }
+                  if (field.name == "state") {
+                    people.state = field.value;
+                  }
+                  if (field.name == "drink") {
+                    people.favcoffee = field.value;
+                  }
+                  if (field.name == "guestCity") {
+                    people.city = field.value;
+                  }
+                  if (field.name == "lastName") {
+                    people.lname = field.value;
+                  }
+                  if (field.name == "firstName") {
+                    people.fname = field.value;
+                  }
+                  if (field.name == "greeting") {
+                    people.greeting = field.value;
+                  }
+                 if (field.name == "greeting") {
+                    people.greeting = field.value;
+                  }
+                  if (field.name == "message") {
+                    people.msg1 = field.value;
+                    people.msg2 = people.msg1;
+                  }
+                  people.crcombined = people.city + " "+ people.state;
+                });
+                people.dt_created = CurrentDate;
+                if (people.favcoffee == "cofee"){
+                  people.favcoffee = "Regular Coffee";
+                }
+                if (people.favcoffee == "expresso"){
+                  people.favcoffee = "Espresso";
+                }
+                if (people.favcoffee == "cappuchino"){
+                  people.favcoffee = "Capuccino";
+                }
+                if (people.favcoffee == "decaf"){
+                  people.favcoffee = "Decaf coffee";
+                }
+                if (people.favcoffee == "americano"){
+                  people.favcoffee = "Americano";
+                }
+                if (people.favcoffee == "tea"){
+                  people.favcoffee = "Tea";
+                }
+                var activePeople = appfire.child('people/'+ people.email);
+                activePeople
+                  .once('value', function(snap) {
+                    if(!snap.val()) {
+                      activePeople.set(people);
+                    } else {
+                      var oldInfo = snap.val();
+                      if (oldInfo.modifiedTime != people.modifiedTime) {
+                          activePeople.set(people);
+                      }
+                    }
+                    io.emit('message', people);
+                }); 
+            });
+    });
+});
 var devices = [];
 var sessionsConnections = {};
 var numberofusers = 0;
@@ -271,6 +359,60 @@ app.post("/remotedashboard", function (req, res) {
     }).then(function(response) {
       res.status(200).json({totals : dashObj});
     });
+    res.status(200);
+});
+app.post("/remotedashboardxively", function (req, res) {
+    var sessInfo = req.body;
+     if(_.isUndefined(sessInfo) || _.isEmpty(sessInfo) ){
+        return res.status(400).json({error: "Request is invalid"});
+    }
+    if(_.isUndefined(sessInfo.zonefrom) || _.isEmpty(sessInfo.zonefrom) ){
+        return res.status(400).json({error: "Request is invalid"});
+    }
+    if(_.isUndefined(sessInfo.zoneto) || _.isEmpty(sessInfo.zoneto) ){
+        return res.status(400).json({error: "Request is invalid"});
+    }
+    var dashObj = Object();
+    dashObj = {
+
+			"onzas": 2416,
+			"drinksServed": {
+				"esp": 34,
+				"amer": 20,
+				"reg": 44,
+				"dcaf": 6,
+				"cap": 24,
+				"tea": 18
+				},
+			"regions":{
+				"west": 21,
+				"midwest": 5,
+				"neMidAtlantic": 6,
+				"neNewEngland": 60,
+				"sWestSouthCentral": 6,
+				"sSouthAtlanticESCentral": 2
+				},
+			"zoneto": "zRTLucCqjmpxNWVLAAGz",
+			"zonefrom": "vizix",
+			"stations":{
+				"station1": 33,
+				"station2": 21,
+				"station3": 47
+				},
+			"totVisitors": 182
+		}
+    
+    var remoteUrl = configDB.kiosk +'/dashboard';
+    requestify.request(remoteUrl, {
+    method: 'POST',
+    body: dashObj,
+    headers : {
+            'Content-Type': 'application/json'
+    },
+    dataType: 'json'        
+    }).then(function(response) {
+      res.status(200).json({totals : dashObj});
+    });
 
 });
 app.post("/add-people", function (req, res) {
@@ -299,6 +441,20 @@ app.post("/add-message", function (req, res) {
   });
   res.status(200).json({results: "Message Added Successfully"});
 });
+
+app.post("/update-message", function (req, res) {
+  
+  var message = req.body.message;
+  var postsRef = appfire.child("messages/"+message.id);
+  postsRef
+    .once('value', function(snap) {
+      if(snap.val()) {
+         postsRef.set(message);
+       } 
+  });
+  res.status(200).json({results: "Message UPdated Successfully"});
+});
+
 
 app.get('/deviceslist', function (req, res) {
    DeviceList.find({}, function(err, data){
@@ -347,29 +503,23 @@ app.post('/upload', function (req, res, cfg) {
 });
 
 app.get('/importfile', function (req, res) {
-    fcsv.fromPath("x.csv")
+    fcsv.fromPath("xlast.csv")
    .on("data", function(data){
       if(!_.isEmpty(data)) {
           var people = new Object();
           people.id = data[0];
-          people.name = removeSpecials(data[2]);
-          people.fname = removeSpecials(data[7]);
-          people.lname = removeSpecials(data[8]);
-          people.email = data[8]+data[7]+'@xively,com';
-          people.favcoffee = removeSpecials(data[12].toLowerCase());
-          people.state = removeSpecials(data[10]);
-          // people.city = data[9];
-          people.region = removeSpecials(data[11]);
-          people.crcombined = removeSpecials(data[5]);
-          people.companyname = removeSpecials(data[4]);
-          people.industry = removeSpecials(data[13]);
-          people.greeting = removeSpecials(data[15]);
-          people.msg1 = removeSpecials(data[16]);
-          people.msg2 = removeSpecials(data[17]);
-          people.zonefrom = "";
-          people.zoneto ="";
-          var pos = data[5].indexOf(",");
-          people.city = data[5].substr(0, pos);
+          people.email = data[0];
+          people.name = removeSpecials(data[1]);
+          people.fname = removeSpecials(data[2]);
+          people.lname = removeSpecials(data[3]);
+          people.city = removeSpecials(data[4]);
+          people.state = removeSpecials(data[5]);
+          people.region = removeSpecials(data[6]);
+          people.favcoffee = removeSpecials(data[7].toLowerCase());
+          people.greeting = removeSpecials(data[8]); 
+          people.msg1 = removeSpecials(data[9]);
+          people.msg2 = removeSpecials(data[9]);
+          people.crcombined = people.city + " "+ people.state;
           if (people.favcoffee == "cofee"){
             people.favcoffee = "Regular Coffee";
           }
@@ -388,7 +538,7 @@ app.get('/importfile', function (req, res) {
           if (people.favcoffee == "tea"){
             people.favcoffee = "Tea";
           }
-          var activePeople = appfire.child('people/'+ escapeEmail(people.email));
+          var activePeople = appfire.child('people/'+ people.email);
           activePeople
             .once('value', function(snap) {
               if(!snap.val()) {

@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', '$ionicPopup','shareComponentService','$state', function($scope, $ionicActionSheet,Api,Toast,$ionicPopup,shareComponentService,$state) {
+app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', '$ionicPopup','storeService','$state', function($scope, $ionicActionSheet,Api,Toast,$ionicPopup,storeService,$state) {
 	
 	$scope.users = [];
 	
@@ -66,7 +66,7 @@ app.controller('Users', ['$scope','$ionicActionSheet','Api', 'Toast', '$ionicPop
     
     $scope.editUser = function(route, user) {
 		$scope.user = user;
-		shareComponentService.addDevice(user);
+		storeService.jsonWrite('shareData',user);
 		$state.go(route);
 	};
 	

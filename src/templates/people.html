@@ -1,5 +1,7 @@
 <ion-view title="People">
 	
+	  
+	
 	<ion-content class="padding-vertical">
 	<ion-refresher pulling-text="Pull to refresh"
 	         refreshing-text="Loading..."
@@ -17,20 +19,23 @@
           Cancel
         </button>
       </div>
+      
+	      <div class="buttons">
+	        <button class="button button-icon icon ion-ionic" ng-click="data.showTest=!data.showTest;listSwipe()"></button>
+	        <button ng-show="data.showTest" type="button" class="button button-default" style="float:right;" ng-click="test()">Test</button>
+	      </div>
+	    
 		<ion-list can-swipe="listCanSwipe">
-			<div>
-				<button ng-show="!selectPeople" type="button" class="button button-default" style="margin-bottom:10px;" ng-click="showCheckBoxes()">Show Select People</button>
-				<button ng-show="selectPeople" type="button" class="button button-default" style="margin-bottom:10px;" ng-click="hideCheckBoxes()">Hide Select People</button>
-				
-				<button ng-show="selectPeople" type="button" class="button button-default" style="float:right;" ng-click="test()">Test</button>
-				
-			</div>
-			<ion-item ng-repeat="p in visitors | orderBy:'name':reverse | filter: data.searchQuery">
-				
-				<div>
+			<ion-item ng-repeat="p in visitors | orderBy:'name':reverse | filter: {name: data.searchQuery}">
+      		
+      		<div style="height:20px">
+						<label class="checkbox customCheckBox bounceInLeft animated" ng-show="data.showTest">
+			      	<input class="animate-show" type="checkbox" ng-model="p.checked">
+			     	</label>
+			     	<div style="display:inline-block">{{ p.name }}</div>
+		     	</div>
+					<!-- <input ng-show="selectPeople" type="checkbox" class="checkbox" ng-model="p.checked" />  -->
 					
-					<input ng-show="selectPeople" type="checkbox" class="checkbox" ng-model="p.checked" /> 
-					{{ p.name }}
 					<ion-option-button class="button-positive" ng-click="deviceTap('router.viewPerson',p)">
 				      View
 				    </ion-option-button>
@@ -46,7 +51,7 @@
 				      Edit
 				    </ion-option-button>
 				    -->
-				</<div>
+				<!-- </div> -->
 				
 			</ion-item>
 		</ion-list>

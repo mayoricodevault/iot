@@ -313,7 +313,7 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                         '<div >'+
                         '</div>'+
                     '</div>',
-            title: 'Ping',
+            title: 'Test Dashboard',
             scope: $scope,
             buttons: [
                 {
@@ -337,6 +337,37 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
             ]
         });
     };
+    
+    $scope.testDashboardXively = function(session){
+        $ionicPopup.show({
+            template:   '<div class="list">'+
+                        '<div >'+
+                        '</div>'+
+                    '</div>',
+            title: 'Test Dashboard Xively',
+            scope: $scope,
+            buttons: [
+                {
+                    text: '<b>Send Random Data</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        $http.post(API_URL + '/remotedashboardxively', { 
+                            zonefrom : "IoT",
+                            zoneto : session.socketid
+                        }).
+                        then(function(response) {
+                           Toast.show("Sending ....", 30);
+                        }, function(response) {
+                             console.log(response);
+                              Toast.show(response.statusText + " "+ response.data.error, 30);
+                        });
+                    }
+                },
+                { text: 'Cancel' }
+              
+            ]
+        });
+    }
     
     $scope.resetAll = function(){
         for(var idxSession in $scope.sessionArray){

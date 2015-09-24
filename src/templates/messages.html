@@ -20,7 +20,7 @@
                              ng-click="quickDeleteMessage(message)">
           		</ion-delete-button>
 				<div> <!-- on-tap="deviceTap('router.viewPerson',p)" -->
-					{{ message.text| limitTo:20  }} <b>( Expositor : {{ message.expositor }})
+					{{ message.text| limitTo:20  }} <b>( Presenter : {{ message.expositor }})
 					<span class="item-note" ng-class="device.color">
 						{{ message.start | date:"MM/dd/yyyy ' ' h:mma"}}
 					</span>

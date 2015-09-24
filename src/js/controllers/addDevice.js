@@ -117,17 +117,13 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
 				break;
 			}
 		}
-		
-		console.log("newdevice --> ",$scope.newdevice);
-		
-		if(typeof $scope.newdevice.master == 'undefined'){
-			$scope.newdevice.master = 0;
-		}
+	
 		
 		if(typeof $scope.newdevice.master == 'undefined'){
 			$scope.newdevice.master = 0;
 		}
 		
+		console.log($scope.newdevice);
 		
 		Api.Device.save({}, $scope.newdevice, 
         function(data){
@@ -151,7 +147,6 @@ app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','To
         },
         function(err){
         	Toast.show(err.data);
-        	//$scope.showAlert("System Error!!!", err.statusText);
 			return false;
         });
 	

@@ -16,9 +16,18 @@
 				<label class="item item-input">
 					<input type="email" placeholder="Email" ng-model="newuser.email">
 				</label>
-				<label class="item item-input">
+				<!-- <label class="item item-input">
 					<input type="text" placeholder="Image" ng-model="newuser.image">
+				</label> -->
+				<label class="item item-input item-select">
+					<span class="input-label">Image</span>
+					<!-- <input type="text" placeholder="Icon" ng-model="newdevice.icon"> -->
+					<img ng-src="{{newuser.image}}" style="width:40px;height:40px">
+					<select ng-model="newuser.image" ng-options="o.src as o.name for o in imageList">
+						<option value="" >Select</option>
+					</select>
 				</label>
+				
 				<div class="item item-divider">
 				Tracking
 				</div>

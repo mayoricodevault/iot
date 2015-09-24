@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsService','$rootScope','SessionService','$http','API_URL',function($scope, Api, $ionicPopup, Toast,VisitorsService,$rootScope,SessionService, $http,API_URL) {
+app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsService','$rootScope','SessionService','$http','API_URL','FIREBASE_URI_SESSIONS','Sessions',function($scope, Api, $ionicPopup, Toast,VisitorsService,$rootScope,SessionService, $http,API_URL,FIREBASE_URI_SESSIONS,Sessions) {
 
 	$scope.cleanVisitors = VisitorsService.getVisitors();
     $scope.visitors = [];
@@ -11,6 +11,21 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
     $scope.baristas = [];
     $scope.products = [];
     $scope.data = {};
+    Sessions(FIREBASE_URI_SESSIONS).$bindTo($scope, "fbBind");
+    
+    $scope.$watch('fbBind', function() {
+        $scope.sessionArray = [];
+        angular.forEach($scope.fbBind, function(session){
+        	if (!session || !session.deviceName) {
+        		return;
+        	}
+        	console.log(session.deviceName);
+        	if (!session.isdeleted) {
+                $scope.sessionArray.push(session);    
+    	    }
+        });
+    });
+    
     
  	Api.Device.query({}, function(data){
     	$scope.devices=data;
@@ -74,11 +89,6 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
                         '<span class="input-label">'+
                         '</span>'+
                       '</label>'+
-                    '</div>'+
-                    '<div class="list">'+
-                    '<span class="form-control margin-bottom">'+
-                    '<input type="checkbox" ng-model="inzone" name="inzone" value="true" checked/>In Zone<br/>'+
-                    '</span>'+
                     '</div>',
             title: 'Test',
             scope: $scope,
@@ -114,6 +124,68 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
                                   Toast.show(response.statusText + " "+ response.data.error, 30);
                              });
                             
+                        }
+                    }
+                },
+                { text: 'Cancel' }
+              
+            ]
+        });
+    }
+    
+    
+    $scope.testOnlineSession = function(session){
+        $ionicPopup.show({
+            template:   '<div class="list">'+
+                        '<label class="item item-input item-select">'+
+                        '<span class="input-label">'+
+                            'Select a Device'+
+                        '</span>'+
+                        '<select class="form-control margin-bottom" ng-model="data.name" ng-options="d.deviceName as d.deviceName for d in sessionArray"><option></option></select>'+
+                        '<span class="input-label">'+
+                        '</span>'+
+                      '</label>'+
+                    '</div>',
+            title: 'Test',
+            scope: $scope,
+            buttons: [
+                {
+                    text: '<b>Send</b>',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        if(!$scope.data.name){
+                            Toast.show("No name selected", 100);
+                        }else{
+                            
+                            for(var key in $scope.visitors){
+                        		if($scope.visitors[key].checked){
+                        			console.log("visitor selected ---> ",$scope.visitors[key].name);
+                        		}
+                        	}
+                            /*var favcoffee = "";
+                            if ( $scope.data.name.favcoffee) {
+                                favcoffee = $scope.data.name.favcoffee;
+                            }
+                             if ( $scope.data.name.favcoffe) {
+                                favcoffee = $scope.data.name.favcoffe;
+                            }
+                            $http.post(API_URL + '/remotekiosk', { 
+                                name : $scope.data.name.name,
+                                favcoffee : favcoffee,
+                                zipcode : $scope.data.name.zipcode,
+                                email : $scope.data.name.email,
+                                zonefrom : "IoT",
+                                zoneto : session.sessionid,
+                                companyname : $scope.data.name.companyname,
+                                message : $scope.data.name.message,
+                                inzone : $socpe.data.inzone
+                            }).
+                              then(function(response) {
+                                 Toast.show("Sending ....", 30);
+                              }, function(response) {
+                                  Toast.show(response.statusText + " "+ response.data.error, 30);
+                             });
+                            */
                         }
                     }
                 },
@@ -207,7 +279,7 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
     function ifAnySelected(){
     	for(var key in $scope.visitors){
     		if($scope.visitors[key].checked){
-    			console.log("checked: ",$scope.visitors[key].checked);
+    			//console.log("checked: ",$scope.visitors[key].checked);
     			return true;
     		}
     	}
@@ -215,8 +287,14 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
     }
     
     $scope.test = function(){
-    	if(ifAnySelected()){
-    		$scope.testSession();
+        
+    	if(ifAnySelected()){                //verify if anyone is selected
+    		/*for(var key in $scope.visitors){
+    		if($scope.visitors[key].checked){
+    			console.log("checked: ",$scope.visitors[key].name);
+    		}
+    	    }*/
+    	    $scope.testOnlineSession();
     	}else{
     		Toast.show("No people selected", 20);
     	}
@@ -232,4 +310,8 @@ app.controller('people', ['$scope', 'Api', '$ionicPopup','Toast' ,'VisitorsServi
     $scope.clearSearch = function() {
         $scope.data.searchQuery = '';
     };
+    
+    $scope.listSwipe = function(){
+        $scope.listCanSwipe = !$scope.listCanSwipe;
+    }
 }]);

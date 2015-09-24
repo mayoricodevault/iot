@@ -50,3 +50,16 @@
   width: 500px!important;
   height: 350px!important;
 }
+.customCheckBox {
+  padding: 0px 0px;
+  padding-right: 15px;
+}
+/*.checkbox input, .checkbox-icon{
+  width:20px;
+  height:20px;
+}
+
+.checkbox input:after, .checkbox-icon:after{
+  left:23%;
+  width:11px;
+}*/

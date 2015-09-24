@@ -5,7 +5,16 @@ app.controller('addUser', ['$scope','Api', '$ionicPopup','Toast',function($scope
 	$scope.setFormScope = function(scope){
 		this.formScope = scope;
 	}
-	$scope.newuser = {};
+	$scope.newuser = {
+		image:""
+	};
+	
+	$scope.imageList=[
+			{name:"no avatar",src:"../img/noavatar.png"},
+			{name:"no avatar",src:"../img/noavatar.png"},
+			{name:"no avatar",src:"../img/noavatar.png"},
+			{name:"no avatar",src:"../img/noavatar.png"}
+		];
 	
 	$scope.userSubmit = function() {
 		console.log("newuser --> ",$scope.newuser);
@@ -20,7 +29,8 @@ app.controller('addUser', ['$scope','Api', '$ionicPopup','Toast',function($scope
 			return;
 		}
 		
-		if(typeof $scope.newuser.image == 'undefined') {
+		console.log("avatar --> ",$scope.newuser.image);
+		if(typeof $scope.newuser.image == 'undefined'||$scope.newuser.image.length == 0) {
 			$scope.newuser.image = 'img/noavatar.png';
 		}
 		
@@ -54,14 +64,6 @@ app.controller('addUser', ['$scope','Api', '$ionicPopup','Toast',function($scope
 			}
 		)
 	};
-	
-	$scope.showAlert = function(errTitle, errMsg) {
-	   var alertPopup = $ionicPopup.alert({
-	     title: errTitle,
-	     template: errMsg
-	   });
-	   alertPopup.then(function(res) {});
-	 };
 	 
 	 $scope.getLocation = function(){
 	 	if($scope.newuser.showlocation == true){

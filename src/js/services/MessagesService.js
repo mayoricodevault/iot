@@ -5,9 +5,22 @@ app.factory('MessagesService', ['$firebaseObject', 'FIREBASE_MESSAGES', function
         return messages;
     };
 
+    var update = function (id, newMsg) {
+        var syncObject =  $firebaseObject(ref.child(id));
+        syncObject.$loaded().then(function() {
+            if (syncObject.id) {
+                syncObject.text = newMsg.text;
+                syncObject.expositor = newMsg.expositor;
+                syncObject.start = newMsg.start;
+                 syncObject.end = newMsg.end;
+                syncObject.$save();
+            }
+        });
 
+    };
 
     return {
-        getMessages: getMessages
+        getMessages: getMessages,
+        update : update
     };
 }]);

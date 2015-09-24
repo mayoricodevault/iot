@@ -39,19 +39,9 @@ app.controller('productCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','$state','
             $scope.products.push(data);
         },
         function(err){
-             $scope.showAlert("Error!", err)
+             Toast.show("Error!", err)
         });
     }
-    
-    $scope.showAlert = function(errTitle, errMsg) {
-	   var alertPopup = $ionicPopup.alert({
-	     title: errTitle,
-	     template: errMsg
-	   });
-	   alertPopup.then(function(res) {
-	     
-	   });
-	 };
 	 
 	 $scope.doRefresh = function() {
         $scope.$broadcast('scroll.refreshComplete');

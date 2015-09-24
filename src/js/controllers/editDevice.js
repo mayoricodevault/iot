@@ -8,10 +8,20 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 	$scope.locationsList=[];
 	$scope.typeList=[];
 	$scope.deviceList=[];
+	$scope.baristas=[];
 	
+	function baristaFilter(data){
+    	$scope.baristas=[];
+    	for(var idx in data){
+    		if(data[idx].type == 'Barista'){
+    			$scope.baristas.push(data[idx]);
+    		}
+    	}
+    }
 	
 	Api.Device.query({}, function(data){
 		$scope.deviceList=data;
+		baristaFilter(data);
     }); // end query device	
     
     Api.Location.query({},function(data){
@@ -25,8 +35,6 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 						{name:"Welcome"}
 				];    
 					
-    
-   // $scope.newdevice=[]; 
 	$scope.newdevice = storeService.jsonRead("shareData");
 	$scope.formScope=null;
 	$scope.setFormScope = function(frmDevice){
@@ -65,19 +73,14 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 				Toast.show("The field Tag ID is required.");
 			return;
 		}
-		
 		if(tagidExist($scope.newdevice.tagid)){
 			Toast.show("The field Tag ID exist.");
 			return;
 		}
-		
 		if(!$scope.newdevice.devicelocation) {
 			Toast.show("The field Location is required.");
 			return;
 		}
-		
-		
-		console.log("type: ",$scope.newdevice.type);
 		if(!$scope.newdevice.type) {
 			Toast.show("The field Type is required.");
 			return;
@@ -106,18 +109,15 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 			}
 		}
 		
-		console.log("newdevice --> ",$scope.newdevice);
-		
-		
-		Api.Device.save({id:$scope.newdevice._id}, $scope.newdevice, 
+		 Api.Device.save({id:$scope.newdevice._id}, $scope.newdevice, 
 	        function(data){
-				storeService.jsonWrite("shareData",$scope.newdevice);
-				Toast.show("Update Successful.");
-				//$scope.doRefresh();
+		 		storeService.jsonWrite("shareData",$scope.newdevice);
+		 		Toast.show("Update Successful.");
+
 	        },
 	        function(err){
-	        	$scope.showAlert("System Error!!!", err.statusText);
-				return false;
+	        	Toast.show("System Error!!!", err.statusText);
+		 		return false;
 	        }
 	    );
 	};
@@ -131,8 +131,4 @@ app.controller('editDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','s
 	     
 	   });
 	 };
-	 
-	 /*$scope.doRefresh = function() {
-        Toast.show('Loading...');
-     }*/
 }]);

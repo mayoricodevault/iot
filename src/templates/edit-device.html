@@ -50,7 +50,7 @@
 						</div>
 						
 						<!-- <input type="text" placeholder="Barista" ng-model="newdevice.master"> -->
-						<select ng-model="newdevice.master" ng-options="o._id as o.devicename for o in deviceList">
+						<select ng-model="newdevice.master" ng-options="o.tagid as o.devicename for o in baristas">
 							<option value="">{{newdevice.master}}</option>
 						</select>
 					</label>

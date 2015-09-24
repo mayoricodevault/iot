@@ -61,8 +61,13 @@
 					      Reset
 					    </ion-option-button>
 					    <div ng-if="session.deviceType=='dashboard'">
-						    <ion-option-button class="button-info" ng-click="testDashboard(session)">
+						    <ion-option-button class="button-balanced" ng-click="testDashboard(session)">
 						      Test Dashboard
+						    </ion-option-button>
+					    </div>
+					    <div ng-if="session.deviceType=='dashboard'">
+						    <ion-option-button class="button-light" ng-click="testDashboardXively(session)">
+						      Test Dashboard Xively
 						    </ion-option-button>
 					    </div>
 					    <div ng-if="session.deviceType!='dashboard'">

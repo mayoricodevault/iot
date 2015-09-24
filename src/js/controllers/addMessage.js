@@ -113,7 +113,7 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	    
 	    currentHour = currentTime.getHours();
 	    currentMinute = currentTime.getMinutes();
-	    
+	   
 	    if(currentHour<selected_hour){
 	    	setTimeSelectedStart(selected_hour,selected_minute);
 	    	$scope.timePickerObjectStart.inputEpochTime = (selected_hour*60+selected_minute)*60;	//set the timepicker-end
@@ -129,6 +129,7 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	    		Toast.show("Select a valid time");
 	    	}
 	    }
+	    
 	  }
 	}
 	
@@ -170,7 +171,7 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 			return;
 		}
 		if(!message.expositor) {
-			Toast.show("The field Expositor is required.");
+			Toast.show("The field Presenter is required.");
 			return;
 		}
 		
@@ -190,7 +191,7 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 		var year = dateObj.getUTCFullYear();
 		
 		
-		console.log(year+"<="+$scope.datepickerObject.inputDate.getFullYear()+"  "+month+"<="+($scope.datepickerObject.inputDate.getMonth()+1)+"  "+day+"<="+$scope.datepickerObject.inputDate.getDate());
+		// console.log(year+"<="+$scope.datepickerObject.inputDate.getFullYear()+"  "+month+"<="+($scope.datepickerObject.inputDate.getMonth()+1)+"  "+day+"<="+$scope.datepickerObject.inputDate.getDate());
 		
 		if(year<=$scope.datepickerObject.inputDate.getFullYear()&&month<=$scope.datepickerObject.inputDate.getMonth()+1&&day<=$scope.datepickerObject.inputDate.getDate()){}
 		else{
@@ -209,10 +210,13 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 			}
 		}
 		
-		if($scope.startHour<=$scope.endHour&&$scope.startMinute<=$scope.endMinute){}
+		if($scope.startHour<$scope.endHour){}
 		else{
-			Toast.show("Please enter a valid time");
-			return;
+			if($scope.startHour==$scope.endHour&&$scope.startMinute<=$scope.endMinute){}
+			else{
+				Toast.show("Please enter a valid time");
+				return;
+			}
 		}
 		
 		var month = $scope.datepickerObject.inputDate.getUTCMonth() + 1; //months from 1-12
