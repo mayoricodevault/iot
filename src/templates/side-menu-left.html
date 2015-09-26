@@ -1,4 +1,4 @@
-<ion-side-menus>
+<ion-side-menus ng-controller="menuleft">
 	<ion-side-menu-content>
 		<ion-nav-bar class="bar-light" animation="nav-title-slide-ios7">
 			<ion-nav-back-button class="button-icon ion-arrow-left-c">
@@ -19,7 +19,7 @@
 							<span class="font-family-default">Log Out</span>
 			</button>
 		</ion-header-bar>
-		<ion-content>
+		<ion-content ng-show="role">
 			<div class="list">
 				<a menu-close class="item item-icon-left" href="#/route/dashboard/home">
 					<i class="icon ion-ios-speedometer"></i>
@@ -98,5 +98,21 @@
 				</a>
 			</div>
 		</ion-content>
+		<ion-content ng-show="!role">
+			<div class="list">
+				<a menu-close class="item item-icon-left" href="#/route/messages">
+					<i class="icon ion-ios-email"></i>
+					Messages
+					<span ng-show="totalMessages>0" class="badge badge-balanced">{{totalMessages}}</span>
+				</a>
+				<div class="item item-divider">
+					Quick Actions
+				</div>
+				<a menu-close class="item item-icon-left" href="#/route/add-message">
+					<i class="icon ion-ios-email"></i>
+					Add Message
+				</a>
+			</div>
+		</ion-content>
 	</ion-side-menu>
-</ion-side-menus>>
+</ion-side-menus>

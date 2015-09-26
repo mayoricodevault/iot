@@ -202,25 +202,10 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                         if(!$scope.data.name){
                             Toast.show("No name selected", 100);
                         }else{
-
-                            
                             $http.post(API_URL + '/remotekiosk', { 
-                                name : $scope.data.name.name,
-                                favcoffee : $scope.data.name.favcoffee,
-                                email : $scope.data.name.email,
                                 zonefrom : "IoT",
                                 zoneto : session.socketid,
-                                companyname : $scope.data.name.companyname,
-                                city : $scope.data.name.city,
-                                state :$scope.data.name.state,
-                                msg1 : $scope.data.name.msg1,
-                                msg2 : $scope.data.name.msg2,
-                                lname : $scope.data.name.lname,
-                                fname : $scope.data.name.fname,
-                                greeting : $scope.data.name.greeting,
-                                region : $scope.data.name.region,
-                                id : $scope.data.name.id,
-                                crcombined : $scope.data.name.crcombined
+                                tagId : $scope.data.name.id
                              }).
                               then(function(response) {
                                  Toast.show("Sending ...." +  $scope.data.name.name, 30);

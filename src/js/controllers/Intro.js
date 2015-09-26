@@ -10,6 +10,8 @@ app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ioni
 		Toast.show("Connecting....", 30);
 		UserFactory.login(username, password).
 		then(function success(response){
+			console.log(response.data.role);
+			$rootScope.userRole = response.data.role;
 			$timeout( function() {
 				$ionicLoading.show({
 				  template: 'Success'
@@ -21,7 +23,13 @@ app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ioni
 			$scope.ioConn = Socket.connect();
 			LSFactory.setData("sio", $scope.ioConn.id);
 			LSFactory.setData("userId", username);
-			$state.go("router.dashboard.home");
+			//var role={'role':response.data.role};
+			//console.log("role--> ",role);
+			if(response.data.role=="admin"){
+				$state.go("router.dashboard.home");
+			}else{
+				$state.go("router.messages");
+			}
 		}, loginError);
 		
 	}

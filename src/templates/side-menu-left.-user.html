@@ -1,0 +1,39 @@
+<ion-side-menus>
+	<ion-side-menu-content>
+		<ion-nav-bar class="bar-light" animation="nav-title-slide-ios7">
+			<ion-nav-back-button class="button-icon ion-arrow-left-c">
+			</ion-nav-back-button>
+		</ion-nav-bar>
+		<ion-nav-buttons side="left">
+			<button class="button button-icon ion-navicon" ng-click="toggleLeft()" ng-hide="$exposeAside.active"></button>
+		</ion-nav-buttons>
+		<ion-nav-buttons side="right">
+			<a class="button button-icon icon ion-ios7-email-outline" ng-click="openAlerts($event)"><span class="badge badge-balanced">5</span></a>
+		</ion-nav-buttons>
+		<ion-nav-view name="menuContent"></ion-nav-view>
+	</ion-side-menu-content>
+	<ion-side-menu expose-aside-when="large">
+		<ion-header-bar class="bar-balanced">
+			<h1 class="title">Menu</h1>
+			<button ng-click="logout()" class="button button-balanced icon-right ion-log-out">
+							<span class="font-family-default">Log Out</span>
+			</button>
+		</ion-header-bar>
+		<ion-content>
+			<div class="list">
+				<a menu-close class="item item-icon-left" href="#/route/messages">
+					<i class="icon ion-ios-email"></i>
+					Messages
+					<span ng-show="totalMessages>0" class="badge badge-balanced">{{totalMessages}}</span>
+				</a>
+				<div class="item item-divider">
+					Quick Actions
+				</div>
+				<a menu-close class="item item-icon-left" href="#/route/add-message">
+					<i class="icon ion-ios-email"></i>
+					Add Message
+				</a>
+			</div>
+		</ion-content>
+	</ion-side-menu>
+</ion-side-menus>

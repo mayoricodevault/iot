@@ -10,12 +10,13 @@ app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$ro
 	$scope.messagesWelcomePoolCount =0;
 	$scope.messagesDashboardPoolCount =0;
 	$scope.messagesXternalPoolCount=0;
+	$scope.messagesVizixPoolCount=0;
   $scope.individualBoard=0;
   
    doRefreshAll();
 //	var maximum = 150;
 	$scope.data = [[]];
-	$scope.labels = ["Barista", "Kiosk", "Welcome", "Dashboard", "xternal"];
+	$scope.labels = ["Barista", "Kiosk", "Welcome", "Dashboard", "xternal", "vizix"];
   // ;
   // $scope.series = ['Messages'];
   // $scope.data = [
@@ -30,7 +31,7 @@ app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$ro
   }; 
 
   function getLiveChartData () {
-      $scope.data = [[$scope.messagesBaristaPoolCount, $scope.messagesKioskPoolCount, $scope.messagesWelcomePoolCount,$scope.messagesDashboardPoolCount, $scope.messagesXternalPoolCount]  ];
+      $scope.data = [[$scope.messagesBaristaPoolCount, $scope.messagesKioskPoolCount, $scope.messagesWelcomePoolCount,$scope.messagesDashboardPoolCount, $scope.messagesXternalPoolCount, $scope.messagesVizixPoolCount]  ];
     }
 
   	$interval(function () {
@@ -61,8 +62,11 @@ app.controller('Dashboard', ['$scope','Socket','$interval', 'Api', 'Toast', '$ro
       if (data.deviceType == 'xternal') {
           $scope.messagesXternalPoolCount +=1;
       }
+      if (data.deviceType == 'vizix') {
+          $scope.messagesVizixPoolCount +=1;
+      }
   		$scope.messagesPoolCount += 1;
-      $scope.messages.push(data);
+      $scope.messages.push(data.message);
     });
 	  
   $scope.doRefresh = function() {

@@ -54,7 +54,7 @@ app.use(express.static(path.join(__dirname,'upload')));
 //io Specific Settings
 // io.set('heartbeat timeout',10000);
 // io.set('heartbeat interval',9000);
-var cronPerson = schedule.scheduleJob('*/5 * * * *', function(){
+var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
     var postBody ={};
     var CurrentDate = moment().format();
     requestify.request(configDB.vizix_person, {
@@ -65,79 +65,84 @@ var cronPerson = schedule.scheduleJob('*/5 * * * *', function(){
          }).then(function(response) {
             // Get the response body
             var data = JSON.parse(response.body);
-            var totalPersons = data.total;
+            // var totalPersons = data.total;
             var personsList = data.results;
             _.each(personsList, function(person){
                 var otherFields = person.fields;
-                var people = new Object();
-                people.modifiedTime = person.modifiedTime;
-                people.activated = person.activated;
-                people.name = person.name;
-                people.id = person.serial;
-                people.email = person.serial;
-                _.each(otherFields, function(field) {
-                  if (field.name == "region") {
-                    people.region = field.value;
-                  }
-                  if (field.name == "state") {
-                    people.state = field.value;
-                  }
-                  if (field.name == "drink") {
-                    people.favcoffee = field.value;
-                  }
-                  if (field.name == "guestCity") {
-                    people.city = field.value;
-                  }
-                  if (field.name == "lastName") {
-                    people.lname = field.value;
-                  }
-                  if (field.name == "firstName") {
-                    people.fname = field.value;
-                  }
-                  if (field.name == "greeting") {
-                    people.greeting = field.value;
-                  }
-                 if (field.name == "greeting") {
-                    people.greeting = field.value;
-                  }
-                  if (field.name == "message") {
-                    people.msg1 = field.value;
-                    people.msg2 = people.msg1;
-                  }
-                  people.crcombined = people.city + " "+ people.state;
-                });
-                people.dt_created = CurrentDate;
-                if (people.favcoffee == "cofee"){
-                  people.favcoffee = "Regular Coffee";
-                }
-                if (people.favcoffee == "expresso"){
-                  people.favcoffee = "Espresso";
-                }
-                if (people.favcoffee == "cappuchino"){
-                  people.favcoffee = "Capuccino";
-                }
-                if (people.favcoffee == "decaf"){
-                  people.favcoffee = "Decaf coffee";
-                }
-                if (people.favcoffee == "americano"){
-                  people.favcoffee = "Americano";
-                }
-                if (people.favcoffee == "tea"){
-                  people.favcoffee = "Tea";
-                }
-                var activePeople = appfire.child('people/'+ people.email);
-                activePeople
-                  .once('value', function(snap) {
-                    if(!snap.val()) {
-                      activePeople.set(people);
-                    } else {
-                      var oldInfo = snap.val();
-                      if (oldInfo.modifiedTime != people.modifiedTime) {
-                          activePeople.set(people);
+                if (!_.isUndefined(person.id) || !_.isEmpty(person.id)) {
+                  var people = new Object();
+                  people.modifiedTime = person.modifiedTime;
+                  people.activated = person.activated;
+                  people.name = person.name;
+                  people.id = person.serial;
+                  people.email = person.serial;
+                  people.thingid = person.id;
+                  _.each(otherFields, function(field) {
+                    if (field.name == "region") {
+                      if(_.isEmpty(field.value)) {
+                        people.region = "undefined";
+                      } else{
+                        people.region = field.value;
                       }
                     }
-                    io.emit('message', people);
-                }); 
+                    if (field.name == "state") {
+                      if(_.isEmpty(field.value)) {
+                        people.state = "undefined";
+                      } else{
+                        people.state = field.value;
+                      }
+                    }
+                    if (field.name == "drink") {
+                      people.favcoffee = field.value;
+                    }
+                    if (field.name == "guestCity") {
+                      if(_.isEmpty(field.value)) {
+                        people.city = "undefined";
+                      } else{
+                        people.city = field.value;
+                      }                      
+                    }
+                    if (field.name == "lastName") {
+                       if(_.isEmpty(field.value)) {
+                          people.lname = " ";
+                        } else{
+                          people.lname = field.value;
+                        }                                  
+                    }
+                    if (field.name == "firstName") {
+                      people.fname = field.value;
+                    }
+                    if (field.name == "greeting") {
+                      people.greeting = field.value;
+                    }
+                   if (field.name == "greeting") {
+                      people.greeting = field.value;
+                    }
+                    if (field.name == "message") {
+                      people.msg1 = removeSpecials(field.value);
+                      people.msg2 = people.msg1;
+                    }
+                    people.crcombined = people.city + " "+ people.state;
+                  });
+                  people.dt_created = CurrentDate;
+                  if (_.isEmpty(people.favcoffee) ){
+                    people.favcoffee = "select";
+                  }
+                  var activePeople = appfire.child('people/'+ person.serial);
+                  activePeople
+                    .once('value', function(snap) {
+                      if(!snap.val()) {
+                        activePeople.set(people);
+                      } else {
+                        var oldInfo = snap.val();
+                        if (oldInfo.modifiedTime != people.modifiedTime) {
+                            activePeople.set(people);
+                        }
+                      }
+                      
+                      io.emit('message',{devicename: 'vizix', message: people });
+                  }); 
+                }
             });
     });
 });
@@ -146,10 +151,11 @@ var sessionsConnections = {};
 var numberofusers = 0;
 var messagesPoolCount = 0;
 // Mini
-var user = {
-  username : "xively",
-  password : "123"
-};
+var currentUsers = [
+  {username:"admin", password:"asesamo", role:"admin"},
+  {username:"xively", password:"asesamo", role:"user"}
+];
+
 
 io.use(sharedsession(session));
 io.on('connection', function(socket) {
@@ -176,7 +182,7 @@ io.on('connection', function(socket) {
   
   
   socket.on('message', function(data){
-      io.emit('message', {devicename: devicename, message: "room : " + data.message });
+      io.emit('message', {devicename: devicename, message: data.message });
   });
   
   socket.on('xternal', function(data){
@@ -426,7 +432,6 @@ app.post("/add-people", function (req, res) {
   });
   res.status(200).json({results: "People Added Successfully"});
 });
-
 app.post("/add-message", function (req, res) {
   
   var message = req.body.message;
@@ -441,9 +446,7 @@ app.post("/add-message", function (req, res) {
   });
   res.status(200).json({results: "Message Added Successfully"});
 });
-
 app.post("/update-message", function (req, res) {
-  
   var message = req.body.message;
   var postsRef = appfire.child("messages/"+message.id);
   postsRef
@@ -454,8 +457,6 @@ app.post("/update-message", function (req, res) {
   });
   res.status(200).json({results: "Message UPdated Successfully"});
 });
-
-
 app.get('/deviceslist', function (req, res) {
    DeviceList.find({}, function(err, data){
      if (err) {
@@ -486,13 +487,20 @@ app.get('/', function(req, res) {
 });
 
 app.post('/login', authenticate, function(req, res) {
-  var token = jwt.sign({
-    username: user.username
-  }, jwtSecret);
-  res.send({
-    token: token,
-    user: user
-  });
+  var credentials = req.body;
+  var authUser = _.where(currentUsers, {username : credentials.username});
+  if (authUser.length >0) {
+    var userName = authUser[0].username;
+    var role = authUser[0].role;
+    var token = jwt.sign({
+      username: userName
+    }, jwtSecret);
+    res.send({
+      token: token,
+      username : userName,
+      role : role
+    });
+  }
 });
 
 app.post('/upload', function (req, res, cfg) {
@@ -552,11 +560,11 @@ app.get('/importfile', function (req, res) {
        res.status(200).json({results : "done"});
    });
 });
-
 app.post('/me', function(req, res) {
     res.send(req.user);
 });
 app.post('/remotekiosk', function (req, res) {
+  console.log(req.body);
   var remoteUrl = configDB.kiosk +'/xively';
   requestify.request(remoteUrl, {
     method: 'POST',
@@ -652,8 +660,15 @@ function authenticate(req,res, next) {
   if(!body.username || !body.password) {
     res.status(400).end("Must Provide Username or Password");
   }
-  if (body.username!==user.username || body.password !==user.password)  {
-     res.status(401).end("Username or Password invalid or incorrect");
+  var userAvail = _.where(currentUsers, {username : body.username});
+  console.log(userAvail.length);
+  if (userAvail.length == 0) {
+    res.status(401).end("Username or Password invalid or incorrect");
+  }
+  if (userAvail.length > 0 ) {
+    if (body.username!== userAvail[0].username || body.password !== userAvail[0].password)  {
+       res.status(401).end("Username or Password invalid or incorrect");
+    }
   }
   next();
 }

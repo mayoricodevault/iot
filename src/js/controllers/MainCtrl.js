@@ -19,7 +19,6 @@ app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicP
 					count++;
 				}
 			}*/
-			console.log(count);
 		});
 	    Api.Location.query({}, function(data){$scope.locations=data;});
 	    Api.Product.query({}, function(data){$scope.products = data;});
