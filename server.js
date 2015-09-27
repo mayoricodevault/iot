@@ -564,7 +564,6 @@ app.post('/me', function(req, res) {
     res.send(req.user);
 });
 app.post('/remotekiosk', function (req, res) {
-  console.log(req.body);
   var remoteUrl = configDB.kiosk +'/xively';
   requestify.request(remoteUrl, {
     method: 'POST',
@@ -579,7 +578,6 @@ app.post('/remotekiosk', function (req, res) {
 });
 app.post('/remotewelcome', function (req, res) {
   var remoteUrl = configDB.kiosk +'/welcome';
-  console.log(req.body);
   requestify.request(remoteUrl, {
     method: 'POST',
     body: req.body,

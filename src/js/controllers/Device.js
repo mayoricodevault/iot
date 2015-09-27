@@ -426,22 +426,9 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                             }
                             var visitor = $scope.data.name;
                             $http.post(API_URL + '/remotewelcome', { 
-                                    name : visitor.name,
-                                    favcoffee : visitor.favcoffee,
-                                    email : visitor.email,
+                                    tagId : visitor.id,
                                     zonefrom : "IoT",
-                                    zoneto : session.socketid,
-                                    companyname : visitor.companyname,
-                                    city : visitor.city,
-                                    state : visitor.state,
-                                    msg1 : visitor.msg1,
-                                    msg2 : visitor.msg2,
-                                    lname : visitor.lname,
-                                    fname : visitor.fname,
-                                    greeting : visitor.greeting,
-                                    region : visitor.region,
-                                    id : visitor.id,
-                                    crcombined : visitor.crcombined
+                                    zoneto : session.socketid
                                 }
                             ).then(function(response) {
                                  Toast.show("Sending ....", 1);
@@ -481,22 +468,9 @@ app.controller('deviceCtrl', ['$scope', 'Api','$ionicPopup', 'Toast','SessionSer
                     			}
                     		   
                 			 $http.post(API_URL + '/remotewelcome',{ 
-                			        name : visitor.name,
-                                    favcoffee : visitor.favcoffee,
-                                    email : visitor.email,
+                			        tagId : visitor.id,
                                     zonefrom : "IoT",
-                                    zoneto : session.socketid,
-                                    companyname : visitor.companyname,
-                                    city : visitor.city,
-                                    state : visitor.state,
-                                    msg1 : visitor.msg1,
-                                    msg2 : visitor.msg2,
-                                    lname : visitor.lname,
-                                    fname : visitor.fname,
-                                    greeting : visitor.greeting,
-                                    region : visitor.region,
-                                    id : visitor.id,
-                                    crcombined : visitor.crcombined
+                                    zoneto : session.socketid
                 			   }).
                                   then(function(response) {
                                      Toast.show("Sending .... " + visitor.name, 1);
