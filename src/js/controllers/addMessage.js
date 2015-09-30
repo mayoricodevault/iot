@@ -161,7 +161,7 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 	
 	$scope.setFormScope = function(frmDevice){
 		$scope.formScope = frmDevice;
-	}
+	};
 	
 	$scope.messageSubmit = function(message) {
 		//console.log("message --> ",message);
@@ -226,12 +226,12 @@ app.controller('addMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','T
 		var startTimeStamp = moment(year+"-"+month+"-"+day+" "+$scope.startHour+":"+$scope.startMinute,"YYYY-MM-DD HH:mm");
 		var endTimeStamp = moment(year+"-"+month+"-"+day+" "+$scope.endHour+":"+$scope.endMinute,"YYYY-MM-DD HH:mm");
 	
-		var message = {
+		message = {
 			text: message.text,
 			expositor: message.expositor,
 			start: startTimeStamp,
 			end: endTimeStamp
-		}
+		};
         
         console.log("message: ",message);
         

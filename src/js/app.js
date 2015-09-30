@@ -15,23 +15,15 @@ var app = angular.module('iot', [
 ]).run(function($rootScope){
   $rootScope.totalMessages = 0;
   $rootScope.totalPeople = 0;
-  $rootScope.userRole="user";
 });
 
 app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
   
   $stateProvider
     .state('router', {
-      //url: "/route/:role",
       url: "/route",
       abstract: true,
-      templateUrl: function($stateParams){
-        /*var role = $stateParams.role;
-        if(role=="admin"){
-          return "templates/side-menu-left.html";
-        }else{
-          return "templates/side-menu-left-user.html";
-        }*/
+      templateUrl: function(){
         return "templates/side-menu-left.html";
       }
     })

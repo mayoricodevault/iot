@@ -3,7 +3,6 @@
 app.controller('addDevice', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','Toast', function($scope, Api, $ionicPopup, $cordovaToast,Toast) {
     
     $scope.baristas=[];
-    
     $scope.$on('$ionicView.beforeEnter', function () {
             // update campaigns everytime the view becomes active
         doRefresh();

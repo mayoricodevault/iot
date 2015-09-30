@@ -24,7 +24,6 @@ app.controller('Intro', function($scope, $ionicSlideBoxDelegate, $timeout, $ioni
 			LSFactory.setData("sio", $scope.ioConn.id);
 			LSFactory.setData("userId", username);
 			//var role={'role':response.data.role};
-			//console.log("role--> ",role);
 			if(response.data.role=="admin"){
 				$state.go("router.dashboard.home");
 			}else{

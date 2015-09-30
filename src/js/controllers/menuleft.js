@@ -1,5 +1,6 @@
 'use strict';
 
-app.controller('menuleft', ['$scope','$rootScope', function($scope,$rootScope) {
-    $scope.role = ($rootScope.userRole == "admin")?true:false;
+app.controller('menuleft', ['$scope','$rootScope','LSFactory', function($scope,$rootScope,LSFactory) {
+    var userrole = LSFactory.getUser();
+    $scope.role = (userrole == "admin")?true:false;
 }]);

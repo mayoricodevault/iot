@@ -54,8 +54,9 @@ app.use(express.static(path.join(__dirname,'upload')));
 //io Specific Settings
 // io.set('heartbeat timeout',10000);
 // io.set('heartbeat interval',9000);
-var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
+var cronPerson = schedule.scheduleJob('*/3 * * * *', function(){
     var postBody ={};
+    var nmbrReaded = 0;
     var CurrentDate = moment().format();
     requestify.request(configDB.vizix_person, {
         method: 'GET',
@@ -64,10 +65,13 @@ var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
         dataType: 'json'        
          }).then(function(response) {
             // Get the response body
+       
+            console.log('Restarting Serving...');
             var data = JSON.parse(response.body);
             // var totalPersons = data.total;
             var personsList = data.results;
             _.each(personsList, function(person){
+                nmbrReaded += 1;
                 var otherFields = person.fields;
                 if (!_.isUndefined(person.id) || !_.isEmpty(person.id)) {
                   var people = new Object();
@@ -112,6 +116,7 @@ var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
                     if (field.name == "firstName") {
                       people.fname = field.value;
                     }
+                    people.greeting ="";
                     if (field.name == "greeting") {
                       people.greeting = field.value;
                     }
@@ -119,9 +124,10 @@ var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
                       people.greeting = field.value;
                     }
                     if (field.name == "message") {
-                      people.msg1 = removeSpecials(field.value);
-                      people.msg2 = people.msg1;
+                      people.msg1 = field.value;
+                      people.msg2 = removeSpecials(field.value);
                     }
+                   
                     people.crcombined = people.city + " "+ people.state;
                   });
                   people.dt_created = CurrentDate;
@@ -133,19 +139,22 @@ var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
                     .once('value', function(snap) {
                       if(!snap.val()) {
                         activePeople.set(people);
+                        
                       } else {
                         var oldInfo = snap.val();
                         if (oldInfo.modifiedTime != people.modifiedTime) {
                             activePeople.set(people);
                         }
                       }
-                      
-                      io.emit('message',{devicename: 'vizix', message: people });
                   }); 
                 }
             });
+            console.log('Ending Reading ...'+nmbrReaded);
+               // io.emit('message',{devicename: 'vizix', message: people });
     });
+    
 });
+
 var devices = [];
 var sessionsConnections = {};
 var numberofusers = 0;

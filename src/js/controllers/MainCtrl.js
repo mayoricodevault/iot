@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicPopover, $state, $timeout, shareComponentService, UserFactory, storeService, $rootScope, Socket, $ionicHistory, $ionicSlideBoxDelegate, $window, API_URL, Toast, LSFactory) {
+app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicPopover, $state, $timeout, shareComponentService, UserFactory, storeService, $rootScope, Socket, $ionicHistory, $ionicSlideBoxDelegate, $window, API_URL, Toast, LSFactory,VisitorsService,FIREBASE_MESSAGES,Messages) {
 	$scope.username="";
 	$scope.password="";
 	$scope.devices = [];
@@ -8,17 +8,48 @@ app.controller('MainCtrl', function(Api, $scope, $ionicSideMenuDelegate, $ionicP
 	$scope.products = [];
 	$scope.users = [];
 	$scope.servers = [];
+	$scope.cleanVisitors = VisitorsService.getVisitors();
 	$scope.visitors= [];
+	$scope.messages = [];
+	
+	Messages(FIREBASE_MESSAGES).$bindTo($scope, "fbMBind");
+    $scope.$watch('fbMBind', function() {
+        doRefreshMessages();
+    }); 
+	
+	$scope.$watch('cleanVisitors', function () {
+        visitorsToArray($scope.cleanVisitors);
+	}, true);
+	
+	function doRefreshMessages() {
+		$scope.messages = [];
+		$scope.totalMessages = 0;
+		angular.forEach($scope.fbMBind, function(message){
+			if (!message || !message.expositor) {
+				return;
+			}
+            $scope.messages.push(message);
+            $scope.totalMessages++;
+		});
+    }
+    
+    function visitorsToArray(oVisitors) {
+		$scope.visitors = [];
+		$scope.totalPeople = 0;
+		oVisitors.forEach(function (visitor) {
+			if (!visitor || !visitor.name) {
+				return;
+			}
+            $scope.visitors.push(visitor); 
+            //console.log("--> ",visitor);
+            $scope.totalPeople++;
+		});
+    }
 	
 	$scope.refreshDataAmount = function(){
 		Api.Device.query({}, function(data){
 			$scope.devices=data;
 			var count=0;
-			/*for(var idx in data){
-				if(data[idx].featured){
-					count++;
-				}
-			}*/
 		});
 	    Api.Location.query({}, function(data){$scope.locations=data;});
 	    Api.Product.query({}, function(data){$scope.products = data;});
