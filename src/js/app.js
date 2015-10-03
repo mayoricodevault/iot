@@ -359,12 +359,12 @@ app.config(function($stateProvider, $urlRouterProvider,$httpProvider) {
       }
     }
 })
-.constant("API_URL", 'https://adm.xivelylive.com')
+.constant("API_URL", 'https://iottemplate-mmayorivera.c9.io')
 .constant('FIREBASE_URI', 'https://kxively.firebaseio.com/people')
 .constant('FIREBASE_VISITORS', 'https://kxively.firebaseio.com/people')
 .constant('FIREBASE_MESSAGES', 'https://kxively.firebaseio.com/messages')
 .constant('FIREBASE_URI_ROOT', 'https://kxively.firebaseio.com')
-.constant('KIOSK_URL', 'https://client.xivelylive.com')
+.constant('KIOSK_URL', 'https://kiosk-mmayorivera.c9.io')
 .constant('FIREBASE_URI_SESSIONS', 'https://kxively.firebaseio.com/sessions');
 
 app.directive("owlCarousel", function() {

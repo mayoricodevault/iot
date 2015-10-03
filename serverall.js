@@ -54,9 +54,10 @@ app.use(express.static(path.join(__dirname,'upload')));
 //io Specific Settings
 // io.set('heartbeat timeout',10000);
 // io.set('heartbeat interval',9000);
-var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
+var cronPerson = schedule.scheduleJob('*/3 * * * *', function(){
     var postBody ={};
     var nmbrReaded = 0;
+    var CurrentDate = moment().format();
     requestify.request(configDB.vizix_person, {
         method: 'GET',
         body: postBody,
@@ -64,25 +65,22 @@ var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
         dataType: 'json'        
          }).then(function(response) {
             // Get the response body
+       
             console.log('Restarting Serving...');
             var data = JSON.parse(response.body);
-            //console.log(response.body);
             // var totalPersons = data.total;
             var personsList = data.results;
             _.each(personsList, function(person){
+                nmbrReaded += 1;
                 var otherFields = person.fields;
-                //console.log(otherFields);
                 if (!_.isUndefined(person.id) || !_.isEmpty(person.id)) {
-                  nmbrReaded += 1;
                   var people = new Object();
                   people.modifiedTime = person.modifiedTime;
                   people.activated = person.activated;
                   people.name = person.name;
-                  people.fullname = person.name;
                   people.id = person.serial;
                   people.email = person.serial;
                   people.thingid = person.id;
-                  people.greeting ="";
                   _.each(otherFields, function(field) {
                     if (field.name == "region") {
                       if(_.isEmpty(field.value)) {
@@ -118,22 +116,21 @@ var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
                     if (field.name == "firstName") {
                       people.fname = field.value;
                     }
-                    
+                    people.greeting ="";
                     if (field.name == "greeting") {
-                        if(_.isEmpty(field.value)) {
-                          people.greeting = "Welcome..";
-                        } else{
-                          people.greeting = field.value;
-                        }      
+                      people.greeting = field.value;
+                    }
+                   if (field.name == "greeting") {
+                      people.greeting = field.value;
                     }
                     if (field.name == "message") {
                       people.msg1 = field.value;
-                      people.msg2 = field.value;
+                      people.msg2 = removeSpecials(field.value);
                     }
                    
                     people.crcombined = people.city + " "+ people.state;
                   });
-                  people.dt_created = new Date().getTime();
+                  people.dt_created = CurrentDate;
                   if (_.isEmpty(people.favcoffee) ){
                     people.favcoffee = "select";
                   }
@@ -142,6 +139,7 @@ var cronPerson = schedule.scheduleJob('*/1 * * * *', function(){
                     .once('value', function(snap) {
                       if(!snap.val()) {
                         activePeople.set(people);
+                        
                       } else {
                         var oldInfo = snap.val();
                         if (oldInfo.modifiedTime != people.modifiedTime) {
@@ -432,25 +430,6 @@ app.post("/remotedashboardxively", function (req, res) {
     });
 
 });
-
-app.post("/upKioskData", function (req, res) {
-  var action = req.body;
-  if (action.action == "update") {
-      
-  }
-  var apporderFB = new Firebase(configDB.firebase +"/orders");
-  apporderFB.once("value", function(snapshot) {
-    snapshot.forEach(function(childSnapshot){
-      var childData = childSnapshot.val();
-      if (childData.masterId=="702" || childData.masterId==702) {
-          
-      }
-      
-    });
-  });
-  res.status(200);
-});
-
 app.post("/add-people", function (req, res) {
   var people = req.body.people;
   var activePeople = appfire.child('people/'+escapeEmail(people.email));

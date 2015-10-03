@@ -180,9 +180,9 @@ app.controller('editMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','
 		}
 		
 		var dateObj = new Date();
-		var month = dateObj.getUTCMonth() + 1; //months from 1-12
-		var day = dateObj.getUTCDate();
-		var year = dateObj.getUTCFullYear();
+		var month = dateObj.getMonth() + 1; //months from 1-12
+		var day = dateObj.getDate();
+		var year = dateObj.getFullYear();
 		
 		
 		// console.log(year+"<="+$scope.datepickerObject.inputDate.getFullYear()+"  "+month+"<="+($scope.datepickerObject.inputDate.getMonth()+1)+"  "+day+"<="+$scope.datepickerObject.inputDate.getDate());
@@ -213,9 +213,9 @@ app.controller('editMessage', ['$scope', 'Api', '$ionicPopup', '$cordovaToast','
 			}
 		}
 		
-		var month = $scope.datepickerObject.inputDate.getUTCMonth() + 1; //months from 1-12
-		var day = $scope.datepickerObject.inputDate.getUTCDate();
-		var year = $scope.datepickerObject.inputDate.getUTCFullYear();
+		var month = $scope.datepickerObject.inputDate.getMonth() + 1; //months from 1-12
+		var day = $scope.datepickerObject.inputDate.getDate();
+		var year = $scope.datepickerObject.inputDate.getFullYear();
 		
 		var startTimeStamp = moment(year+"-"+month+"-"+day+" "+$scope.startHour+":"+$scope.startMinute,"YYYY-MM-DD HH:mm");
 		var endTimeStamp = moment(year+"-"+month+"-"+day+" "+$scope.endHour+":"+$scope.endMinute,"YYYY-MM-DD HH:mm");
